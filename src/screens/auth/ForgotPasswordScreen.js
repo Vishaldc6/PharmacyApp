@@ -4,6 +4,9 @@ import {
   StyleSheet,
   ImageBackground,
   SafeAreaView,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {size} from '../../styles/size';
@@ -40,81 +43,86 @@ const ForgotPasswordScreen = props => {
         source={require('../../assets/images/BackGroundImage.jpg')}
         style={styles.bgImage}>
         <SafeAreaView>
-          <View
-            style={{
-              flex: 1,
-              width: size.width,
-              backgroundColor: colors.white,
-              borderWidth: 1,
-              borderRadius: 30,
-              padding: 20,
-              position: 'absolute',
-              // top:300,
-              bottom: -size.height,
-            }}>
-            <KeyboardAwareScrollView
+          <KeyboardAvoidingView>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <View
+                style={{
+                  flex: 1,
+                  width: size.width,
+                  backgroundColor: colors.white,
+                  borderWidth: 1,
+                  borderRadius: 30,
+                  padding: 20,
+                  position: 'absolute',
+                  // top:300,
+                  bottom: -size.height,
+                  // bottom: -10,
+                }}>
+                {/* <KeyboardAwareScrollView
               keyboardShouldPersistTaps={'always'}
               style={styles.mainContainer}
-              enableOnAndroid={true}>
-              <Text style={fonts.h1}>Forgot Password</Text>
-              <View style={{height: 20}} />
-              <CustomInput
-                value={username}
-                onChange={val => {
-                  setusername(val);
-                }}
-                title={'Username'}
-                placeholder={'Enter Username'}
-                iconName={'user-circle-o'}
-              />
-              <Text style={styles.errorText}>{usernameError}</Text>
-
-              <CustomInput
-                passwordField={true}
-                value={password}
-                onChange={val => {
-                  setpassword(val);
-                }}
-                title={'New Password'}
-                placeholder={'Enter New Password'}
-                iconName={'key'}
-              />
-              <Text style={styles.errorText}>{passwordError}</Text>
-
-              <CustomInput
-                passwordField={true}
-                value={confirmPassword}
-                onChange={val => {
-                  setconfirmPassword(val);
-                }}
-                title={'Confirm New Password'}
-                placeholder={'Enter Confirm New Password'}
-                iconName={'key'}
-              />
-              <Text style={styles.errorText}>{confirmPasswordError}</Text>
-              <View style={{height: 20}} />
-              <View style={{marginHorizontal: 10}}>
-                <CustomButton
-                  title={'Change Password'}
-                  onPress={() => {
-                    if (
-                      username == '' &&
-                      password == '' &&
-                      confirmPassword == ''
-                    ) {
-                      // Alert.alert('Sign in',"All flieds are empty")
-                      setusernameError('* Please enter Username');
-                      setpasswordError('* Please enter New Password');
-                      setconfirmPasswordError(
-                        '* Please enter Confirm New Password',
-                      );
-                    }
+              enableOnAndroid={true}> */}
+                <Text style={fonts.h1}>Forgot Password</Text>
+                <View style={{height: 20}} />
+                <CustomInput
+                  value={username}
+                  onChange={val => {
+                    setusername(val);
                   }}
+                  title={'Username'}
+                  placeholder={'Enter Username'}
+                  iconName={'user-circle-o'}
                 />
+                <Text style={styles.errorText}>{usernameError}</Text>
+
+                <CustomInput
+                  passwordField={true}
+                  value={password}
+                  onChange={val => {
+                    setpassword(val);
+                  }}
+                  title={'New Password'}
+                  placeholder={'Enter New Password'}
+                  iconName={'key'}
+                />
+                <Text style={styles.errorText}>{passwordError}</Text>
+
+                <CustomInput
+                  passwordField={true}
+                  value={confirmPassword}
+                  onChange={val => {
+                    setconfirmPassword(val);
+                  }}
+                  title={'Confirm New Password'}
+                  placeholder={'Enter Confirm New Password'}
+                  iconName={'key'}
+                />
+                <Text style={styles.errorText}>{confirmPasswordError}</Text>
+                <View style={{height: 20}} />
+                <View style={{marginHorizontal: 10}}>
+                  <CustomButton
+                    title={'Change Password'}
+                    onPress={() => {
+                      if (
+                        username == '' &&
+                        password == '' &&
+                        confirmPassword == ''
+                      ) {
+                        // Alert.alert('Sign in',"All flieds are empty")
+                        setusernameError('* Please enter Username');
+                        setpasswordError('* Please enter New Password');
+                        setconfirmPasswordError(
+                          '* Please enter Confirm New Password',
+                        );
+                      }
+                    }}
+                  />
+                  <View style={{height: 10}} />
+                </View>
+                {/* </KeyboardAwareScrollView> */}
               </View>
-              <View style={{height: 50}} />
-            </KeyboardAwareScrollView>
-          </View>
+            </TouchableWithoutFeedback>
+          </KeyboardAvoidingView>
         </SafeAreaView>
       </ImageBackground>
     </View>
