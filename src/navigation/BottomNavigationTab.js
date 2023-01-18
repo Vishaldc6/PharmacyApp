@@ -19,7 +19,6 @@ const BottomNavigationTab = () => {
       barStyle={{
         borderWidth: 0.2,
         backgroundColor: 'transparent',
-        // borderRadius: 20,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
       }}

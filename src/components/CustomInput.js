@@ -9,7 +9,7 @@ const CustomInput = props => {
   const [isVisible, setisVisible] = useState(false);
 
   return (
-    <View style={{margin: 3}}>
+    <View>
       <Text style={{...fonts.h3, marginLeft: 10}}>{props.title}</Text>
       <View style={styles.inputContainer}>
         <View style={styles.iconBox}>
