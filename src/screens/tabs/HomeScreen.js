@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
   categoryCard: {
     flex: 1,
     // backgroundColor: 'blue',
-    margin: 5,
+    margin: 10,
     // justifyContent: 'center',
     // alignContent: 'center',
     alignSelf: 'center',

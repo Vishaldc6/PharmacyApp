@@ -35,6 +35,13 @@ const CategoryScreen = props => {
         numColumns={3}
         renderItem={({item}) => <CategoryCard item={item} />}
       />
+      {/* Scroll banner */}
+
+      {/* horizontal product */}
+
+      {/* simple banner */}
+
+      {/* vertical products */}
       <Text>CategoryScreen</Text>
     </View>
   );
