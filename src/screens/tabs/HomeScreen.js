@@ -23,6 +23,8 @@ import {categories} from '../../assets/data/categories';
 import {useNavigation} from '@react-navigation/native';
 import {products} from '../../assets/data/products';
 import CustomHeading from '../../components/CustomHeading';
+import PrimaryProductCard from '../../components/product/PrimaryProductCard';
+import CategoryCard from '../../components/category/CategoryCard';
 
 const Card = ({title, icon, onPress}) => (
   <TouchableWithoutFeedback onPress={onPress}>
@@ -30,14 +32,18 @@ const Card = ({title, icon, onPress}) => (
       style={{
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 1,
+        // flex: 1,
+        // backgroundColor: 'red',
+        width: size.width / 5,
       }}>
+      {/* <View style={{height: size.height / 14}}> */}
       <Fontisto
         name={icon}
-        size={size.height / 25}
+        size={size.height / 23}
         color={colors.black}
         style={{marginVertical: 10}}
       />
+      {/* </View> */}
       <Text style={{...fonts.h3, textAlign: 'center'}}>{title}</Text>
     </View>
   </TouchableWithoutFeedback>
@@ -49,56 +55,6 @@ const Banner = ({image}) => (
   </View>
 );
 
-const CategoryCard = ({item}) => {
-  return (
-    <View style={styles.categoryCard}>
-      <Image
-        source={item.image}
-        style={{height: 100, width: 100, alignSelf: 'center'}}
-        resizeMode={'stretch'}
-      />
-      <Text style={{...fonts.h4, alignSelf: 'center'}}>{item.name}</Text>
-    </View>
-  );
-};
-
-const ProductCard = ({item}) => {
-  return (
-    <View style={styles.categoryCard}>
-      <Image source={item.image} style={{height: 120, width: 120}} />
-      <Text style={fonts.h4}>{item.name}</Text>
-      <Text style={{...fonts.h3, color: colors.darkgray}}>
-        {item.quantity} items
-      </Text>
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Text style={{...fonts.h3, color: colors.darkgray}}>{item.rate} </Text>
-        <Text style={{...fonts.h3, color: colors.darkgray}}>
-          ({item.rating} ratings)
-        </Text>
-      </View>
-      <View
-        style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
-        <Text style={fonts.h6}>Rs.{item.price}</Text>
-        <Text style={fonts.h3}> {item.discount} % off</Text>
-      </View>
-      {/* <CustomButton title={'Add to Cart'} /> */}
-      <View
-        style={{
-          flex: 1,
-          borderWidth: 1,
-          borderRadius: 10,
-          borderColor: colors.primary_color,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Text style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
-          Add to Cart
-        </Text>
-      </View>
-    </View>
-  );
-};
-
 const HomeScreen = props => {
   const navigation = useNavigation();
   return (
@@ -107,12 +63,23 @@ const HomeScreen = props => {
       <CustomHeader cart={true} tag={true} title={'Home'} />
 
       {/* SearchBar */}
-      <CustomSearchBar
-        placeholder="Search Medicine.."
+      <TouchableWithoutFeedback
         onPress={() => {
-          navigation.navigate(ScreenNames.SearchScreen);
-        }}
-      />
+          props.navigation.navigate(ScreenNames.SearchScreen);
+        }}>
+        <CustomSearchBar
+          placeholder="Search Medicine.."
+          // onPress={() => {
+          //   props.navigation.navigate(ScreenNames.SearchScreen);
+          // }}
+        />
+      </TouchableWithoutFeedback>
+      {/* <Text
+        onPress={() => {
+          props.navigation.navigate(ScreenNames.SearchScreen);
+        }}>
+        search screen
+      </Text> */}
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Card View Container */}
         <View style={styles.cardContainer}>
@@ -121,6 +88,7 @@ const HomeScreen = props => {
             icon={'laboratory'}
             onPress={() => {
               console.log('Lab Test Page');
+              props.navigation.push(ScreenNames.LabScreen);
             }}
           />
           <Card
@@ -143,6 +111,7 @@ const HomeScreen = props => {
             icon={'doctor'}
             onPress={() => {
               console.log('Consult Doctor Page');
+              props.navigation.push(ScreenNames.DoctorScreen);
             }}
           />
         </View>
@@ -183,39 +152,55 @@ const HomeScreen = props => {
           </Swiper>
         </View>
         {/* Category */}
-        <CustomHeading
-          header1={'Popular Categories'}
-          header2={'see more >'}
-          onPress={() => {
-            props.navigation.navigate(ScreenNames.CategoryScreen);
-          }}
-        />
+        <View
+          style={{
+            elevation: 2,
+            backgroundColor: colors.white,
+            padding: 5,
+            marginVertical: 5,
+          }}>
+          <CustomHeading
+            header1={'Popular Categories'}
+            header2={'see more >'}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.CategoryScreen);
+            }}
+          />
+          <FlatList
+            style={{marginVertical: 5}}
+            scrollEnabled={false}
+            numColumns={3}
+            data={categories}
+            renderItem={({item}) => <CategoryCard item={item} />}
+          />
+        </View>
 
-        <FlatList
-          style={{marginVertical: 5}}
-          scrollEnabled={false}
-          numColumns={3}
-          data={categories}
-          renderItem={({item}) => <CategoryCard item={item} />}
-        />
-
-        <CustomHeading
-          header1={'Popular Products'}
-          header2={'see more >'}
-          onPress={() => {
-            props.navigation.navigate(ScreenNames.ProductScreen);
-          }}
-        />
-        <FlatList
-          style={{marginVertical: 5}}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          // scrollEnabled={false}
-          data={products}
-          renderItem={({item, index}) =>
-            index < 5 && <ProductCard item={item} />
-          }
-        />
+        {/* Horizontal Products */}
+        <View
+          style={{
+            elevation: 2,
+            backgroundColor: colors.white,
+            padding: 5,
+            marginVertical: 5,
+          }}>
+          <CustomHeading
+            header1={'Popular Products'}
+            header2={'see more >'}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.ProductScreen);
+            }}
+          />
+          <FlatList
+            style={{marginVertical: 5}}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            // scrollEnabled={false}
+            data={products}
+            renderItem={({item, index}) =>
+              index < 5 && <PrimaryProductCard item={item} />
+            }
+          />
+        </View>
         <Text>HomeScreen</Text>
       </ScrollView>
     </View>
@@ -229,9 +214,9 @@ const styles = StyleSheet.create({
     // height: size.height / 7,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'baseline',
     paddingVertical: 10,
-    elevation: 5,
+    elevation: 2,
     borderRadius: 10,
     marginVertical: 5,
   },
@@ -241,7 +226,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: 10,
-    elevation: 5,
+    elevation: 2,
     borderRadius: 10,
     padding: 6,
     marginVertical: 5,
@@ -265,14 +250,6 @@ const styles = StyleSheet.create({
     height: size.height / 4.5,
     // backgroundColor: 'red',
     padding: 10,
-  },
-  categoryCard: {
-    flex: 1,
-    // backgroundColor: 'blue',
-    margin: 10,
-    // justifyContent: 'center',
-    // alignContent: 'center',
-    alignSelf: 'center',
   },
 });
 

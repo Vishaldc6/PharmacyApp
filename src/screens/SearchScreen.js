@@ -1,12 +1,9 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-import CustomSearchBar from '../components/CustomSearchBar';
-import GlobalStyles from '../styles/GlobalStyles';
 
 const SearchScreen = () => {
   return (
-    <View style={GlobalStyles.mainContainer}>
-      {/* <CustomSearchBar /> */}
+    <View>
       <Text>SearchScreen</Text>
     </View>
   );

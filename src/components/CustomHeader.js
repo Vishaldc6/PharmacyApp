@@ -8,12 +8,32 @@ import fonts from '../styles/fonts';
 const CustomHeader = props => {
   return (
     <View style={styles.container}>
-      {props.back && (
-        <Icon name={'chevron-left'} size={25} style={styles.icon} />
-      )}
-      <Text numberOfLines={1} style={{...fonts.h1, flex: 1}}>
-        {props.title}
-      </Text>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          // backgroundColor: 'red',
+        }}>
+        {props.back && (
+          <Icon
+            onPress={() => {
+              props.navigation.goBack();
+            }}
+            name={'chevron-left'}
+            size={size.height / 35}
+            style={{
+              marginHorizontal: 0,
+              padding: 0,
+              paddingRight: 10,
+            }}
+            color={colors.black}
+          />
+        )}
+        <Text numberOfLines={1} style={{...fonts.h1, flex: 1}}>
+          {props.title}
+        </Text>
+      </View>
       <View style={styles.postIconContainer}>
         {props.tag && <Icon name={'tag'} size={25} style={styles.icon} />}
         {props.search && <Icon name={'search'} size={25} style={styles.icon} />}
@@ -41,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     padding: 5,
     // backgroundColor: 'red',
   },

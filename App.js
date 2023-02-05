@@ -8,12 +8,13 @@ import BottomNavigationTab from './src/navigation/BottomNavigationTab';
 import ScreenNames from './src/navigation/screenNames/ScreenNames';
 import OnboardingScreen from './src/screens/auth/OnboardingScreen';
 import ForgotPasswordScreen from './src/screens/auth/ForgotPasswordScreen';
-import SearchScreen from './src/screens/SearchScreen';
 import DoctorScreen from './src/screens/tabs/DoctorScreen';
 import DoctorHomeScreen from './src/screens/doctor/DoctorHomeScreen';
 import MedicineScreen from './src/screens/MedicineScreen';
 import CategoryScreen from './src/screens/CategoryScreen';
 import ProductScreen from './src/screens/ProductScreen';
+import SearchScreen from './src/screens/SearchScreen';
+import LabScreen from './src/screens/tabs/LabScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +43,6 @@ const App = () => {
           component={ForgotPasswordScreen}
         />
         <Stack.Screen name={ScreenNames.Home} component={BottomNavigationTab} />
-
         <Stack.Screen
           name={ScreenNames.DoctorScreen}
           component={DoctorScreen}
@@ -51,10 +51,6 @@ const App = () => {
         <Stack.Screen
           name={ScreenNames.DoctorHomeScreen}
           component={DoctorHomeScreen}
-        />
-        <Stack.Screen
-          name={ScreenNames.SearchScreen}
-          component={SearchScreen}
         />
         <Stack.Screen
           name={ScreenNames.MedicineScreen}
@@ -68,6 +64,11 @@ const App = () => {
           name={ScreenNames.ProductScreen}
           component={ProductScreen}
         />
+        <Stack.Screen
+          name={ScreenNames.SearchScreen}
+          component={SearchScreen}
+        />
+        <Stack.Screen name={ScreenNames.LabScreen} component={LabScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -11,7 +11,7 @@ const MedicineScreen = props => {
 
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader title="Medicines" />
+      <CustomHeader title="Medicines" back {...props} />
       <CustomSearchBar
         placeholder="Search Medicine.."
         onPress={() => {

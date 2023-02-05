@@ -11,7 +11,6 @@ import colors from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {size} from '../styles/size';
-import SearchScreen from '../screens/SearchScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -81,16 +80,6 @@ const BottomNavigationTab = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name={ScreenNames.SearchScreen}
-        component={SearchScreen}
-        options={{
-          tabBarLabel: 'Search',
-          tabBarIcon: ({focused, color}) => (
-            <Fontisto name="search" size={size.height / 35} color={color} />
-          ),
-        }}
-      /> */}
       <Tab.Screen
         name={ScreenNames.ProfileScreen}
         component={ProfileScreen}
