@@ -131,7 +131,7 @@ const HomeScreen = props => {
               <Text
                 style={{
                   ...fonts.h5,
-                  color: colors.white,
+                  color: colors.primary_color,
                 }}>
                 Upload
               </Text>
@@ -232,10 +232,11 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   btn: {
-    backgroundColor: colors.primary_color,
+    borderColor: colors.primary_color,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 30,
+    borderRadius: 20,
     margin: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,

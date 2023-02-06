@@ -19,6 +19,7 @@ import {Images} from '../assets/images';
 import CustomHeading from '../components/CustomHeading';
 import PrimaryProductCard from '../components/product/PrimaryProductCard';
 import SecondaryProductCard from '../components/product/SecondaryProductCard';
+import SimpleBanner from '../components/banner/SimpleBanner';
 
 const ProductCard = ({item}) => {
   return (
@@ -78,14 +79,7 @@ const ProductScreen = props => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* simple banner */}
-        <View style={styles.bannerContainer}>
-          <View style={styles.slide}>
-            <Image
-              source={Images.banners3}
-              style={{flex: 1, resizeMode: 'cover', height: 200, width: 500}}
-            />
-          </View>
-        </View>
+        <SimpleBanner />
         {/* horizontal products */}
         <View style={{elevation: 2, backgroundColor: colors.white, padding: 5}}>
           <CustomHeading header1={'Popular Products'} />
