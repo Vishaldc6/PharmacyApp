@@ -7,7 +7,8 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomSearchBar from '../../components/CustomSearchBar';
@@ -19,13 +20,32 @@ import {size} from '../../styles/size';
 import CustomHeading from '../../components/CustomHeading';
 import {tests} from '../../assets/data/tests';
 import {diseases} from '../../assets/data/diseases';
+import {labs} from '../../assets/data/labs';
 
-const TestCard = ({item}) => (
-  <View>
-    <Text style={{...fonts.h2}}>{item.name}</Text>
-    <Text style={{...fonts.h3}}>{item.details}</Text>
-  </View>
-);
+const TestCard = ({item, index}) => {
+  const [isChecked, setisChecked] = useState(false);
+  return (
+    <TouchableWithoutFeedback
+      onPress={() => {
+        setisChecked(!isChecked);
+      }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}>
+        <View>
+          <Text style={{...fonts.h2}}>{item.name}</Text>
+          <Text style={{...fonts.h3}}>{item.details}</Text>
+        </View>
+        {isChecked && (
+          <Icon name={'check'} size={20} color={colors.primary_color} />
+        )}
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
 
 const DiseasesCard = ({item}) => (
   <View style={styles.diseasesCard}>
@@ -34,9 +54,48 @@ const DiseasesCard = ({item}) => (
       resizeMode={'cover'}
       style={{height: 50, width: 50}}
     />
-    <Text>{item.name}</Text>
+    <Text style={fonts.h5}>{item.name}</Text>
   </View>
 );
+
+const LabCard = ({item}) => {
+  const discountedPrice =
+    item.price - parseFloat(item.price) / parseFloat(item.discount);
+
+  return (
+    <View style={styles.labCard}>
+      <Text style={fonts.h5}>{item.name}</Text>
+      <Text>Includes {item.included_tests.length} Tests</Text>
+      <Image
+        source={Images.noImage}
+        resizeMode={'cover'}
+        style={{margin: 10, height: 80, width: 80, alignSelf: 'center'}}
+      />
+      <Text>{item.rate} rate</Text>
+      <Text style={{...fonts.h3, color: colors.primary_color}}>
+        {item.discount} % off
+      </Text>
+      <Text
+        style={{
+          ...fonts.h3,
+          color: colors.darkgray,
+          textDecorationLine: 'line-through',
+        }}>
+        Rs.{item.price}
+      </Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginVertical: 5,
+        }}>
+        <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text>
+        <Text style={{...fonts.h6, color: colors.primary_color}}>Book </Text>
+      </View>
+    </View>
+  );
+};
 
 const LabScreen = () => {
   return (
@@ -64,17 +123,7 @@ const LabScreen = () => {
               Just upload the prescription and tell us what you need. We do the
               rest !
             </Text>
-            <View
-              style={styles.btn}
-              // style={{
-              //   flex: 1,
-              //   borderWidth: 1,
-              //   borderRadius: 10,
-              //   borderColor: colors.primary_color,
-              //   justifyContent: 'center',
-              //   alignItems: 'center',
-              // }}
-            >
+            <View style={styles.btn}>
               <Text
                 style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
                 Upload
@@ -113,7 +162,9 @@ const LabScreen = () => {
               />
             )}
             data={tests}
-            renderItem={({item}) => <TestCard item={item} />}
+            renderItem={({item, index}) => (
+              <TestCard item={item} index={index} />
+            )}
           />
         </View>
         {/* Health Checkup Categories */}
@@ -127,7 +178,15 @@ const LabScreen = () => {
           />
         </View>
         {/* Horizontal Labs */}
-
+        <View style={{marginVertical: 10}}>
+          <CustomHeading header1={'Popular Labs'} />
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            data={labs}
+            renderItem={({item}) => <LabCard item={item} />}
+          />
+        </View>
         <Text>LabScreen</Text>
       </ScrollView>
     </View>
@@ -160,6 +219,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     height: 100,
     width: 100,
+    borderRadius: 10,
+    margin: 10,
+  },
+  labCard: {
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    backgroundColor: colors.white,
+    // height: 100,
+    // width: 100,
+    padding: 10,
     borderRadius: 10,
     margin: 10,
   },

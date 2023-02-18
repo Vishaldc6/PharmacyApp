@@ -15,6 +15,10 @@ import CategoryScreen from './src/screens/CategoryScreen';
 import ProductScreen from './src/screens/ProductScreen';
 import SearchScreen from './src/screens/SearchScreen';
 import LabScreen from './src/screens/tabs/LabScreen';
+import AdminHomeScreen from './src/screens/admin/AdminHomeScreen';
+import AdminLabScreen from './src/screens/admin/AdminLabScreen';
+import AdminTestScreen from './src/screens/admin/AdminTestScreen';
+import AdminProductScreen from './src/screens/admin/AdminProductScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -69,6 +73,22 @@ const App = () => {
           component={SearchScreen}
         />
         <Stack.Screen name={ScreenNames.LabScreen} component={LabScreen} />
+        <Stack.Screen
+          name={ScreenNames.AdminHomeScreen}
+          component={AdminHomeScreen}
+        />
+        <Stack.Screen
+          name={ScreenNames.AdminLabScreen}
+          component={AdminLabScreen}
+        />
+        <Stack.Screen
+          name={ScreenNames.AdminTestScreen}
+          component={AdminTestScreen}
+        />
+        <Stack.Screen
+          name={ScreenNames.AdminProductScreen}
+          component={AdminProductScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

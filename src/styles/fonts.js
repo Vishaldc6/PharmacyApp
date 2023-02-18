@@ -36,4 +36,9 @@ export default Fonts = {
     fontWeight: '600',
     color: colors.black,
   },
+  h8: {
+    fontSize: 30,
+    fontWeight: '800',
+    color: colors.black,
+  },
 };

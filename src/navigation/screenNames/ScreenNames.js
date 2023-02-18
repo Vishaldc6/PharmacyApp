@@ -1,4 +1,11 @@
 export default ScreenName = {
+  //admin
+  AdminHomeScreen: 'AdminHomeScreen',
+  AdminProductScreen: 'AdminProductScreen',
+  AdminLabScreen: 'AdminLabScreen',
+  AdminTestScreen: 'AdminTestScreen',
+
+  //user
   OnboardingScreen: 'OnboardingScreen',
   WellcomeScreen: 'WellcomeScreen',
   SignInScreen: 'SignInScreen',
@@ -16,6 +23,7 @@ export default ScreenName = {
   MedicineScreen: 'MedicineScreen',
   CategoryScreen: 'CategoryScreen',
   ProductScreen: 'ProductScreen',
+  CarePlanScreen: 'CarePlanScreen',
 
   // doctor
   DoctorHomeScreen: 'DoctorHomeScreen',

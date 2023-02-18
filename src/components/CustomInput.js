@@ -34,7 +34,7 @@ const CustomInput = props => {
           }
           placeholder={props.placeholder}
           value={props.value}
-          onChange={props.onChange}
+          onChangeText={props.onChangeText}
           keyboardType={props.keyboardType}
           secureTextEntry={isVisible ? false : true}
         />

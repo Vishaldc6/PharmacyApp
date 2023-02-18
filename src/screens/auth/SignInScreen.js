@@ -14,7 +14,6 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
@@ -42,21 +41,11 @@ const SignInScreen = props => {
         <SafeAreaView>
           <KeyboardAvoidingView>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View
-                style={{
-                  flex: 1,
-                  width: size.width,
-                  backgroundColor: colors.white,
-                  borderWidth: 1,
-                  borderRadius: 30,
-                  padding: 20,
-                  position: 'absolute',
-                  bottom: -size.height - size.height / 12,
-                }}>
+              <View style={GlobalStyles.formContainer}>
                 <Text style={fonts.h1}>Wellcome</Text>
                 <View style={{height: 20}} />
                 <CustomInput
-                  onChange={val => {
+                  onChangeText={val => {
                     setusername(val);
                   }}
                   value={username}
@@ -66,11 +55,10 @@ const SignInScreen = props => {
                   iconName={'user-circle-o'}
                 />
                 <Text style={styles.errorText}>{usernameError}</Text>
-
                 <CustomInput
                   passwordField={true}
                   value={password}
-                  onChange={val => {
+                  onChangeText={val => {
                     setpassword(val);
                   }}
                   title={'Password'}
@@ -106,15 +94,22 @@ const SignInScreen = props => {
                   <CustomButton
                     title={'Sign in'}
                     onPress={() => {
+                      console.log('username', username);
                       // if (username == '' && password == '') {
                       //   // Alert.alert('Sign in',"All flieds are empty")
                       //   setusernameError('* Please enter Username');
                       //   setpasswordError('* Please enter Password');
                       // }
-                      if (isCheck) {
-                        props.navigation.navigate(ScreenNames.DoctorHomeScreen);
+                      if (username == 'admin' && password == 'admin123') {
+                        props.navigation.navigate(ScreenNames.AdminHomeScreen);
                       } else {
-                        props.navigation.navigate(ScreenNames.Home);
+                        if (isCheck) {
+                          props.navigation.navigate(
+                            ScreenNames.DoctorHomeScreen,
+                          );
+                        } else {
+                          props.navigation.navigate(ScreenNames.Home);
+                        }
                       }
                     }}
                   />

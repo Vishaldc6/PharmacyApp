@@ -59,7 +59,7 @@ const ForgotPasswordScreen = props => {
                 <View style={{height: 20}} />
                 <CustomInput
                   value={username}
-                  onChange={val => {
+                  onChangeText={val => {
                     setusername(val);
                   }}
                   title={'Username'}
@@ -71,7 +71,7 @@ const ForgotPasswordScreen = props => {
                 <CustomInput
                   passwordField={true}
                   value={password}
-                  onChange={val => {
+                  onChangeText={val => {
                     setpassword(val);
                   }}
                   title={'New Password'}
@@ -83,7 +83,7 @@ const ForgotPasswordScreen = props => {
                 <CustomInput
                   passwordField={true}
                   value={confirmPassword}
-                  onChange={val => {
+                  onChangeText={val => {
                     setconfirmPassword(val);
                   }}
                   title={'Confirm New Password'}

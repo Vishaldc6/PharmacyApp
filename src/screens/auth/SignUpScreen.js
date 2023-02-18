@@ -4,9 +4,7 @@ import {
   StyleSheet,
   ImageBackground,
   SafeAreaView,
-  Alert,
   KeyboardAvoidingView,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
@@ -16,7 +14,6 @@ import {size} from '../../styles/size';
 import CustomInput from '../../components/CustomInput';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
@@ -52,26 +49,11 @@ const SignUpScreen = props => {
         <SafeAreaView>
           <KeyboardAvoidingView>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View
-                style={{
-                  flex: 1,
-                  width: size.width,
-                  backgroundColor: colors.white,
-                  borderWidth: 1,
-                  borderRadius: 30,
-                  padding: 20,
-                  position: 'absolute',
-                  bottom: -size.height - size.height / 12,
-                }}>
-                {/* <KeyboardAwareScrollView
-            
-              keyboardShouldPersistTaps={'always'}
-              style={styles.mainContainer}
-              enableOnAndroid={true}> */}
+              <View style={GlobalStyles.formContainer}>
                 <Text style={fonts.h1}>New Account</Text>
                 <View style={{height: 20}} />
                 <CustomInput
-                  onChange={val => {
+                  onChangeText={val => {
                     setemail(val);
                   }}
                   value={email}
@@ -80,10 +62,9 @@ const SignUpScreen = props => {
                   keyboardType={'email-address'}
                   iconName={'envelope-o'}
                 />
-
                 <Text style={styles.errorText}>{emailError}</Text>
                 <CustomInput
-                  onChange={val => {
+                  onChangeText={val => {
                     setusername(val);
                   }}
                   value={username}
@@ -95,7 +76,7 @@ const SignUpScreen = props => {
                 <Text style={styles.errorText}>{usernameError}</Text>
                 <CustomInput
                   passwordField={true}
-                  onChange={val => {
+                  onChangeText={val => {
                     setpassword(val);
                   }}
                   value={password}
@@ -106,7 +87,7 @@ const SignUpScreen = props => {
                 <Text style={styles.errorText}>{passwordError}</Text>
                 <CustomInput
                   passwordField={true}
-                  onChange={val => {
+                  onChangeText={val => {
                     setconfirmPassword(val);
                   }}
                   value={confirmPassword}
@@ -163,7 +144,6 @@ const SignUpScreen = props => {
                   </Text>
                 </Text>
                 <View style={{height: size.height / 10}} />
-                {/* </KeyboardAwareScrollView> */}
               </View>
             </TouchableWithoutFeedback>
           </KeyboardAvoidingView>
@@ -174,9 +154,6 @@ const SignUpScreen = props => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
   bgImage: {
     flex: 1,
   },
