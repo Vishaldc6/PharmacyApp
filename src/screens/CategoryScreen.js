@@ -31,7 +31,7 @@ const Banner = ({image}) => (
 const CategoryScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader title={'Categories'} />
+      <CustomHeader title={'Categories'} back {...props} />
       <CustomSearchBar
         onPress={() => {
           //   props.navigation.navigate(ScreenNames.SearchScreen);

@@ -70,7 +70,7 @@ const ProductCard = ({item}) => {
 const ProductScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader title={'Products'} />
+      <CustomHeader title={'Products'} back {...props} />
       <CustomSearchBar
         onPress={() => {
           //   props.navigation.navigate(ScreenNames.SearchScreen);

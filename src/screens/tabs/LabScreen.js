@@ -97,10 +97,10 @@ const LabCard = ({item}) => {
   );
 };
 
-const LabScreen = () => {
+const LabScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader search={true} title={'Laboratory'} />
+      <CustomHeader title={'Laboratory'} back {...props} />
       <CustomSearchBar placeholder={'Search Labs or Tests (CBC, WD3, ect.)'} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Simple Banner */}

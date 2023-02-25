@@ -1,5 +1,6 @@
 import {View, Text, FlatList, Image, StyleSheet, Button} from 'react-native';
 import React from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomSearchBar from '../../components/CustomSearchBar';
@@ -33,7 +34,7 @@ const LabCard = ({item}) => {
           Rs.{item.price}
         </Text>
         <View style={{height: 20}} />
-        <View style={GlobalStyles.rowContainer}>
+        {/* <View style={GlobalStyles.rowContainer}>
           <Button
             title="Edit"
             onPress={() => {
@@ -46,8 +47,25 @@ const LabCard = ({item}) => {
               console.log('Deleted Item id : ', item.id);
             }}
           />
-        </View>
+        </View> */}
       </View>
+      <Icon
+        name="pencil"
+        color={colors.primary_color}
+        size={25}
+        onPress={() => {
+          console.log(item.id);
+        }}
+      />
+      <View style={{width: 20}} />
+      <Icon
+        name="trash-o"
+        color={colors.primary_color}
+        size={25}
+        onPress={() => {
+          console.log('Deleted Item id : ', item.id);
+        }}
+      />
     </View>
   );
 };

@@ -1,5 +1,6 @@
 import {View, Text, Image, StyleSheet, Button} from 'react-native';
 import React from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import {size} from '../../styles/size';
@@ -48,8 +49,25 @@ const SecondaryProductCard = ({item, isAdmin, editPress, deletePress}) => {
         {/* <CustomButton title={'Add to Cart'} /> */}
         {isAdmin ? (
           <View style={GlobalStyles.rowContainer}>
-            <Button title="Edit" onPress={editPress} />
-            <Button title="Delete" onPress={deletePress} />
+            {/* <Button title="Edit" onPress={editPress} />
+            <Button title="Delete" onPress={deletePress} /> */}
+            <Icon
+              name="pencil"
+              color={colors.primary_color}
+              size={25}
+              onPress={() => {
+                console.log(item.id);
+              }}
+            />
+            <View style={{width: 20}} />
+            <Icon
+              name="trash-o"
+              color={colors.primary_color}
+              size={25}
+              onPress={() => {
+                console.log('Deleted Item id : ', item.id);
+              }}
+            />
           </View>
         ) : (
           <View

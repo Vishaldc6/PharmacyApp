@@ -6,8 +6,12 @@ import {
   Image,
   FlatList,
   ScrollView,
+  Platform,
+  PermissionsAndroid,
+  Modal,
+  Button,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomSearchBar from '../../components/CustomSearchBar';
@@ -25,6 +29,10 @@ import {products} from '../../assets/data/products';
 import CustomHeading from '../../components/CustomHeading';
 import PrimaryProductCard from '../../components/product/PrimaryProductCard';
 import CategoryCard from '../../components/category/CategoryCard';
+import {openCamera, openGallery} from '../../utils/functions';
+import CustomModal from '../../components/CustomModal';
+
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const Card = ({title, icon, onPress}) => (
   <TouchableWithoutFeedback onPress={onPress}>
@@ -57,6 +65,64 @@ const Banner = ({image}) => (
 
 const HomeScreen = props => {
   const navigation = useNavigation();
+
+  const [isModal, setisModal] = useState(false);
+
+  const requestCameraPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'App needs camera permission',
+          },
+        );
+        // If CAMERA Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        return false;
+      }
+    } else return true;
+  };
+
+  const requestExternalWritePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'External Storage Write Permission',
+            message: 'App needs write permission',
+          },
+        );
+        // If WRITE_EXTERNAL_STORAGE Permission is granted
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        alert('Write permission err', err);
+      }
+      return false;
+    } else return true;
+  };
+
+  const openCamera = async () => {
+    let isCameraPermitted = await requestCameraPermission();
+    let isStoragePermitted = await requestExternalWritePermission();
+    console.log(isCameraPermitted);
+    console.log(isStoragePermitted);
+    if (isCameraPermitted && isStoragePermitted) {
+      launchCamera({}, response => {
+        console.log('response : ', response);
+      });
+    }
+  };
+
+  const openGallery = async () => {
+    launchImageLibrary({}, res => {
+      console.log('response : ', res);
+    });
+  };
+
   return (
     <View style={GlobalStyles.mainContainer}>
       {/* Header */}
@@ -88,7 +154,7 @@ const HomeScreen = props => {
             icon={'laboratory'}
             onPress={() => {
               console.log('Lab Test Page');
-              props.navigation.push(ScreenNames.LabScreen);
+              props.navigation.navigate(ScreenNames.LabScreen);
             }}
           />
           <Card
@@ -111,7 +177,7 @@ const HomeScreen = props => {
             icon={'doctor'}
             onPress={() => {
               console.log('Consult Doctor Page');
-              props.navigation.push(ScreenNames.DoctorScreen);
+              props.navigation.navigate(ScreenNames.DoctorScreen);
             }}
           />
         </View>
@@ -126,7 +192,10 @@ const HomeScreen = props => {
             </Text>
           </View>
           <TouchableWithoutFeedback
-            onPress={() => props.navigation.navigate(ScreenNames.SearchScreen)}>
+            onPress={async () => {
+              setisModal(true);
+              console.log('uploading ...');
+            }}>
             <View style={styles.btn}>
               <Text
                 style={{
@@ -201,8 +270,47 @@ const HomeScreen = props => {
             }
           />
         </View>
-        <Text>HomeScreen</Text>
       </ScrollView>
+      {/* <CustomModal visibility={isModal} /> */}
+      <Modal visible={isModal} animationType={'slide'} transparent={true}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              width: '75%',
+              backgroundColor: 'white',
+              padding: 10,
+              elevation: 5,
+            }}>
+            <Text style={{...fonts.h6, marginVertical: 10}}>Select Option</Text>
+            <Text
+              onPress={() => {
+                openCamera();
+                setisModal(false);
+              }}
+              style={{...fonts.h5, margin: 5}}>
+              Open Camera
+            </Text>
+            <Text
+              onPress={() => {
+                openGallery();
+                setisModal(false);
+              }}
+              style={{...fonts.h5, margin: 5}}>
+              Choose from Gallery
+            </Text>
+            <Text
+              onPress={() => setisModal(false)}
+              style={{...fonts.h5, margin: 5}}>
+              Cancel
+            </Text>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

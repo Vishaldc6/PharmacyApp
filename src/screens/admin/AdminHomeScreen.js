@@ -8,6 +8,7 @@ import {tests} from '../../assets/data/tests';
 import {labs} from '../../assets/data/labs';
 import colors from '../../styles/colors';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
+import {categories} from '../../assets/data/categories';
 
 const Card = ({title, number, onPress}) => {
   return (
@@ -31,6 +32,11 @@ const AdminHomeScreen = props => {
         onPress={() => {
           props.navigation.navigate(ScreenNames.AdminProductScreen);
         }}
+      />
+      <Card
+        title={'Categories'}
+        number={categories.length}
+        onPress={() => {}}
       />
       <Card
         title={'Laboratories'}
