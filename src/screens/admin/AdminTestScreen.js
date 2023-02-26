@@ -7,6 +7,7 @@ import CustomSearchBar from '../../components/CustomSearchBar';
 import colors from '../../styles/colors';
 import {tests} from '../../assets/data/tests';
 import fonts from '../../styles/fonts';
+import AdminButtons from '../../components/admin/AdminButtons';
 
 const AdminTestScreen = props => {
   return (
@@ -32,21 +33,22 @@ const AdminTestScreen = props => {
         )}
         data={tests}
         renderItem={({item}) => (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              margin: 10,
-            }}>
-            <View>
-              <Text style={fonts.h2}>{item.name}</Text>
-              <Text style={fonts.h3}>{item.details}</Text>
-            </View>
-            <View style={GlobalStyles.rowContainer}>
+          <View style={{margin: 5}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                margin: 5,
+              }}>
+              <View>
+                <Text style={fonts.h2}>{item.name}</Text>
+                <Text style={fonts.h3}>{item.details}</Text>
+              </View>
+              {/* <View style={GlobalStyles.rowContainer}>
               <Icon
-                name="pencil"
-                color={colors.primary_color}
+              name="pencil"
+              color={colors.primary_color}
                 size={25}
                 onPress={() => {
                   console.log(item.id);
@@ -54,14 +56,16 @@ const AdminTestScreen = props => {
               />
               <View style={{width: 20}} />
               <Icon
-                name="trash-o"
-                color={colors.primary_color}
-                size={25}
-                onPress={() => {
-                  console.log('Deleted Item id : ', item.id);
-                }}
+              name="trash-o"
+              color={colors.primary_color}
+              size={25}
+              onPress={() => {
+                console.log('Deleted Item id : ', item.id);
+              }}
               />
+            </View> */}
             </View>
+            <AdminButtons item={item} />
           </View>
         )}
       />

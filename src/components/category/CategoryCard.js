@@ -1,16 +1,33 @@
 import {View, Text, Image, StyleSheet} from 'react-native';
 import React from 'react';
 import fonts from '../../styles/fonts';
+import AdminButtons from '../admin/AdminButtons';
 
-const CategoryCard = ({item}) => {
+const CategoryCard = ({item, isAdmin}) => {
   return (
-    <View style={styles.categoryCard}>
-      <Image
-        source={item.image}
-        style={{height: 100, width: 100, alignSelf: 'center'}}
-        resizeMode={'stretch'}
-      />
-      <Text style={{...fonts.h4, alignSelf: 'center'}}>{item.name}</Text>
+    <View
+      style={{
+        flex: 1,
+        margin: 5,
+        // alignSelf: 'center',
+        // backgroundColor: 'green',
+      }}>
+      <View
+        style={{
+          ...styles.categoryCard,
+          flexDirection: isAdmin ? 'row' : 'column',
+        }}>
+        <Image
+          source={item.image}
+          style={{height: 100, width: 100, alignSelf: 'center'}}
+          resizeMode={'stretch'}
+        />
+        {isAdmin && <View style={{width: 20}} />}
+        <Text style={{...fonts.h4, alignSelf: 'center'}} numberOfLines={1}>
+          {item.name}
+        </Text>
+      </View>
+      {isAdmin && <AdminButtons item={item} />}
     </View>
   );
 };
@@ -22,7 +39,7 @@ const styles = StyleSheet.create({
     margin: 5,
     // justifyContent: 'center',
     // alignContent: 'center',
-    alignSelf: 'center',
+    // alignSelf: 'center',
   },
 });
 

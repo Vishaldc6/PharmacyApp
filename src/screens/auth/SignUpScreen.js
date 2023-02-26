@@ -44,7 +44,7 @@ const SignUpScreen = props => {
   }, []);
 
   return (
-    <View style={{...GlobalStyles.mainContainer, marginHorizontal: 0}}>
+    <View style={{flex: 1}}>
       <ImageBackground source={Images.backgroundImage} style={styles.bgImage}>
         <SafeAreaView>
           <KeyboardAvoidingView>

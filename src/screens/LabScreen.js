@@ -6,21 +6,24 @@ import {
   Image,
   FlatList,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import GlobalStyles from '../../styles/GlobalStyles';
-import CustomHeader from '../../components/CustomHeader';
-import CustomSearchBar from '../../components/CustomSearchBar';
-import SimpleBanner from '../../components/banner/SimpleBanner';
-import fonts from '../../styles/fonts';
-import colors from '../../styles/colors';
-import {Images} from '../../assets/images';
-import {size} from '../../styles/size';
-import CustomHeading from '../../components/CustomHeading';
-import {tests} from '../../assets/data/tests';
-import {diseases} from '../../assets/data/diseases';
-import {labs} from '../../assets/data/labs';
+import GlobalStyles from '../styles/GlobalStyles';
+import CustomHeader from '../components/CustomHeader';
+import CustomSearchBar from '../components/CustomSearchBar';
+import SimpleBanner from '../components/banner/SimpleBanner';
+import fonts from '../styles/fonts';
+import colors from '../styles/colors';
+import {Images} from '../assets/images';
+import {size} from '../styles/size';
+import CustomHeading from '../components/CustomHeading';
+import {tests} from '../assets/data/tests';
+import {diseases} from '../assets/data/diseases';
+import {labs} from '../assets/data/labs';
+import {AppStrings} from '../utils/AppStrings';
+import ScreenNames from '../navigation/screenNames/ScreenNames';
 
 const TestCard = ({item, index}) => {
   const [isChecked, setisChecked] = useState(false);
@@ -47,6 +50,21 @@ const TestCard = ({item, index}) => {
   );
 };
 
+const InformationCard = ({image, title, subTitle}) => (
+  <View
+    style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: 10,
+    }}>
+    <Image source={image} style={{marginRight: 10, height: 50, width: 50}} />
+    <View style={{flex: 1}}>
+      <Text style={fonts.h2}>{title}</Text>
+      <Text style={fonts.h3}>{subTitle}</Text>
+    </View>
+  </View>
+);
+
 const DiseasesCard = ({item}) => (
   <View style={styles.diseasesCard}>
     <Image
@@ -66,11 +84,7 @@ const LabCard = ({item}) => {
     <View style={styles.labCard}>
       <Text style={fonts.h5}>{item.name}</Text>
       <Text>Includes {item.included_tests.length} Tests</Text>
-      <Image
-        source={Images.noImage}
-        resizeMode={'cover'}
-        style={{margin: 10, height: 80, width: 80, alignSelf: 'center'}}
-      />
+      <Image source={Images.noImage} resizeMode={'cover'} style={styles.img} />
       <Text>{item.rate} rate</Text>
       <Text style={{...fonts.h3, color: colors.primary_color}}>
         {item.discount} % off
@@ -107,28 +121,36 @@ const LabScreen = props => {
         <SimpleBanner />
         {/* Book Lab with Prescription */}
         <View style={styles.prescriptionContainer}>
-          <View>
-            <Image
-              source={Images.noImage}
-              style={{
-                height: size.height / 10,
-                width: size.height / 10,
-                margin: 10,
-              }}
-            />
-          </View>
+          <Image
+            source={Images.noImage}
+            style={{
+              height: size.height / 10,
+              width: size.height / 10,
+              margin: 10,
+            }}
+          />
+
           <View style={{flex: 1}}>
             <Text style={fonts.h6}>Order quickly with a prescription</Text>
             <Text style={fonts.h3}>
               Just upload the prescription and tell us what you need. We do the
               rest !
             </Text>
-            <View style={styles.btn}>
-              <Text
-                style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
-                Upload
-              </Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate(ScreenNames.UploadPrescriptionScreen);
+              }}>
+              <View style={styles.btn}>
+                <Text
+                  style={{
+                    ...fonts.h6,
+                    margin: 10,
+                    color: colors.primary_color,
+                  }}>
+                  Upload
+                </Text>
+              </View>
+            </TouchableOpacity>
             {/* <TouchableWithoutFeedback>
               <View style={styles.btn}>
                 <Text
@@ -187,7 +209,31 @@ const LabScreen = props => {
             renderItem={({item}) => <LabCard item={item} />}
           />
         </View>
-        <Text>LabScreen</Text>
+
+        {/* Information */}
+        <View style={{padding: 20, backgroundColor: colors.white}}>
+          <Text style={fonts.h1}>{AppStrings.howDoesHome}</Text>
+          <InformationCard
+            image={Images.noImage}
+            title={AppStrings.completeBooking}
+            subTitle={AppStrings.includesSelection}
+          />
+          <InformationCard
+            image={Images.noImage}
+            title={AppStrings.safeHomeSample}
+            subTitle={AppStrings.highlyTrained}
+          />
+          <InformationCard
+            image={Images.noImage}
+            title={AppStrings.smapleDelivery}
+            subTitle={AppStrings.phlebotomistDeliver}
+          />
+          <InformationCard
+            image={Images.noImage}
+            title={AppStrings.onlineReport}
+            subTitle={AppStrings.reportDelivery}
+          />
+        </View>
       </ScrollView>
     </View>
   );
@@ -232,6 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 10,
   },
+  img: {margin: 10, height: 80, width: 80, alignSelf: 'center'},
 });
 
 export default LabScreen;

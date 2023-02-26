@@ -1,7 +1,7 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
-import CustomHeader from '../../components/CustomHeader';
+import GlobalStyles from '../styles/GlobalStyles';
+import CustomHeader from '../components/CustomHeader';
 
 const OrderScreen = () => {
   return (

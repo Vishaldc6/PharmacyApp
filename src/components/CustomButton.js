@@ -3,6 +3,7 @@ import React from 'react';
 import {size} from '../styles/size';
 import Colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import colors from '../styles/colors';
 const CustomButton = props => {
   return (
     <TouchableWithoutFeedback {...props}>
@@ -18,6 +19,8 @@ const CustomButton = props => {
           justifyContent: 'center',
           borderRadius: 15,
           marginHorizontal: 10,
+          borderWidth: props.secondary ? 1 : 0,
+          borderColor: props.secondary && colors.primary_color,
         }}>
         <Text
           style={{

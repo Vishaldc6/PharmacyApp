@@ -71,7 +71,7 @@ const Done = ({...props}) => (
 );
 const OnboardingScreen = props => {
   return (
-    <View style={{...GlobalStyles.mainContainer, marginHorizontal: 0}}>
+    <View style={{flex: 1}}>
       <Onboarding
         bottomBarColor={Colors.white}
         skipToPage={2}

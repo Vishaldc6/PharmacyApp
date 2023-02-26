@@ -10,6 +10,7 @@ const CustomHeading = props => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        margin: 10,
       }}>
       <Text style={fonts.h1}>{props.header1}</Text>
       <Text

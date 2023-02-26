@@ -3,9 +3,9 @@ import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import ScreenNames from './screenNames/ScreenNames';
 import HomeScreen from '../screens/tabs/HomeScreen';
-import OrderScreen from '../screens/tabs/OrderScreen';
+import OrderScreen from '../screens/OrderScreen';
 import DoctorScreen from '../screens/tabs/DoctorScreen';
-import LabScreen from '../screens/tabs/LabScreen';
+import LabScreen from '../screens/LabScreen';
 import ProfileScreen from '../screens/tabs/ProfileScreen';
 import colors from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,7 +21,7 @@ const BottomNavigationTab = () => {
       barStyle={styles.barStyle}
       sceneAnimationType={'shifting'}
       shifting={true}
-      // screenOptions={{tabBarColor: colors.grey}}
+      screenOptions={{tabBarColor: colors.white}}
       // labeled={false}
       activeColor={colors.primary_color}
       initialRouteName={ScreenNames.HomeScreen}>
@@ -81,7 +81,7 @@ const BottomNavigationTab = () => {
 
 const styles = StyleSheet.create({
   barStyle: {
-    height: size.height / 10,
+    // height: size.height / 11,
     borderWidth: 0.2,
     backgroundColor: 'transparent',
     borderTopLeftRadius: 15,

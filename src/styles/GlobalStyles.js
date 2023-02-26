@@ -4,12 +4,13 @@ import {size} from './size';
 export default GlobalStyles = {
   mainContainer: {
     flex: 1,
-    marginHorizontal: 10,
+    paddingHorizontal: 10,
     // backgroundColor: colors.white,
   },
   rowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   formContainer: {
     flex: 1,

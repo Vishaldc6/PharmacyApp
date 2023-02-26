@@ -81,7 +81,7 @@ const ProductScreen = props => {
         {/* simple banner */}
         <SimpleBanner />
         {/* horizontal products */}
-        <View style={{elevation: 2, backgroundColor: colors.white, padding: 5}}>
+        <View style={{elevation: 2, backgroundColor: colors.white}}>
           <CustomHeading header1={'Popular Products'} />
           <FlatList
             style={{marginVertical: 5}}
@@ -94,8 +94,8 @@ const ProductScreen = props => {
             }
           />
         </View>
-        {/* vertical products */}
 
+        {/* vertical products */}
         <FlatList
           style={{
             flex: 1,

@@ -1,4 +1,4 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, Image, StyleSheet} from 'react-native';
 import React from 'react';
 import CustomHeader from '../../components/CustomHeader';
 import GlobalStyles from '../../styles/GlobalStyles';
@@ -7,6 +7,7 @@ import colors from '../../styles/colors';
 import CustomHeading from '../../components/CustomHeading';
 import {size} from '../../styles/size';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {Images} from '../../assets/images';
 
 const ListTile = ({icon, title, onPress}) => (
   <View
@@ -35,20 +36,61 @@ const ListTile = ({icon, title, onPress}) => (
 const ProfileScreen = () => {
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader cart={true} title={'Profile'} />
-      {/* <Text style={fonts.h1}>Hii, xyz</Text>
-      <Text style={{color: colors.primary_color}}>View Profile</Text> */}
-      <CustomHeading header1={'Hii, xyz'} header2={'View Profile'} />
+      <CustomHeader cart={true} />
+      <View
+        style={{
+          alignItems: 'center',
+          // backgroundColor: 'red'
+        }}>
+        <Image
+          source={Images.noImage}
+          style={{
+            borderRadius: 100,
+            height: size.width / 3,
+            width: size.width / 3,
+            margin: 10,
+          }}
+        />
+        <Text style={fonts.h1}>Hello User</Text>
+        <Text style={fonts.h2}>20, Male</Text>
+      </View>
 
-      <ScrollView>
-        <ListTile icon={'shopping-cart'} title={'My Cart'} />
-        <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-        <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
-        <ListTile icon={'shopping-cart'} title={'My Orders'} />
-      </ScrollView>
-      <Text>ProfileScreen</Text>
+      <View
+        style={{
+          width: '100%',
+          position: 'absolute',
+          bottom: 0,
+          alignSelf: 'center',
+          padding: 10,
+          borderRadius: 20,
+          backgroundColor: colors.white,
+        }}>
+        <ScrollView>
+          <View style={styles.indicator} />
+
+          <Text style={{...fonts.h1, alignSelf: 'center', padding: 10}}>
+            My Information
+          </Text>
+          <ListTile icon={'shopping-cart'} title={'My Cart'} />
+          <ListTile icon={'shopping-cart'} title={'My Doctors'} />
+          <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+          <ListTile icon={'shopping-cart'} title={'My Orders'} />
+        </ScrollView>
+      </View>
+      {/* <Text>ProfileScreen</Text> */}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    height: 5,
+    width: 30,
+    backgroundColor: colors.grey,
+    borderRadius: 20,
+    alignSelf: 'center',
+    margin: 5,
+  },
+});
 
 export default ProfileScreen;

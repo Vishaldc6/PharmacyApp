@@ -48,12 +48,12 @@ const CustomHeader = props => {
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: 'blue',
-    height: size.height / 15,
+    // height: size.height / 15,
     // width: size.width,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 5,
+    paddingVertical: 10,
   },
   postIconContainer: {
     flexDirection: 'row',

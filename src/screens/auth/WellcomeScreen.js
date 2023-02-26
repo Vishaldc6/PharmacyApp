@@ -14,7 +14,7 @@ import {Images} from '../../assets/images';
 
 const WellcomeScreen = props => {
   return (
-    <View style={{...GlobalStyles.mainContainer, marginHorizontal: 0}}>
+    <View style={{flex: 1}}>
       <ImageBackground source={Images.backgroundImage} style={styles.bgImage}>
         <View style={{position: 'absolute', bottom: 50, width: size.width}}>
           <CustomButton

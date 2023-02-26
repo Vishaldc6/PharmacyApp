@@ -36,7 +36,9 @@ const AdminHomeScreen = props => {
       <Card
         title={'Categories'}
         number={categories.length}
-        onPress={() => {}}
+        onPress={() => {
+          props.navigation.navigate(ScreenNames.AdminCategoryScreen);
+        }}
       />
       <Card
         title={'Laboratories'}

@@ -8,6 +8,7 @@ import {labs} from '../../assets/data/labs';
 import colors from '../../styles/colors';
 import {size} from '../../styles/size';
 import fonts from '../../styles/fonts';
+import AdminButtons from '../../components/admin/AdminButtons';
 
 const LabCard = ({item}) => {
   const discountedPrice =
@@ -33,39 +34,10 @@ const LabCard = ({item}) => {
           }}>
           Rs.{item.price}
         </Text>
-        <View style={{height: 20}} />
-        {/* <View style={GlobalStyles.rowContainer}>
-          <Button
-            title="Edit"
-            onPress={() => {
-              console.log(item.id);
-            }}
-          />
-          <Button
-            title="Delete"
-            onPress={() => {
-              console.log('Deleted Item id : ', item.id);
-            }}
-          />
-        </View> */}
+        {/* <View style={{height: 20}} /> */}
+
+        <AdminButtons item={item} />
       </View>
-      <Icon
-        name="pencil"
-        color={colors.primary_color}
-        size={25}
-        onPress={() => {
-          console.log(item.id);
-        }}
-      />
-      <View style={{width: 20}} />
-      <Icon
-        name="trash-o"
-        color={colors.primary_color}
-        size={25}
-        onPress={() => {
-          console.log('Deleted Item id : ', item.id);
-        }}
-      />
     </View>
   );
 };

@@ -5,6 +5,7 @@ import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import {size} from '../../styles/size';
 import GlobalStyles from '../../styles/GlobalStyles';
+import AdminButtons from '../admin/AdminButtons';
 
 const SecondaryProductCard = ({item, isAdmin, editPress, deletePress}) => {
   const discountedPrice =
@@ -48,36 +49,46 @@ const SecondaryProductCard = ({item, isAdmin, editPress, deletePress}) => {
         </View>
         {/* <CustomButton title={'Add to Cart'} /> */}
         {isAdmin ? (
-          <View style={GlobalStyles.rowContainer}>
-            {/* <Button title="Edit" onPress={editPress} />
-            <Button title="Delete" onPress={deletePress} /> */}
-            <Icon
-              name="pencil"
-              color={colors.primary_color}
-              size={25}
-              onPress={() => {
-                console.log(item.id);
-              }}
-            />
-            <View style={{width: 20}} />
-            <Icon
-              name="trash-o"
-              color={colors.primary_color}
-              size={25}
-              onPress={() => {
-                console.log('Deleted Item id : ', item.id);
-              }}
-            />
-          </View>
+          // <View style={GlobalStyles.rowContainer}>
+          //   {/* <Button title="Edit" onPress={editPress} />
+          //   <Button title="Delete" onPress={deletePress} /> */}
+          //   <View
+          //     style={{
+          //       // flex:1,
+          //       ...styles.btn,
+          //     }}>
+          //     <Text
+          //       style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
+          //       Edit
+          //     </Text>
+          //   </View>
+          //   {/* <Icon
+          //     name="pencil"
+          //     color={colors.primary_color}
+          //     size={25}
+          //     onPress={() => {
+          //       console.log(item.id);
+          //     }}
+          //   /> */}
+          //   {/* <View style={{width: 20}} /> */}
+          //   <View style={styles.btn}>
+          //     <Icon
+          //       name="trash-o"
+          //       color={colors.primary_color}
+          //       size={25}
+          //       style={{margin: 8}}
+          //       onPress={() => {
+          //         console.log('Deleted Item id : ', item.id);
+          //       }}
+          //     />
+          //   </View>
+          // </View>
+          <AdminButtons item={item} />
         ) : (
           <View
             style={{
               flex: 1,
-              borderWidth: 1,
-              borderRadius: 10,
-              borderColor: colors.primary_color,
-              justifyContent: 'center',
-              alignItems: 'center',
+              ...styles.btn,
             }}>
             <Text
               style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
@@ -104,6 +115,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 5,
     // borderColor: colors.darkgray,
+  },
+  btn: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: colors.primary_color,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -64,10 +64,6 @@ const Banner = ({image}) => (
 );
 
 const HomeScreen = props => {
-  const navigation = useNavigation();
-
-  const [isModal, setisModal] = useState(false);
-
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -193,8 +189,9 @@ const HomeScreen = props => {
           </View>
           <TouchableWithoutFeedback
             onPress={async () => {
-              setisModal(true);
-              console.log('uploading ...');
+              props.navigation.navigate(ScreenNames.UploadPrescriptionScreen);
+              // setisModal(true);
+              // console.log('uploading ...');
             }}>
             <View style={styles.btn}>
               <Text
@@ -206,7 +203,7 @@ const HomeScreen = props => {
               </Text>
             </View>
           </TouchableWithoutFeedback>
-          {/* <CustomButton title={'Upload'} /> */}
+          {/* <CustomButton secondary title={'Upload'} /> */}
         </View>
 
         {/* Banners */}
@@ -225,8 +222,8 @@ const HomeScreen = props => {
           style={{
             elevation: 2,
             backgroundColor: colors.white,
-            padding: 5,
             marginVertical: 5,
+            // borderRadius: 10,
           }}>
           <CustomHeading
             header1={'Popular Categories'}
@@ -249,7 +246,6 @@ const HomeScreen = props => {
           style={{
             elevation: 2,
             backgroundColor: colors.white,
-            padding: 5,
             marginVertical: 5,
           }}>
           <CustomHeading
@@ -272,45 +268,6 @@ const HomeScreen = props => {
         </View>
       </ScrollView>
       {/* <CustomModal visibility={isModal} /> */}
-      <Modal visible={isModal} animationType={'slide'} transparent={true}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              width: '75%',
-              backgroundColor: 'white',
-              padding: 10,
-              elevation: 5,
-            }}>
-            <Text style={{...fonts.h6, marginVertical: 10}}>Select Option</Text>
-            <Text
-              onPress={() => {
-                openCamera();
-                setisModal(false);
-              }}
-              style={{...fonts.h5, margin: 5}}>
-              Open Camera
-            </Text>
-            <Text
-              onPress={() => {
-                openGallery();
-                setisModal(false);
-              }}
-              style={{...fonts.h5, margin: 5}}>
-              Choose from Gallery
-            </Text>
-            <Text
-              onPress={() => setisModal(false)}
-              style={{...fonts.h5, margin: 5}}>
-              Cancel
-            </Text>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };

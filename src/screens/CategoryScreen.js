@@ -39,7 +39,7 @@ const CategoryScreen = props => {
         placeholder="Search Category.."
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{elevation: 2, backgroundColor: colors.white, padding: 5}}>
+        <View style={{elevation: 2, backgroundColor: colors.white}}>
           <CustomHeading header1={'Popular Categories'} />
           <FlatList
             // style={{backgroundColor: 'red'}}
@@ -64,7 +64,7 @@ const CategoryScreen = props => {
           style={{
             elevation: 2,
             backgroundColor: colors.white,
-            padding: 5,
+
             marginVertical: 10,
           }}>
           <CustomHeading header1={'Popular Products'} />

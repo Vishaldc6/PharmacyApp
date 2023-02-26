@@ -1,5 +1,14 @@
 export default colors = {
+  //Admin Theme
+  primary_color_admin: '#FF7F50',
+
+  // Patient Theme
+  // primary_color: '#87CEFA',
   primary_color: '#2879FF',
+
+  //Doctor Theme
+  primary_color_doc: '#483D8B',
+
   white: '#ffffff',
   black: '#000000',
   grey: '#B6B6B6',
