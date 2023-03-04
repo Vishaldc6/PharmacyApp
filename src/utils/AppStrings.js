@@ -1,4 +1,7 @@
 export const AppStrings = {
+  // BASE URL
+  BASE_URL: 'http://192.168.29.125:8000/api',
+
   // LabScreen
   howDoesHome: 'How does home sample collection for lab tests works',
   completeBooking: 'Complete Booking',

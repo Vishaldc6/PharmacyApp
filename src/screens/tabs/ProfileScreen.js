@@ -1,5 +1,12 @@
-import {View, Text, ScrollView, Image, StyleSheet} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  StyleSheet,
+  Animated,
+} from 'react-native';
+import React, {useRef} from 'react';
 import CustomHeader from '../../components/CustomHeader';
 import GlobalStyles from '../../styles/GlobalStyles';
 import fonts from '../../styles/fonts';
@@ -33,29 +40,114 @@ const ListTile = ({icon, title, onPress}) => (
   </View>
 );
 
+HeaderMaxHeight = size.height / 2;
+HeaderMinHeight = size.height / 10;
+ImageMaxHeight = size.height / 5;
+ImageMinHeight = size.height / 12;
+ImageTop = size.height / 8;
+ImageLeft = size.width / 3.5;
+ImageMinTop = 5;
+ImageMinLeft = 5;
+
 const ProfileScreen = () => {
+  const scrollY = useRef(new Animated.Value(0)).current;
+
+  const heightHandller = scrollY.interpolate({
+    inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
+    outputRange: [HeaderMaxHeight, HeaderMinHeight],
+    extrapolate: 'clamp',
+  });
+
+  const imageheightHandller = scrollY.interpolate({
+    inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
+    outputRange: [ImageMaxHeight, ImageMinHeight],
+    extrapolate: 'clamp',
+  });
+  const imagetransformationTopHandller = scrollY.interpolate({
+    inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
+    outputRange: [ImageTop, ImageMinTop],
+    extrapolate: 'clamp',
+  });
+  const imagetransformationLeftHandller = scrollY.interpolate({
+    inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
+    outputRange: [ImageLeft, ImageMinLeft],
+    extrapolate: 'clamp',
+  });
+  const scaleImageHandler = scrollY.interpolate({
+    inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
+    outputRange: [1.5, 1],
+    extrapolate: 'clamp',
+  });
+
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader cart={true} />
-      <View
+      {/* <CustomHeader cart={true} /> */}
+      <Animated.View
         style={{
-          alignItems: 'center',
-          // backgroundColor: 'red'
+          // backgroundColor: 'red',
+          height: heightHandller,
+          // justifyContent: 'center',
         }}>
-        <Image
+        <Animated.Image
           source={Images.noImage}
           style={{
+            top: imagetransformationTopHandller,
+            left: imagetransformationLeftHandller,
             borderRadius: 100,
-            height: size.width / 3,
-            width: size.width / 3,
-            margin: 10,
+            height: imageheightHandller,
+            width: imageheightHandller,
+            // margin: 10,
+            transform: [
+              {
+                scale: scaleImageHandler,
+              },
+            ],
           }}
         />
-        <Text style={fonts.h1}>Hello User</Text>
-        <Text style={fonts.h2}>20, Male</Text>
-      </View>
+        {/* <Text style={fonts.h1}>Hello User</Text>
+        <Text style={fonts.h2}>20, Male</Text> */}
+      </Animated.View>
 
-      <View
+      <Animated.ScrollView
+        style={{
+          // flex: 1,
+          width: '100%',
+          // position: 'absolute',
+          // bottom: 0,
+          alignSelf: 'center',
+          padding: 10,
+          borderRadius: 20,
+          backgroundColor: colors.white,
+        }}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: scrollY,
+                },
+              },
+            },
+          ],
+          {
+            useNativeDriver: false,
+          },
+        )}>
+        {/* <View style={styles.indicator} /> */}
+
+        <Text style={{...fonts.h1, alignSelf: 'center', padding: 10}}>
+          My Information
+        </Text>
+        <ListTile icon={'shopping-cart'} title={'My Cart'} />
+        <ListTile icon={'shopping-cart'} title={'My Doctors'} />
+        <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+        <ListTile icon={'shopping-cart'} title={'My Orders'} />
+        <View style={{height: 1000, backgroundColor: 'white'}} />
+      </Animated.ScrollView>
+
+      {/* <View
         style={{
           width: '100%',
           position: 'absolute',
@@ -63,7 +155,7 @@ const ProfileScreen = () => {
           alignSelf: 'center',
           padding: 10,
           borderRadius: 20,
-          backgroundColor: colors.white,
+          backgroundColor: colors.black,
         }}>
         <ScrollView>
           <View style={styles.indicator} />
@@ -76,8 +168,7 @@ const ProfileScreen = () => {
           <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
           <ListTile icon={'shopping-cart'} title={'My Orders'} />
         </ScrollView>
-      </View>
-      {/* <Text>ProfileScreen</Text> */}
+      </View> */}
     </View>
   );
 };

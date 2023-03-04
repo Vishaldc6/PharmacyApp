@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomButton from '../../components/CustomButton';
@@ -18,6 +19,7 @@ import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
 import {Images} from '../../assets/images';
+import {userRegister} from '../../config/apiServices/ApiServices';
 
 const SignUpScreen = props => {
   const [email, setemail] = useState('');
@@ -114,7 +116,7 @@ const SignUpScreen = props => {
                 <View style={{marginHorizontal: 10}}>
                   <CustomButton
                     title={'Sign up'}
-                    onPress={() => {
+                    onPress={async () => {
                       if (
                         email == '' &&
                         username == '' &&
@@ -128,6 +130,27 @@ const SignUpScreen = props => {
                         setconfirmPasswordError(
                           '* Please enter Confirm Password',
                         );
+                      } else {
+                        if (isCheck) {
+                          console.log('ischeck');
+                        } else {
+                          const res = await userRegister(
+                            username,
+                            email,
+                            password,
+                            confirmPassword,
+                          );
+                          console.log('ressss : ', res);
+                          if (res.errors == null) {
+                            Alert.alert('Pharmacy App', res.MESSAGE);
+                            props.navigation.navigate(ScreenNames.SignInScreen);
+                          } else {
+                            Alert.alert(
+                              'Pharmacy App',
+                              Object.values(res.errors)[0].toString(),
+                            );
+                          }
+                        }
                       }
                     }}
                   />

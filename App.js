@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SignInScreen from './src/screens/auth/SignInScreen';
@@ -23,15 +23,35 @@ import PatientDetailScreen from './src/screens/doctor/PatientDetailScreen';
 import AdminCategoryScreen from './src/screens/admin/AdminCategoryScreen';
 import {StatusBar} from 'react-native';
 import UploadPrescriptionScreen from './src/screens/UploadPrescriptionScreen';
+import {getToken} from './src/config/apiServices/ApiServices';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  const [token, settoken] = useState(null);
+
+  useEffect(() => {
+    checkUser();
+  }, []);
+
+  const checkUser = async () => {
+    const TOKEN = await getToken();
+    console.log('TOKEN : = ', TOKEN);
+    settoken(TOKEN);
+    // if(token!==null){
+
+    // }
+  };
+
   return (
     <>
       <StatusBar backgroundColor={'grey'} />
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName={
+            token == null ? OnboardingScreen : BottomNavigationTab
+          }>
           <Stack.Screen
             name={ScreenNames.OnboardingScreen}
             component={OnboardingScreen}

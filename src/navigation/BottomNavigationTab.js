@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   barStyle: {
     // height: size.height / 11,
     borderWidth: 0.2,
-    backgroundColor: 'transparent',
+    // backgroundColor: 'white',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },

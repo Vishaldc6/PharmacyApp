@@ -218,10 +218,22 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            // storeFile file('debug.keystore')
+            // storePassword 'android'
+            // keyAlias 'androiddebugkey'
+            // keyPassword 'android'
+            storeFile file('C:/ReactNative/pharmacyapp.keystore')
+            storePassword '123456'
+            keyAlias 'key'
+            keyPassword '123456'
+        }
+        release{
+            if (project.hasProperty('C:/ReactNative/pharmacyapp.keystore')) {
+                storeFile file('C:/ReactNative/pharmacyapp.keystore')
+                storePassword '123456'
+                keyAlias 'key'
+                keyPassword '123456'
+            }
         }
     }
     buildTypes {
@@ -320,3 +332,4 @@ def isNewArchitectureEnabled() {
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
+apply plugin: 'com.google.gms.google-services'

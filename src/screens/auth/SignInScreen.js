@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {size} from '../../styles/size';
@@ -18,22 +19,101 @@ import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
 import {Images} from '../../assets/images';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin';
+import {AppStrings} from '../../utils/AppStrings';
+import {
+  ApiCall,
+  saveUser,
+  userLogin,
+} from '../../config/apiServices/ApiServices';
+
+const GOOGLE_CLIENT_ID =
+  '59510826670-7lilbhlo1mt18c6l2c685uae1sp3v9k6.apps.googleusercontent.com';
 
 const SignInScreen = props => {
+  const [email, setemail] = useState('');
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
   const [isCheck, setisCheck] = useState(false);
-  const [usernameError, setusernameError] = useState('');
+  const [emailError, setemailError] = useState('');
   const [passwordError, setpasswordError] = useState('');
+
+  const [user, setUser] = useState(null);
+  GoogleSignin.configure({
+    webClientId:
+      '59510826670-7lilbhlo1mt18c6l2c685uae1sp3v9k6.apps.googleusercontent.com',
+    // offlineAccess: true,
+  });
+  const signIn = async () => {
+    try {
+      console.log('first');
+      await GoogleSignin.hasPlayServices();
+      const {idToken} = await GoogleSignin.signIn();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      // const { access_token } = response.data;
+      // await AsyncStorage.setItem('ACCESS_TOKEN', access_token);
+      // setUser(response.data.user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      // await AsyncStorage.removeItem('access_token');
+      // setUser(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const checkSignedIn = async () => {
+    // const access_token = await AsyncStorage.getItem('access_token');
+    // if (access_token) {
+    // const response = await axios.get('http://YOUR_LARAVEL_BACKEND_URL/user', {
+    //   headers: {
+    //     Authorization: `Bearer ${access_token}`
+    //   }
+    // });
+    // setUser(response.data);
+    // }
+  };
+
+  // checkSignedIn();
 
   useEffect(() => {
     props.navigation.addListener('focus', () => {
-      setusername('');
+      setemail('');
       setpassword('');
-      setusernameError('');
+      setemailError('');
       setpasswordError('');
     });
   }, []);
+
+  // const userLogin = async () => {
+  //   console.log('first');
+  //   const res = await fetch(`${AppStrings.BASE_URL}/login`, {
+  //     method: 'POST',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({
+  //       email: email,
+  //       password: password,
+  //     }),
+  //   });
+  //   console.log(res);
+  //   const json = await res.json();
+  //   console.log('JSON data : ', json);
+  //   Alert.alert('Pharmacy App', json.MESSAGE);
+  // };
 
   return (
     <View style={{flex: 1}}>
@@ -46,15 +126,15 @@ const SignInScreen = props => {
                 <View style={{height: 20}} />
                 <CustomInput
                   onChangeText={val => {
-                    setusername(val);
+                    setemail(val);
                   }}
-                  value={username}
-                  title={'Username'}
-                  placeholder={'Enter Username'}
+                  value={email}
+                  title={'Email'}
+                  placeholder={'Enter Email'}
                   keyboardType={'email-address'}
                   iconName={'user-circle-o'}
                 />
-                <Text style={styles.errorText}>{usernameError}</Text>
+                <Text style={styles.errorText}>{emailError}</Text>
                 <CustomInput
                   passwordField={true}
                   value={password}
@@ -93,14 +173,13 @@ const SignInScreen = props => {
                 <View style={{marginHorizontal: 10}}>
                   <CustomButton
                     title={'Sign in'}
-                    onPress={() => {
-                      console.log('username', username);
-                      // if (username == '' && password == '') {
-                      //   // Alert.alert('Sign in',"All flieds are empty")
-                      //   setusernameError('* Please enter Username');
-                      //   setpasswordError('* Please enter Password');
-                      // }
-                      if (username == 'admin' && password == 'admin123') {
+                    onPress={async () => {
+                      // console.log('username', username);
+                      if (email == '' && password == '') {
+                        // Alert.alert('Sign in',"All flieds are empty")
+                        setusernameError('* Please enter Email');
+                        setpasswordError('* Please enter Password');
+                      } else if (email == 'admin' && password == 'admin123') {
                         props.navigation.navigate(ScreenNames.AdminHomeScreen);
                       } else {
                         if (isCheck) {
@@ -108,13 +187,50 @@ const SignInScreen = props => {
                             ScreenNames.DoctorHomeScreen,
                           );
                         } else {
-                          props.navigation.navigate(ScreenNames.Home);
+                          const res = await ApiCall('/login', 'POST', {
+                            email: email,
+                            password: password,
+                          });
+                          console.log('res        :::::: ', res);
+                          if (res.FLAG) {
+                            saveUser(res.DATA.token);
+                            props.navigation.replace(ScreenNames.Home);
+                          } else {
+                            Alert.alert(
+                              'Pharmacy App',
+                              'Something went wrong !',
+                            );
+                          }
+                          // const res = await userLogin(email, password);
+                          // console.log('resss : ', res);
+                          // if (res.errors == null) {
+                          //   Alert.alert('Pharmacy App', res.MESSAGE);
+                          //   if (res.FLAG) {
+                          //     props.navigation.navigate(ScreenNames.Home);
+                          //   }
+                          //   console.log(res);
+                          // } else {
+                          //   Alert.alert(
+                          //     'Pharmacy App',
+                          //     Object.values(res.errors)[0].toString(),
+                          //   );
+                          // }
+
+                          // userLogin();
+                          // props.navigation.navigate(ScreenNames.Home);
+                          // signIn();
                         }
                       }
                     }}
                   />
                 </View>
                 <View style={{height: 10}} />
+                <GoogleSigninButton
+                  onPress={() => {
+                    console.log('lklk');
+                    signIn();
+                  }}
+                />
                 <Text style={{...fonts.h3, alignSelf: 'center'}}>
                   New User ?{' '}
                   <Text
