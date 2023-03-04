@@ -21,9 +21,12 @@ import AdminTestScreen from './src/screens/admin/AdminTestScreen';
 import AdminProductScreen from './src/screens/admin/AdminProductScreen';
 import PatientDetailScreen from './src/screens/doctor/PatientDetailScreen';
 import AdminCategoryScreen from './src/screens/admin/AdminCategoryScreen';
-import {StatusBar} from 'react-native';
+import {ActivityIndicator, StatusBar, View} from 'react-native';
 import UploadPrescriptionScreen from './src/screens/UploadPrescriptionScreen';
 import {getToken} from './src/config/apiServices/ApiServices';
+import AuthStack from './src/navigation/AuthStack';
+import colors from './src/styles/colors';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +34,7 @@ const App = () => {
   const [token, settoken] = useState(null);
 
   useEffect(() => {
+    SplashScreen.hide();
     checkUser();
   }, []);
 
@@ -43,6 +47,14 @@ const App = () => {
     // }
   };
 
+  if (token == null) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignContent: 'center'}}>
+        <ActivityIndicator color={colors.primary_color} />
+      </View>
+    );
+  }
+
   return (
     <>
       <StatusBar backgroundColor={'grey'} />
@@ -50,28 +62,10 @@ const App = () => {
         <Stack.Navigator
           screenOptions={{headerShown: false}}
           initialRouteName={
-            token == null ? OnboardingScreen : BottomNavigationTab
+            token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
           }>
-          <Stack.Screen
-            name={ScreenNames.OnboardingScreen}
-            component={OnboardingScreen}
-          />
-          <Stack.Screen
-            name={ScreenNames.WellcomeScreen}
-            component={WellcomeScreen}
-          />
-          <Stack.Screen
-            name={ScreenNames.SignInScreen}
-            component={SignInScreen}
-          />
-          <Stack.Screen
-            name={ScreenNames.SignUpScreen}
-            component={SignUpScreen}
-          />
-          <Stack.Screen
-            name={ScreenNames.ForgotPasswordScreen}
-            component={ForgotPasswordScreen}
-          />
+          <Stack.Screen name={ScreenNames.AuthStack} component={AuthStack} />
+
           <Stack.Screen
             name={ScreenNames.Home}
             component={BottomNavigationTab}
@@ -80,7 +74,6 @@ const App = () => {
             name={ScreenNames.DoctorScreen}
             component={DoctorScreen}
           />
-
           <Stack.Screen
             name={ScreenNames.DoctorHomeScreen}
             component={DoctorHomeScreen}
@@ -100,6 +93,10 @@ const App = () => {
           <Stack.Screen
             name={ScreenNames.SearchScreen}
             component={SearchScreen}
+          />
+          <Stack.Screen
+            name={ScreenNames.ForgotPasswordScreen}
+            component={ForgotPasswordScreen}
           />
           <Stack.Screen
             name={ScreenNames.UploadPrescriptionScreen}

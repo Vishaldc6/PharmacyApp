@@ -20,6 +20,7 @@ import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
 import {Images} from '../../assets/images';
 import {userRegister} from '../../config/apiServices/ApiServices';
+import {AppStrings} from '../../utils/AppStrings';
 
 const SignUpScreen = props => {
   const [email, setemail] = useState('');
@@ -142,11 +143,11 @@ const SignUpScreen = props => {
                           );
                           console.log('ressss : ', res);
                           if (res.errors == null) {
-                            Alert.alert('Pharmacy App', res.MESSAGE);
+                            Alert.alert(AppStrings.appName, res.MESSAGE);
                             props.navigation.navigate(ScreenNames.SignInScreen);
                           } else {
                             Alert.alert(
-                              'Pharmacy App',
+                              AppStrings.appName,
                               Object.values(res.errors)[0].toString(),
                             );
                           }

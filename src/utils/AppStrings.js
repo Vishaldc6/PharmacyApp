@@ -1,6 +1,26 @@
 export const AppStrings = {
+  //App Name
+  appName: 'Pharmacy App',
   // BASE URL
   BASE_URL: 'http://192.168.29.125:8000/api',
+
+  //CarePlanScreen
+  reduceMedial: 'Reduce your medical expenses by HALF',
+  saveThings: 'Save or things that make you happy',
+  explorePlan: 'Explore Plans',
+  limitedOffer:
+    'Limited time offer ! Join now for reduced membership prices and exclusive benefits',
+  benefits: 'Benefits',
+  getxtraDiscnt: 'Get extra 2% discount',
+  guaranteedSaving:
+    'Guaranteed saving over & above promotional offers. Extra 2% disount on all prescription medicine purchase.',
+  freeLabtest: 'Free Lab Test',
+  getfree:
+    'Get free CBC or HbA1C test or upgrade to any one of our premium tests',
+  freeConsultation: 'Free E-Consultation',
+  noShipping: 'No Shipping Charges',
+  radipDelivery: 'Rapid Delivery',
+  choosePlan: "Choose a plan that's right for you",
 
   // LabScreen
   howDoesHome: 'How does home sample collection for lab tests works',
@@ -23,4 +43,7 @@ export const AppStrings = {
     'All uploads are encrpted & visible only to our pharmacists.',
   prescriptionInfo2:
     'Any prescription you upload is validated before processing the order',
+
+  lorem:
+    'Aliqua minim cupidatat aliquip duis officia aliqua nostrud dolore velit anim proident duis amet reprehenderit.',
 };

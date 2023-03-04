@@ -15,6 +15,9 @@ import CustomHeading from '../../components/CustomHeading';
 import {size} from '../../styles/size';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Images} from '../../assets/images';
+import {ApiCall} from '../../config/apiServices/ApiServices';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ScreenNames from '../../navigation/screenNames/ScreenNames';
 
 const ListTile = ({icon, title, onPress}) => (
   <View
@@ -49,7 +52,7 @@ ImageLeft = size.width / 3.5;
 ImageMinTop = 5;
 ImageMinLeft = 5;
 
-const ProfileScreen = () => {
+const ProfileScreen = props => {
   const scrollY = useRef(new Animated.Value(0)).current;
 
   const heightHandller = scrollY.interpolate({
@@ -137,14 +140,23 @@ const ProfileScreen = () => {
         )}>
         {/* <View style={styles.indicator} /> */}
 
-        <Text style={{...fonts.h1, alignSelf: 'center', padding: 10}}>
-          My Information
+        <Text
+          style={{...fonts.h1, alignSelf: 'center', padding: 10}}
+          onPress={async () => {
+            const res = await ApiCall('/logout', 'POST');
+            console.log('logout user ', res);
+            if (res.FLAG) {
+              await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
+              props.navigation.replace(ScreenNames.AuthStack);
+            }
+          }}>
+          Log Out
         </Text>
         <ListTile icon={'shopping-cart'} title={'My Cart'} />
         <ListTile icon={'shopping-cart'} title={'My Doctors'} />
         <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
         <ListTile icon={'shopping-cart'} title={'My Orders'} />
-        <View style={{height: 1000, backgroundColor: 'white'}} />
+        <View style={{height: HeaderMaxHeight, backgroundColor: 'white'}} />
       </Animated.ScrollView>
 
       {/* <View

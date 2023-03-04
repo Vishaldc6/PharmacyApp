@@ -7,6 +7,7 @@ export default ScreenName = {
   AdminCategoryScreen: 'AdminCategoryScreen',
 
   //user
+  AuthStack: 'AuthStack',
   OnboardingScreen: 'OnboardingScreen',
   WellcomeScreen: 'WellcomeScreen',
   SignInScreen: 'SignInScreen',

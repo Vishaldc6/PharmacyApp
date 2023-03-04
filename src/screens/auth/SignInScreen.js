@@ -29,6 +29,7 @@ import {
   saveUser,
   userLogin,
 } from '../../config/apiServices/ApiServices';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GOOGLE_CLIENT_ID =
   '59510826670-7lilbhlo1mt18c6l2c685uae1sp3v9k6.apps.googleusercontent.com';
@@ -44,7 +45,7 @@ const SignInScreen = props => {
   const [user, setUser] = useState(null);
   GoogleSignin.configure({
     webClientId:
-      '59510826670-7lilbhlo1mt18c6l2c685uae1sp3v9k6.apps.googleusercontent.com',
+      '108100832496-l73asi23f96crgh9ua0aclqggltqo5eq.apps.googleusercontent.com',
     // offlineAccess: true,
   });
   const signIn = async () => {
@@ -112,7 +113,7 @@ const SignInScreen = props => {
   //   console.log(res);
   //   const json = await res.json();
   //   console.log('JSON data : ', json);
-  //   Alert.alert('Pharmacy App', json.MESSAGE);
+  //   Alert.alert(AppStrings.appName, json.MESSAGE);
   // };
 
   return (
@@ -197,40 +198,35 @@ const SignInScreen = props => {
                             props.navigation.replace(ScreenNames.Home);
                           } else {
                             Alert.alert(
-                              'Pharmacy App',
+                              AppStrings.appName,
                               'Something went wrong !',
                             );
                           }
                           // const res = await userLogin(email, password);
                           // console.log('resss : ', res);
                           // if (res.errors == null) {
-                          //   Alert.alert('Pharmacy App', res.MESSAGE);
+                          //   Alert.alert(AppStrings.appName, res.MESSAGE);
                           //   if (res.FLAG) {
                           //     props.navigation.navigate(ScreenNames.Home);
                           //   }
                           //   console.log(res);
                           // } else {
                           //   Alert.alert(
-                          //     'Pharmacy App',
+                          //     AppStrings.appName,
                           //     Object.values(res.errors)[0].toString(),
                           //   );
                           // }
-
-                          // userLogin();
-                          // props.navigation.navigate(ScreenNames.Home);
-                          // signIn();
                         }
                       }
                     }}
                   />
                 </View>
                 <View style={{height: 10}} />
-                <GoogleSigninButton
-                  onPress={() => {
-                    console.log('lklk');
-                    signIn();
-                  }}
-                />
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <Text>OR</Text>
+                  <GoogleSigninButton onPress={signIn} />
+                </View>
+                {/* <Icon name={'google'} size={25} onPress={signIn} /> */}
                 <Text style={{...fonts.h3, alignSelf: 'center'}}>
                   New User ?{' '}
                   <Text

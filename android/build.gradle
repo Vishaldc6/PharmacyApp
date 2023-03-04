@@ -7,7 +7,7 @@ buildscript {
         compileSdkVersion = 31
         targetSdkVersion = 31
         //google signin
-         googlePlayServicesAuthVersion = "16.0.1"
+        googlePlayServicesAuthVersion = "19.2.0"
 
         if (System.properties['os.arch'] == "aarch64") {
             // For M1 Users we need to use the NDK 24 which added support for aarch64
@@ -29,8 +29,8 @@ buildscript {
         // in the individual module build.gradle files
 
         //google sign in
-        classpath 'com.android.tools.build:gradle:3.1.2' 
-        classpath 'com.google.gms:google-services:4.1.0' 
+        classpath 'com.android.tools.build:gradle:4.2.1'
+        classpath 'com.google.gms:google-services:4.3.10'
     }
 }
 

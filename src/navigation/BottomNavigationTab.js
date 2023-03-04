@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {size} from '../styles/size';
 import CarePlanScreen from '../screens/tabs/CarePlanScreen';
+// import CarePlanScreen from '../screens/tabs/CarePlanScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -37,24 +38,18 @@ const BottomNavigationTab = () => {
       />
       {/* <Tab.Screen
         name={ScreenNames.OrderScreen}
-        component={OrderScreen}
+        component={CarePlanScreen}
         options={{
           tabBarLabel: 'Orders',
           tabBarIcon: ({focused, color}) => (
-            <Fontisto name="shopping-bag" size={size.height / 35} color={color} />
+            <Fontisto
+              name="shopping-bag"
+              size={size.height / 35}
+              color={color}
+            />
           ),
         }}
       /> */}
-      <Tab.Screen
-        name={ScreenNames.CarePlanScreen}
-        component={CarePlanScreen}
-        options={{
-          tabBarLabel: 'Care Plan',
-          tabBarIcon: ({focused, color}) => (
-            <Fontisto name="pulse" size={size.height / 35} color={color} />
-          ),
-        }}
-      />
       <Tab.Screen
         name={ScreenNames.DoctorScreen}
         component={DoctorScreen}
@@ -62,6 +57,16 @@ const BottomNavigationTab = () => {
           tabBarLabel: 'Doctors',
           tabBarIcon: ({focused, color}) => (
             <Fontisto name="doctor" size={size.height / 35} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name={ScreenNames.CarePlanScreen}
+        component={CarePlanScreen}
+        options={{
+          tabBarLabel: 'Care Plan',
+          tabBarIcon: ({focused, color}) => (
+            <Fontisto name="pulse" size={size.height / 35} color={color} />
           ),
         }}
       />
@@ -82,10 +87,16 @@ const BottomNavigationTab = () => {
 const styles = StyleSheet.create({
   barStyle: {
     // height: size.height / 11,
-    borderWidth: 0.2,
-    // backgroundColor: 'white',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderWidth: 1,
+    backgroundColor: colors.white,
+    // borderTopLeftRadius: 10,
+    // borderTopRightRadius: 10,
+    // borderRadius: 10,
+    borderColor: colors.primary_color,
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    right: 10,
   },
 });
 

@@ -7,6 +7,7 @@ const CustomHeading = props => {
   return (
     <View
       style={{
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

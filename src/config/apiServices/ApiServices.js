@@ -15,6 +15,10 @@ export const saveUser = async token => {
 export const getToken = async () => {
   const token = JSON.parse(await AsyncStorage.getItem('TOKEN'));
   console.log(token);
+  if (token == null) {
+    saveUser('logout');
+    return 'logout';
+  }
   return token;
 };
 
@@ -24,6 +28,11 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     Accept: 'application/json',
     'Content-Type': 'application/json',
   };
+
+  const token = JSON.parse(await AsyncStorage.getItem('TOKEN'));
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
 
   try {
     const res = await fetch(AppStrings.BASE_URL + endpoint, {
@@ -36,10 +45,10 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     if (!res.ok) {
       console.log(response);
       if (response.errors == null) {
-        return Alert.alert('Pharmacy App', response.MESSAGE);
+        return Alert.alert(AppStrings.appName, response.MESSAGE);
       } else {
         return Alert.alert(
-          'Pharmacy App',
+          AppStrings.appName,
           Object.values(response.DATA.errors)[0].toString(),
         );
       }
@@ -47,7 +56,7 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
 
     return response;
   } catch (error) {
-    Alert.alert('Pharmacy App', error.toString());
+    Alert.alert(AppStrings.appName, error.toString());
   }
 };
 
@@ -75,7 +84,7 @@ export const userRegister = async (name, email, password, confirm_password) => {
       break;
     case 422:
       console.log('JSON data errors : ', response.DATA.errors);
-      //   Alert.alert('Pharmacy App', response.MESSAGE);
+      //   Alert.alert(AppStrings.appName, response.MESSAGE);
       response = response.DATA;
       break;
     case 500:
@@ -115,7 +124,7 @@ export const userLogin = async (email, password) => {
       break;
     case 422:
       console.log('JSON data errors : ', response.DATA.errors);
-      //   Alert.alert('Pharmacy App', response.MESSAGE);
+      //   Alert.alert(AppStrings.appName, response.MESSAGE);
       response = response.DATA;
       break;
     case 500:

@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     height: size.height / 4.5,
     // backgroundColor: 'red',
-    padding: 10,
+    paddingVertical: 10,
   },
 });
 

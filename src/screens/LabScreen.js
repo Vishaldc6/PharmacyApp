@@ -24,6 +24,7 @@ import {diseases} from '../assets/data/diseases';
 import {labs} from '../assets/data/labs';
 import {AppStrings} from '../utils/AppStrings';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
+import InformationCard from '../components/InformationCard';
 
 const TestCard = ({item, index}) => {
   const [isChecked, setisChecked] = useState(false);
@@ -49,21 +50,6 @@ const TestCard = ({item, index}) => {
     </TouchableWithoutFeedback>
   );
 };
-
-const InformationCard = ({image, title, subTitle}) => (
-  <View
-    style={{
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 10,
-    }}>
-    <Image source={image} style={{marginRight: 10, height: 50, width: 50}} />
-    <View style={{flex: 1}}>
-      <Text style={fonts.h2}>{title}</Text>
-      <Text style={fonts.h3}>{subTitle}</Text>
-    </View>
-  </View>
-);
 
 const DiseasesCard = ({item}) => (
   <View style={styles.diseasesCard}>
