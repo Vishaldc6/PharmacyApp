@@ -27,6 +27,7 @@ import {getToken} from './src/config/apiServices/ApiServices';
 import AuthStack from './src/navigation/AuthStack';
 import colors from './src/styles/colors';
 import SplashScreen from 'react-native-splash-screen';
+import ProfileScreen from './src/screens/tabs/ProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -97,6 +98,10 @@ const App = () => {
           <Stack.Screen
             name={ScreenNames.ForgotPasswordScreen}
             component={ForgotPasswordScreen}
+          />
+          <Stack.Screen
+            name={ScreenNames.ProfileScreen}
+            component={ProfileScreen}
           />
           <Stack.Screen
             name={ScreenNames.UploadPrescriptionScreen}

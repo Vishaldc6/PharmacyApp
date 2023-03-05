@@ -91,6 +91,7 @@ const ProfileScreen = props => {
           height: heightHandller,
           // justifyContent: 'center',
         }}>
+        <Text style={fonts.h1}>Back</Text>
         <Animated.Image
           source={Images.noImage}
           style={{
@@ -145,7 +146,7 @@ const ProfileScreen = props => {
           onPress={async () => {
             const res = await ApiCall('/logout', 'POST');
             console.log('logout user ', res);
-            if (res.FLAG) {
+            if (res.success) {
               await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
               props.navigation.replace(ScreenNames.AuthStack);
             }

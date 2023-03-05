@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    borderBottomWidth: 0.5,
+    // borderBottomWidth: 0.5,
     marginHorizontal: -10,
   },
   postIconContainer: {

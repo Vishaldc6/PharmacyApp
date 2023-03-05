@@ -43,6 +43,12 @@ const LabCard = ({item}) => {
 };
 
 const AdminLabScreen = props => {
+  useEffect(() => {
+    // getProductList()
+  }, []);
+
+  // const getProduct
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Laboratories'} back {...props} />

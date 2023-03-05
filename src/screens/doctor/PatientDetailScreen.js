@@ -1,4 +1,10 @@
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import React from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
@@ -7,6 +13,7 @@ import {size} from '../../styles/size';
 import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import CustomButton from '../../components/CustomButton';
+import ScreenNames from '../../navigation/screenNames/ScreenNames';
 
 const PatientDetailScreen = props => {
   let patient = props.route.params.patient;
@@ -14,6 +21,7 @@ const PatientDetailScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader back {...props} />
+
       <View style={styles.patientHeader}>
         <Image
           source={Images.noImage}
@@ -30,6 +38,7 @@ const PatientDetailScreen = props => {
           </Text>
         </View>
       </View>
+
       <View
         style={{
           borderWidth: 0.5,
@@ -37,10 +46,19 @@ const PatientDetailScreen = props => {
           marginVertical: 10,
         }}
       />
-      <Text>PatientDetailScreen</Text>
-      <Text>PatientDetailScreen</Text>
-      <Text>PatientDetailScreen</Text>
-      <Text>PatientDetailScreen</Text>
+
+      {/* Patient detail */}
+      <Text style={fonts.h1}>Patient Detail</Text>
+      <Text>Name : {patient.name}</Text>
+      <Text>Age : {patient.age}</Text>
+      <Text>Gender : {patient.gender}</Text>
+
+      {/* Symptoms */}
+      <Text style={fonts.h1}>Symptoms</Text>
+      <Text>Fever</Text>
+      <Text>Cough</Text>
+
+      {/* Accept or Reject */}
       <View style={styles.confirmCard}>
         <CustomButton secondary title={'Reject'} />
         <CustomButton title={'Accept'} />
@@ -57,6 +75,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   confirmCard: {
+    // flex: 1,
     backgroundColor: colors.white,
     flexDirection: 'row',
     alignItems: 'center',
@@ -67,6 +86,8 @@ const styles = StyleSheet.create({
     borderColor: colors.grey,
     position: 'absolute',
     bottom: 0,
+    right: 10,
+    left: 10,
   },
 });
 

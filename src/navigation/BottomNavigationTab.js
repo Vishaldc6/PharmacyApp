@@ -93,10 +93,11 @@ const styles = StyleSheet.create({
     // borderTopRightRadius: 10,
     // borderRadius: 10,
     borderColor: colors.primary_color,
-    position: 'absolute',
+    // position: 'absolute',
     bottom: 10,
-    left: 10,
-    right: 10,
+    // left: 10,
+    // right: 10,
+    marginHorizontal: 5,
   },
 });
 

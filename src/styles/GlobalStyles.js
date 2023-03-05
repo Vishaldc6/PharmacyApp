@@ -4,7 +4,7 @@ import {size} from './size';
 export default GlobalStyles = {
   mainContainer: {
     flex: 1,
-    paddingHorizontal: 10,
+    padding: 10,
     // backgroundColor: colors.white,
   },
   rowContainer: {

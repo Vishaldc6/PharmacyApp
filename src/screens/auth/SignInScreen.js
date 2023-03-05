@@ -178,7 +178,7 @@ const SignInScreen = props => {
                       // console.log('username', username);
                       if (email == '' && password == '') {
                         // Alert.alert('Sign in',"All flieds are empty")
-                        setusernameError('* Please enter Email');
+                        setemailError('* Please enter Email');
                         setpasswordError('* Please enter Password');
                       } else if (email == 'admin' && password == 'admin123') {
                         props.navigation.navigate(ScreenNames.AdminHomeScreen);
@@ -193,8 +193,8 @@ const SignInScreen = props => {
                             password: password,
                           });
                           console.log('res        :::::: ', res);
-                          if (res.FLAG) {
-                            saveUser(res.DATA.token);
+                          if (res) {
+                            saveUser(res.token);
                             props.navigation.replace(ScreenNames.Home);
                           } else {
                             Alert.alert(

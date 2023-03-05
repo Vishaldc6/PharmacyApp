@@ -57,7 +57,7 @@ const Card = ({title, icon, onPress}) => (
   </TouchableWithoutFeedback>
 );
 
-const Banner = ({image}) => (
+export const Banner = ({image}) => (
   <View style={styles.slide}>
     <Image source={image} style={{flex: 1, resizeMode: 'contain'}} />
   </View>

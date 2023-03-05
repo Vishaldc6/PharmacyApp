@@ -37,9 +37,9 @@ const CarePlanScreen = () => {
           <Text
             style={{
               ...fonts.h2,
-              alignSelf: 'center',
               alignContent: 'center',
               margin: 6,
+              textAlign: 'center',
             }}>
             {AppStrings.limitedOffer}
           </Text>

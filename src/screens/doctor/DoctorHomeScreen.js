@@ -5,16 +5,15 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React from 'react';
-import CustomHeader from '../../components/CustomHeader';
 import GlobalStyles from '../../styles/GlobalStyles';
 import fonts from '../../styles/fonts';
 import {Images} from '../../assets/images';
 import {size} from '../../styles/size';
 import {patients} from '../../assets/data/patients';
 import colors from '../../styles/colors';
-import CustomHeading from '../../components/CustomHeading';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 
 const PatientCard = ({name, age, gender, date, onPress}) => (
@@ -27,9 +26,11 @@ const PatientCard = ({name, age, gender, date, onPress}) => (
         // justifyContent: 'space-evenly',
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: colors.grey,
+        borderColor: colors.lightgrey,
         padding: 10,
-        marginVertical: 5,
+        margin: 5,
+        backgroundColor: colors.white,
+        elevation: 5,
       }}>
       {/* <View style={{width: 20}} /> */}
       <View style={{flex: 1}}>
@@ -65,56 +66,60 @@ const DoctorHomeScreen = props => {
   return (
     <View style={{flex: 1}}>
       {/* Doctor Header */}
-      <View style={styels.header}>
-        <Image
-          source={Images.noImage}
-          style={{
-            height: size.height / 8,
-            width: size.height / 8,
-            borderRadius: 50,
-          }}
-        />
-        <View style={{marginHorizontal: 10}}>
-          <Text style={fonts.h1}>Hello, Doctor</Text>
-          <Text style={fonts.h3}>MBBS</Text>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          props.navigation.navigate(ScreenNames.ProfileScreen);
+        }}>
+        <View style={styels.header}>
+          <Image
+            source={Images.noImage}
+            style={{
+              height: size.height / 8,
+              width: size.height / 8,
+              borderRadius: 50,
+            }}
+          />
+          <View style={{marginHorizontal: 10}}>
+            <Text style={fonts.h1}>Hello, Doctor</Text>
+            <Text style={fonts.h3}>MBBS</Text>
+          </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
       <View style={{...GlobalStyles.mainContainer, marginVertical: 10}}>
         {/* Patients List */}
-        <View
+        {/* <View
           style={{
             elevation: 2,
             backgroundColor: colors.white,
             padding: 10,
             // marginVertical: 5,
-          }}>
-          <CustomHeading header1={'Patients List'} />
-          <FlatList
-            // ItemSeparatorComponent={() => (
-            //   <View
-            //     style={{
-            //       borderWidth: 0.5,
-            //       borderColor: colors.darkgray,
-            //       margin: 10,
-            //     }}
-            //   />
-            // )}
-            data={patients}
-            renderItem={({item}) => (
-              <PatientCard
-                name={item.name}
-                age={item.age}
-                gender={item.gender}
-                date={item.date}
-                onPress={() =>
-                  props.navigation.navigate(ScreenNames.PatientDetailScreen, {
-                    patient: item,
-                  })
-                }
-              />
-            )}
-          />
-        </View>
+          }}> */}
+        <FlatList
+          // ItemSeparatorComponent={() => (
+          //   <View
+          //     style={{
+          //       borderWidth: 0.5,
+          //       borderColor: colors.darkgray,
+          //       margin: 10,
+          //     }}
+          //   />
+          // )}
+          data={patients}
+          renderItem={({item}) => (
+            <PatientCard
+              name={item.name}
+              age={item.age}
+              gender={item.gender}
+              date={item.date}
+              onPress={() =>
+                props.navigation.navigate(ScreenNames.PatientDetailScreen, {
+                  patient: item,
+                })
+              }
+            />
+          )}
+        />
+        {/* </View> */}
       </View>
     </View>
   );

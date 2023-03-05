@@ -25,13 +25,14 @@ export const getToken = async () => {
 //Api Call
 export const ApiCall = async (endpoint, method = 'GET', data = null) => {
   const headers = {
-    Accept: 'application/json',
+    // Accept: 'application/json',
     'Content-Type': 'application/json',
   };
 
   const token = JSON.parse(await AsyncStorage.getItem('TOKEN'));
   if (token) {
-    headers.Authorization = `Bearer ${token}`;
+    // headers.Authorization = `Bearer ${token}`;
+    headers.Authorization = `${token}`;
   }
 
   try {
@@ -44,14 +45,20 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     console.log('response:::', response);
     if (!res.ok) {
       console.log(response);
-      if (response.errors == null) {
-        return Alert.alert(AppStrings.appName, response.MESSAGE);
+      if (response.success) {
+        Alert.alert(AppStrings.appName, response.message);
+        return response.data;
       } else {
-        return Alert.alert(
-          AppStrings.appName,
-          Object.values(response.DATA.errors)[0].toString(),
-        );
+        return Alert.alert(AppStrings.appName, response.message);
       }
+      // if (response.errors == null) {
+      //   return Alert.alert(AppStrings.appName, response.MESSAGE);
+      // } else {
+      //   return Alert.alert(
+      //     AppStrings.appName,
+      //     Object.values(response.DATA.errors)[0].toString(),
+      //   );
+      // }
     }
 
     return response;

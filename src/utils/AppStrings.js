@@ -22,6 +22,16 @@ export const AppStrings = {
   radipDelivery: 'Rapid Delivery',
   choosePlan: "Choose a plan that's right for you",
 
+  //DoctorlistScreen
+  onlineDoctor: 'Online doctor consultation with qualified doctors',
+  talk: 'Talk within 30 mins',
+  freeFollowUp: '3 day FREE follw up',
+  getPrescription: 'Get a valid prescription',
+  consultNow: 'Consult now',
+  consultDoctor1Click: 'Consult Doctor in 1 click',
+  selectSymptom: 'select a symptom to book in 1 step - Starting at $50',
+  meetDoctor: 'Meet our Doctors',
+
   // LabScreen
   howDoesHome: 'How does home sample collection for lab tests works',
   completeBooking: 'Complete Booking',

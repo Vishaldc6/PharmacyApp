@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
@@ -26,12 +26,13 @@ import {AppStrings} from '../utils/AppStrings';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
 import InformationCard from '../components/InformationCard';
 
-const TestCard = ({item, index}) => {
+const TestCard = ({item, index, onPress}) => {
   const [isChecked, setisChecked] = useState(false);
   return (
     <TouchableWithoutFeedback
       onPress={() => {
         setisChecked(!isChecked);
+        onPress();
       }}>
       <View
         style={{
@@ -98,6 +99,16 @@ const LabCard = ({item}) => {
 };
 
 const LabScreen = props => {
+  const [selectedTests, setselectedTests] = useState([]);
+  const [total, settotal] = useState(0);
+  console.log('Test list : ', selectedTests);
+
+  // useEffect(() => {
+  //   selectedTests.map(itm => {
+  //     settotal(t => t + itm.price);
+  //   });
+  // }, [selectedTests]);
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Laboratory'} back {...props} />
@@ -171,7 +182,33 @@ const LabScreen = props => {
             )}
             data={tests}
             renderItem={({item, index}) => (
-              <TestCard item={item} index={index} />
+              <TestCard
+                item={item}
+                index={index}
+                onPress={() => {
+                  if (selectedTests.length == 0) {
+                    const nlist = [...selectedTests, item];
+                    console.log('nlist : ', nlist);
+                    setselectedTests(nlist);
+                  } else {
+                    selectedTests.map((itm, i) => {
+                      console.log(item.id);
+                      console.log(itm.id);
+                      if (itm.id != item.id) {
+                        const nlist = [...selectedTests, item];
+                        console.log('nlist : ', nlist);
+                        settotal(t => t + itm.price);
+                        setselectedTests(nlist);
+                      } else {
+                        const list = selectedTests.filter(
+                          itm => itm.id != item.id,
+                        );
+                        setselectedTests(list);
+                      }
+                    });
+                  }
+                }}
+              />
             )}
           />
         </View>
@@ -221,6 +258,18 @@ const LabScreen = props => {
           />
         </View>
       </ScrollView>
+      {selectedTests.length != 0 ? (
+        <View
+          style={{
+            backgroundColor: colors.white,
+            padding: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text>{selectedTests.length} test selected</Text>
+          <Text>RS. {total}</Text>
+        </View>
+      ) : null}
     </View>
   );
 };
