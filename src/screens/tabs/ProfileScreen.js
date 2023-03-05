@@ -144,12 +144,12 @@ const ProfileScreen = props => {
         <Text
           style={{...fonts.h1, alignSelf: 'center', padding: 10}}
           onPress={async () => {
-            const res = await ApiCall('/logout', 'POST');
-            console.log('logout user ', res);
-            if (res.success) {
-              await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
-              props.navigation.replace(ScreenNames.AuthStack);
-            }
+            // const res = await ApiCall('/logout', 'POST');
+            // console.log('logout user ', res);
+            // if (res.success) {
+            await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
+            props.navigation.replace(ScreenNames.AuthStack);
+            // }
           }}>
           Log Out
         </Text>

@@ -10,8 +10,9 @@ import {
   PermissionsAndroid,
   Modal,
   Button,
+  RefreshControl,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomSearchBar from '../../components/CustomSearchBar';
@@ -23,9 +24,8 @@ import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import Swiper from 'react-native-swiper';
 import {Images} from '../../assets/images';
-import {categories} from '../../assets/data/categories';
-import {useNavigation} from '@react-navigation/native';
-import {products} from '../../assets/data/products';
+// import {categories} from '../../assets/data/categories';
+
 import CustomHeading from '../../components/CustomHeading';
 import PrimaryProductCard from '../../components/product/PrimaryProductCard';
 import CategoryCard from '../../components/category/CategoryCard';
@@ -33,6 +33,7 @@ import {openCamera, openGallery} from '../../utils/functions';
 import CustomModal from '../../components/CustomModal';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {getCategories, getProducts} from '../../config/apiServices/ApiServices';
 
 const Card = ({title, icon, onPress}) => (
   <TouchableWithoutFeedback onPress={onPress}>
@@ -64,59 +65,24 @@ export const Banner = ({image}) => (
 );
 
 const HomeScreen = props => {
-  const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'App needs camera permission',
-          },
-        );
-        // If CAMERA Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        return false;
-      }
-    } else return true;
-  };
+  const [categories, setCategories] = useState([]);
+  const [products, setproducts] = useState([]);
+  const [isRefresh, setisRefresh] = useState(false);
 
-  const requestExternalWritePermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'External Storage Write Permission',
-            message: 'App needs write permission',
-          },
-        );
-        // If WRITE_EXTERNAL_STORAGE Permission is granted
-        return granted === PermissionsAndroid.RESULTS.GRANTED;
-      } catch (err) {
-        alert('Write permission err', err);
-      }
-      return false;
-    } else return true;
-  };
+  useEffect(() => {
+    getData();
+  }, []);
 
-  const openCamera = async () => {
-    let isCameraPermitted = await requestCameraPermission();
-    let isStoragePermitted = await requestExternalWritePermission();
-    console.log(isCameraPermitted);
-    console.log(isStoragePermitted);
-    if (isCameraPermitted && isStoragePermitted) {
-      launchCamera({}, response => {
-        console.log('response : ', response);
-      });
-    }
-  };
-
-  const openGallery = async () => {
-    launchImageLibrary({}, res => {
-      console.log('response : ', res);
+  const getData = () => {
+    getCategories().then(res => {
+      const list = res.reverse();
+      setCategories(list);
     });
+    getProducts().then(res => {
+      const list = res.reverse();
+      setproducts(list);
+    });
+    setisRefresh(false);
   };
 
   return (
@@ -142,7 +108,16 @@ const HomeScreen = props => {
         }}>
         search screen
       </Text> */}
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => {
+              getData();
+            }}
+            refreshing={isRefresh}
+          />
+        }>
         {/* Card View Container */}
         <View style={styles.cardContainer}>
           <Card
@@ -237,7 +212,18 @@ const HomeScreen = props => {
             scrollEnabled={false}
             numColumns={3}
             data={categories}
-            renderItem={({item}) => <CategoryCard item={item} />}
+            renderItem={({item, index}) =>
+              index <= 5 && (
+                <CategoryCard
+                  item={item}
+                  onPress={() => {
+                    props.navigation.navigate(ScreenNames.ProductScreen, {
+                      cat_id: item.id,
+                    });
+                  }}
+                />
+              )
+            }
           />
         </View>
 

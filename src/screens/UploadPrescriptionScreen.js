@@ -96,7 +96,7 @@ const UploadPrescriptionScreen = props => {
                 onPress={async () => {
                   let res = await openCamera();
                   console.log('opne res', res);
-                  setimg(res);
+                  setimg(res.uri);
                   setisModal(false);
                 }}
               />
@@ -106,7 +106,7 @@ const UploadPrescriptionScreen = props => {
                 onPress={async () => {
                   const res = await openGallery();
                   console.log(res);
-                  setimg(res);
+                  setimg(res.uri);
                   setisModal(false);
                 }}
               />

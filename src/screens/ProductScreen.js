@@ -5,13 +5,14 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomSearchBar from '../components/CustomSearchBar';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
-import {products} from '../assets/data/products';
+
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
 import {size} from '../styles/size';
@@ -20,6 +21,7 @@ import CustomHeading from '../components/CustomHeading';
 import PrimaryProductCard from '../components/product/PrimaryProductCard';
 import SecondaryProductCard from '../components/product/SecondaryProductCard';
 import SimpleBanner from '../components/banner/SimpleBanner';
+import {getProducts} from '../config/apiServices/ApiServices';
 
 const ProductCard = ({item}) => {
   return (
@@ -68,6 +70,23 @@ const ProductCard = ({item}) => {
 };
 
 const ProductScreen = props => {
+  const [products, setproducts] = useState([]);
+  const [isRefresh, setisRefresh] = useState(false);
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    getProducts().then(res => {
+      const list = res.reverse();
+      setproducts(list);
+      setisRefresh(false);
+      setloading(false);
+    });
+  };
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Products'} back {...props} />
@@ -77,46 +96,52 @@ const ProductScreen = props => {
         }}
         placeholder="Search Product.."
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* simple banner */}
-        <SimpleBanner />
-        {/* horizontal products */}
-        <View style={{elevation: 2, backgroundColor: colors.white}}>
-          <CustomHeading header1={'Popular Products'} />
-          <FlatList
-            style={{marginVertical: 5}}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            // scrollEnabled={false}
-            data={products}
-            renderItem={({item, index}) =>
-              index < 5 && <PrimaryProductCard item={item} />
-            }
-          />
+      {loading ? (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator />
         </View>
-
-        {/* vertical products */}
-        <FlatList
-          style={{
-            flex: 1,
-            backgroundColor: colors.white,
-            marginVertical: 10,
-            elevation: 2,
-          }}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                borderWidth: 0.5,
-                borderColor: colors.darkgray,
-                margin: 10,
-              }}
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* simple banner */}
+          <SimpleBanner />
+          {/* horizontal products */}
+          <View style={{elevation: 2, backgroundColor: colors.white}}>
+            <CustomHeading header1={'Popular Products'} />
+            <FlatList
+              style={{marginVertical: 5}}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              // scrollEnabled={false}
+              data={products}
+              renderItem={({item, index}) =>
+                index < 5 && <PrimaryProductCard item={item} />
+              }
             />
-          )}
-          data={products}
-          renderItem={({item}) => <SecondaryProductCard item={item} />}
-        />
-        <Text>ProductScreen</Text>
-      </ScrollView>
+          </View>
+
+          {/* vertical products */}
+          <FlatList
+            style={{
+              flex: 1,
+              backgroundColor: colors.white,
+              marginVertical: 10,
+              elevation: 2,
+            }}
+            ItemSeparatorComponent={() => (
+              <View
+                style={{
+                  borderWidth: 0.5,
+                  borderColor: colors.darkgray,
+                  margin: 10,
+                }}
+              />
+            )}
+            data={products}
+            renderItem={({item}) => <SecondaryProductCard item={item} />}
+          />
+          <Text>ProductScreen</Text>
+        </ScrollView>
+      )}
     </View>
   );
 };

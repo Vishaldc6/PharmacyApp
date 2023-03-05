@@ -1,27 +1,41 @@
-import {View, Text, FlatList, Image, StyleSheet, Button} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  StyleSheet,
+  Button,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomSearchBar from '../../components/CustomSearchBar';
-import {labs} from '../../assets/data/labs';
+
 import colors from '../../styles/colors';
 import {size} from '../../styles/size';
 import fonts from '../../styles/fonts';
 import AdminButtons from '../../components/admin/AdminButtons';
+import {ApiCall, getLabs} from '../../config/apiServices/ApiServices';
+import FloatingButton from '../../components/admin/FloatingButton';
+import ScreenNames from '../../navigation/screenNames/ScreenNames';
 
 const LabCard = ({item}) => {
-  const discountedPrice =
-    item.price - parseFloat(item.price) / parseFloat(item.discount);
+  // const discountedPrice =
+  //   item.price - parseFloat(item.price) / parseFloat(item.discount);
 
   return (
     <View style={styles.card}>
-      <Image source={item.image} style={{height: 120, width: 120}} />
+      <Image source={{uri: item.image}} style={{height: 120, width: 120}} />
       <View style={{width: 20}} />
       <View style={{flex: 1}}>
         <Text style={fonts.h4}>{item.name}</Text>
-        <Text>Includes {item.included_tests.length} Tests</Text>
-        <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text>
+        <Text>Includes {item.included_test} Tests</Text>
+        <Text>{item.address}</Text>
+        <Text numberOfLines={1}>{item.description}</Text>
+        {/*<Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text>
         <Text>{item.rate} rate</Text>
         <Text style={{...fonts.h3, color: colors.primary_color}}>
           {item.discount} % off
@@ -33,7 +47,7 @@ const LabCard = ({item}) => {
             textDecorationLine: 'line-through',
           }}>
           Rs.{item.price}
-        </Text>
+        </Text> */}
         {/* <View style={{height: 20}} /> */}
 
         <AdminButtons item={item} />
@@ -43,35 +57,82 @@ const LabCard = ({item}) => {
 };
 
 const AdminLabScreen = props => {
+  const [labs, setlabs] = useState([]);
+  const [loading, setloading] = useState(true);
+  const [isRefresh, setisRefresh] = useState(false);
+
   useEffect(() => {
-    // getProductList()
+    getData();
   }, []);
 
-  // const getProduct
-
+  const getData = () => {
+    getLabs().then(res => {
+      const list = res.reverse();
+      setlabs(list);
+      setisRefresh(false);
+      setloading(false);
+    });
+  };
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Laboratories'} back {...props} />
-      <CustomSearchBar placeholder="Search Laboratory.." />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        style={{
-          flex: 1,
-          backgroundColor: colors.white,
-          marginVertical: 10,
-          elevation: 2,
-        }}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{
-              borderWidth: 0.5,
-              borderColor: colors.darkgray,
-              margin: 10,
-            }}
+      {/* <CustomSearchBar placeholder="Search Laboratory.." /> */}
+      {loading ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator />
+        </View>
+      ) : labs.length == 0 ? (
+        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+          <Text>No labs found</Text>
+        </View>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: colors.white,
+            marginVertical: 10,
+            elevation: 2,
+          }}>
+          <FlatList
+            refreshControl={
+              <RefreshControl
+                tintColor={colors.primary_color_admin}
+                refreshing={isRefresh}
+                onRefresh={() => {
+                  getData();
+                }}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => (
+              <View
+                style={{
+                  borderWidth: 0.5,
+                  borderColor: colors.darkgray,
+                  margin: 10,
+                }}
+              />
+            )}
+            data={labs}
+            renderItem={({item}) => (
+              <LabCard item={item} />
+              // <Text>{item.name}</Text>
+            )}
           />
-        )}
-        data={labs}
-        renderItem={({item}) => <LabCard item={item} />}
+        </View>
+      )}
+      <FloatingButton
+        icon={'plus'}
+        onPress={() => {
+          props.navigation.navigate(ScreenNames.AdminFormScreen, {
+            title: 'Laboratory',
+            add: true,
+            included_test: true,
+            desc: true,
+            img: true,
+            name: true,
+          });
+        }}
       />
     </View>
   );

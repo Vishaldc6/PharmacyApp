@@ -1,14 +1,27 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  RefreshControl,
+  ScrollView,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import fonts from '../../styles/fonts';
-import {products} from '../../assets/data/products';
+
 import {tests} from '../../assets/data/tests';
-import {labs} from '../../assets/data/labs';
+
 import colors from '../../styles/colors';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
-import {categories} from '../../assets/data/categories';
+import {
+  ApiCall,
+  getCategories,
+  getLabs,
+  getProducts,
+} from '../../config/apiServices/ApiServices';
+import {ActivityIndicator} from 'react-native-paper';
 
 const Card = ({title, number, onPress}) => {
   return (
@@ -22,38 +35,92 @@ const Card = ({title, number, onPress}) => {
 };
 
 const AdminHomeScreen = props => {
+  const [loading, setloading] = useState(true);
+
+  const [products, setproducts] = useState(0);
+  const [categories, setcategories] = useState(0);
+  const [labs, setlabs] = useState(0);
+
+  const [isRefresh, setisRefresh] = useState(false);
+
+  // const getProducts = async () => {
+  //   const res = await ApiCall('/product', 'GET');
+  //   setproducts(res.length);
+  //   setloading(false);
+  //   setisRefresh(false);
+  // };
+  // const getCategories = async () => {
+  //   const res = await ApiCall('/category', 'GET');
+  //   setcategories(res.length);
+  //   setloading(false);
+  //   setisRefresh(false);
+  // };
+  // const getLabs = async () => {
+  //   const res = await ApiCall('/lab', 'GET');
+  //   setlabs(res.length);
+  //   setloading(false);
+  //   setisRefresh(false);
+  // };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    getProducts().then(res => setproducts(res.length));
+    getCategories().then(res => setcategories(res.length));
+    getLabs().then(res => setlabs(res.length));
+    setisRefresh(true);
+    setloading(false);
+    setisRefresh(false);
+  };
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title="Hello🖐 Admin !" {...props} />
-      <Text>AdminHomeScreen</Text>
-      <Card
-        title={'Products'}
-        number={products.length}
-        onPress={() => {
-          props.navigation.navigate(ScreenNames.AdminProductScreen);
-        }}
-      />
-      <Card
-        title={'Categories'}
-        number={categories.length}
-        onPress={() => {
-          props.navigation.navigate(ScreenNames.AdminCategoryScreen);
-        }}
-      />
-      <Card
-        title={'Laboratories'}
-        number={labs.length}
-        onPress={() => {
-          props.navigation.navigate(ScreenNames.AdminLabScreen);
-        }}
-      />
-      <Card
-        title={'Tests'}
-        number={tests.length}
-        onPress={() => {
-          props.navigation.navigate(ScreenNames.AdminTestScreen);
-        }}
-      />
+      {loading ? (
+        <ActivityIndicator style={{alignSelf: 'center'}} />
+      ) : (
+        <ScrollView
+          scrollEnabled
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefresh}
+              onRefresh={() => {
+                getData();
+              }}
+            />
+          }>
+          <Card
+            title={'Products'}
+            number={products}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.AdminProductScreen);
+            }}
+          />
+          <Card
+            title={'Categories'}
+            number={categories}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.AdminCategoryScreen);
+            }}
+          />
+          <Card
+            title={'Laboratories'}
+            number={labs}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.AdminLabScreen);
+            }}
+          />
+          <Card
+            title={'Tests'}
+            number={tests.length}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.AdminTestScreen);
+            }}
+          />
+        </ScrollView>
+      )}
     </View>
   );
 };

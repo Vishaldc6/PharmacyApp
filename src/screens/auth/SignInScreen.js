@@ -188,10 +188,10 @@ const SignInScreen = props => {
                             ScreenNames.DoctorHomeScreen,
                           );
                         } else {
-                          const res = await ApiCall('/login', 'POST', {
-                            email: email,
-                            password: password,
-                          });
+                          const body = new FormData();
+                          body.append('email', email);
+                          body.append('password', password);
+                          const res = await ApiCall('/login', 'POST', body);
                           console.log('res        :::::: ', res);
                           if (res) {
                             saveUser(res.token);

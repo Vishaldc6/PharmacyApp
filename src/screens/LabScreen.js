@@ -7,6 +7,7 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -25,6 +26,7 @@ import {labs} from '../assets/data/labs';
 import {AppStrings} from '../utils/AppStrings';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
 import InformationCard from '../components/InformationCard';
+import {getLabs} from '../config/apiServices/ApiServices';
 
 const TestCard = ({item, index, onPress}) => {
   const [isChecked, setisChecked] = useState(false);
@@ -64,26 +66,37 @@ const DiseasesCard = ({item}) => (
 );
 
 const LabCard = ({item}) => {
-  const discountedPrice =
-    item.price - parseFloat(item.price) / parseFloat(item.discount);
+  // const discountedPrice =
+  //   item.price - parseFloat(item.price) / parseFloat(item.discount);
 
   return (
     <View style={styles.labCard}>
       <Text style={fonts.h5}>{item.name}</Text>
-      <Text>Includes {item.included_tests.length} Tests</Text>
-      <Image source={Images.noImage} resizeMode={'cover'} style={styles.img} />
-      <Text>{item.rate} rate</Text>
-      <Text style={{...fonts.h3, color: colors.primary_color}}>
-        {item.discount} % off
+      <Text>Includes {item.included_test} Tests</Text>
+      <Image
+        source={{uri: item.image}}
+        resizeMode={'cover'}
+        style={styles.img}
+      />
+      {/* <Text style={{...fonts.h3, color: colors.primary_color}}>
+        {item.address}
       </Text>
-      <Text
+      <Text style={{...fonts.h3, color: colors.primary_color}}>
+        {item.description}
+      </Text> */}
+
+      {/* <Text>{item.rate} rate</Text> */}
+      {/* <Text style={{...fonts.h3, color: colors.primary_color}}>
+        {item.discount} % off
+      </Text> */}
+      {/* <Text
         style={{
           ...fonts.h3,
           color: colors.darkgray,
           textDecorationLine: 'line-through',
         }}>
         Rs.{item.price}
-      </Text>
+      </Text> */}
       <View
         style={{
           flexDirection: 'row',
@@ -91,7 +104,7 @@ const LabCard = ({item}) => {
           justifyContent: 'space-between',
           marginVertical: 5,
         }}>
-        <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text>
+        {/* <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text> */}
         <Text style={{...fonts.h6, color: colors.primary_color}}>Book </Text>
       </View>
     </View>
@@ -99,56 +112,74 @@ const LabCard = ({item}) => {
 };
 
 const LabScreen = props => {
+  const [labs, setlabs] = useState([]);
+  const [isRefresh, setisRefresh] = useState(false);
+  const [loading, setloading] = useState(true);
+
   const [selectedTests, setselectedTests] = useState([]);
   const [total, settotal] = useState(0);
   console.log('Test list : ', selectedTests);
 
-  // useEffect(() => {
-  //   selectedTests.map(itm => {
-  //     settotal(t => t + itm.price);
-  //   });
-  // }, [selectedTests]);
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    getLabs().then(res => {
+      const list = res.reverse();
+      setlabs(list);
+      setloading(false);
+      isRefresh(false);
+    });
+  };
 
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Laboratory'} back {...props} />
       <CustomSearchBar placeholder={'Search Labs or Tests (CBC, WD3, ect.)'} />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Simple Banner */}
-        <SimpleBanner />
-        {/* Book Lab with Prescription */}
-        <View style={styles.prescriptionContainer}>
-          <Image
-            source={Images.noImage}
-            style={{
-              height: size.height / 10,
-              width: size.height / 10,
-              margin: 10,
-            }}
-          />
+      {loading ? (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Simple Banner */}
+          <SimpleBanner />
+          {/* Book Lab with Prescription */}
+          <View style={styles.prescriptionContainer}>
+            <Image
+              source={Images.noImage}
+              style={{
+                height: size.height / 10,
+                width: size.height / 10,
+                margin: 10,
+              }}
+            />
 
-          <View style={{flex: 1}}>
-            <Text style={fonts.h6}>Order quickly with a prescription</Text>
-            <Text style={fonts.h3}>
-              Just upload the prescription and tell us what you need. We do the
-              rest !
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate(ScreenNames.UploadPrescriptionScreen);
-              }}>
-              <View style={styles.btn}>
-                <Text
-                  style={{
-                    ...fonts.h6,
-                    margin: 10,
-                    color: colors.primary_color,
-                  }}>
-                  Upload
-                </Text>
-              </View>
-            </TouchableOpacity>
-            {/* <TouchableWithoutFeedback>
+            <View style={{flex: 1}}>
+              <Text style={fonts.h6}>Order quickly with a prescription</Text>
+              <Text style={fonts.h3}>
+                Just upload the prescription and tell us what you need. We do
+                the rest !
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate(
+                    ScreenNames.UploadPrescriptionScreen,
+                  );
+                }}>
+                <View style={styles.btn}>
+                  <Text
+                    style={{
+                      ...fonts.h6,
+                      margin: 10,
+                      color: colors.primary_color,
+                    }}>
+                    Upload
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              {/* <TouchableWithoutFeedback>
               <View style={styles.btn}>
                 <Text
                   style={{
@@ -159,105 +190,106 @@ const LabScreen = props => {
                 </Text>
               </View>
             </TouchableWithoutFeedback> */}
+            </View>
           </View>
-        </View>
-        {/* Popular Tests */}
-        <View style={{marginVertical: 10}}>
-          <CustomHeading header1={'Popular Tests'} />
-          <FlatList
-            style={{
-              backgroundColor: colors.white,
-              padding: 10,
-              borderColor: colors.darkgray,
-              borderWidth: 0.5,
-            }}
-            ItemSeparatorComponent={() => (
-              <View
-                style={{
-                  borderWidth: 0.3,
-                  borderColor: colors.darkgray,
-                  marginVertical: 10,
-                }}
-              />
-            )}
-            data={tests}
-            renderItem={({item, index}) => (
-              <TestCard
-                item={item}
-                index={index}
-                onPress={() => {
-                  if (selectedTests.length == 0) {
-                    const nlist = [...selectedTests, item];
-                    console.log('nlist : ', nlist);
-                    setselectedTests(nlist);
-                  } else {
-                    selectedTests.map((itm, i) => {
-                      console.log(item.id);
-                      console.log(itm.id);
-                      if (itm.id != item.id) {
-                        const nlist = [...selectedTests, item];
-                        console.log('nlist : ', nlist);
-                        settotal(t => t + itm.price);
-                        setselectedTests(nlist);
-                      } else {
-                        const list = selectedTests.filter(
-                          itm => itm.id != item.id,
-                        );
-                        setselectedTests(list);
-                      }
-                    });
-                  }
-                }}
-              />
-            )}
-          />
-        </View>
-        {/* Health Checkup Categories */}
-        <View style={{marginVertical: 10}}>
-          <CustomHeading header1={'Health Checkup Categories'} />
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={diseases}
-            renderItem={({item}) => <DiseasesCard item={item} />}
-          />
-        </View>
-        {/* Horizontal Labs */}
-        <View style={{marginVertical: 10}}>
-          <CustomHeading header1={'Popular Labs'} />
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-            data={labs}
-            renderItem={({item}) => <LabCard item={item} />}
-          />
-        </View>
+          {/* Popular Tests */}
+          <View style={{marginVertical: 10}}>
+            <CustomHeading header1={'Popular Tests'} />
+            <FlatList
+              style={{
+                backgroundColor: colors.white,
+                padding: 10,
+                borderColor: colors.darkgray,
+                borderWidth: 0.5,
+              }}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    borderWidth: 0.3,
+                    borderColor: colors.darkgray,
+                    marginVertical: 10,
+                  }}
+                />
+              )}
+              data={tests}
+              renderItem={({item, index}) => (
+                <TestCard
+                  item={item}
+                  index={index}
+                  onPress={() => {
+                    if (selectedTests.length == 0) {
+                      const nlist = [...selectedTests, item];
+                      console.log('nlist : ', nlist);
+                      setselectedTests(nlist);
+                    } else {
+                      selectedTests.map((itm, i) => {
+                        console.log(item.id);
+                        console.log(itm.id);
+                        if (itm.id != item.id) {
+                          const nlist = [...selectedTests, item];
+                          console.log('nlist : ', nlist);
+                          settotal(t => t + itm.price);
+                          setselectedTests(nlist);
+                        } else {
+                          const list = selectedTests.filter(
+                            itm => itm.id != item.id,
+                          );
+                          setselectedTests(list);
+                        }
+                      });
+                    }
+                  }}
+                />
+              )}
+            />
+          </View>
+          {/* Health Checkup Categories */}
+          <View style={{marginVertical: 10}}>
+            <CustomHeading header1={'Health Checkup Categories'} />
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              data={diseases}
+              renderItem={({item}) => <DiseasesCard item={item} />}
+            />
+          </View>
+          {/* Horizontal Labs */}
+          <View style={{marginVertical: 10}}>
+            <CustomHeading header1={'Popular Labs'} />
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+              data={labs}
+              renderItem={({item}) => <LabCard item={item} />}
+            />
+          </View>
 
-        {/* Information */}
-        <View style={{padding: 20, backgroundColor: colors.white}}>
-          <Text style={fonts.h1}>{AppStrings.howDoesHome}</Text>
-          <InformationCard
-            image={Images.noImage}
-            title={AppStrings.completeBooking}
-            subTitle={AppStrings.includesSelection}
-          />
-          <InformationCard
-            image={Images.noImage}
-            title={AppStrings.safeHomeSample}
-            subTitle={AppStrings.highlyTrained}
-          />
-          <InformationCard
-            image={Images.noImage}
-            title={AppStrings.smapleDelivery}
-            subTitle={AppStrings.phlebotomistDeliver}
-          />
-          <InformationCard
-            image={Images.noImage}
-            title={AppStrings.onlineReport}
-            subTitle={AppStrings.reportDelivery}
-          />
-        </View>
-      </ScrollView>
+          {/* Information */}
+          <View style={{padding: 20, backgroundColor: colors.white}}>
+            <Text style={fonts.h1}>{AppStrings.howDoesHome}</Text>
+            <InformationCard
+              image={Images.noImage}
+              title={AppStrings.completeBooking}
+              subTitle={AppStrings.includesSelection}
+            />
+            <InformationCard
+              image={Images.noImage}
+              title={AppStrings.safeHomeSample}
+              subTitle={AppStrings.highlyTrained}
+            />
+            <InformationCard
+              image={Images.noImage}
+              title={AppStrings.smapleDelivery}
+              subTitle={AppStrings.phlebotomistDeliver}
+            />
+            <InformationCard
+              image={Images.noImage}
+              title={AppStrings.onlineReport}
+              subTitle={AppStrings.reportDelivery}
+            />
+          </View>
+        </ScrollView>
+      )}
       {selectedTests.length != 0 ? (
         <View
           style={{

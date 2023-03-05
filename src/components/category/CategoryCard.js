@@ -1,34 +1,42 @@
-import {View, Text, Image, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import React from 'react';
 import fonts from '../../styles/fonts';
 import AdminButtons from '../admin/AdminButtons';
 
-const CategoryCard = ({item, isAdmin}) => {
+const CategoryCard = ({item, isAdmin, onPress}) => {
   return (
-    <View
-      style={{
-        flex: 1,
-        margin: 5,
-        // alignSelf: 'center',
-        // backgroundColor: 'green',
-      }}>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View
         style={{
-          ...styles.categoryCard,
-          flexDirection: isAdmin ? 'row' : 'column',
+          flex: 1,
+          margin: 5,
+          // alignSelf: 'center',
+          // backgroundColor: 'green',
         }}>
-        <Image
-          source={item.image}
-          style={{height: 100, width: 100, alignSelf: 'center'}}
-          resizeMode={'stretch'}
-        />
-        {isAdmin && <View style={{width: 20}} />}
-        <Text style={{...fonts.h4, alignSelf: 'center'}} numberOfLines={1}>
-          {item.name}
-        </Text>
+        <View
+          style={{
+            ...styles.categoryCard,
+            flexDirection: isAdmin ? 'row' : 'column',
+          }}>
+          <Image
+            source={{uri: item.image}}
+            style={{height: 100, width: 100, alignSelf: 'center'}}
+            resizeMode={'stretch'}
+          />
+          {isAdmin && <View style={{width: 20}} />}
+          <Text style={{...fonts.h4, alignSelf: 'center'}} numberOfLines={1}>
+            {item.name}
+          </Text>
+        </View>
+        {isAdmin && <AdminButtons item={item} />}
       </View>
-      {isAdmin && <AdminButtons item={item} />}
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

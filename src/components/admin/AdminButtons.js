@@ -23,7 +23,12 @@ const AdminButtons = ({item}) => {
           console.log('Edited Item id : ', item.id);
         }}>
         <View style={styles.btn}>
-          <Text style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
+          <Text
+            style={{
+              ...fonts.h6,
+              margin: 10,
+              color: colors.primary_color_admin,
+            }}>
             Edit
           </Text>
         </View>
@@ -45,7 +50,7 @@ const AdminButtons = ({item}) => {
         <View style={styles.btn}>
           <Icon
             name="trash-o"
-            color={colors.primary_color}
+            color={colors.primary_color_admin}
             size={25}
             style={{margin: 8}}
             onPress={() => {
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: colors.primary_color,
+    borderColor: colors.primary_color_admin,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 5,

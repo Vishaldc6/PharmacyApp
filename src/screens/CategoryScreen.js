@@ -5,22 +5,23 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomSearchBar from '../components/CustomSearchBar';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
-import {categories} from '../assets/data/categories';
 import fonts from '../styles/fonts';
 import Swiper from 'react-native-swiper';
 import {Images} from '../assets/images';
 import {size} from '../styles/size';
 import CustomHeading from '../components/CustomHeading';
-import {products} from '../assets/data/products';
+
 import PrimaryProductCard from '../components/product/PrimaryProductCard';
 import SecondaryProductCard from '../components/product/SecondaryProductCard';
 import CategoryCard from '../components/category/CategoryCard';
+import {getCategories, getProducts} from '../config/apiServices/ApiServices';
 
 const Banner = ({image}) => (
   <View style={styles.slide}>
@@ -29,6 +30,32 @@ const Banner = ({image}) => (
 );
 
 const CategoryScreen = props => {
+  const [categories, setcategories] = useState([]);
+  const [products, setproducts] = useState([]);
+  const [isRefresh, setisRefresh] = useState(false);
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    getCategories().then(res => {
+      const list = res.reverse();
+      setcategories(list);
+      setisRefresh(false);
+      setloading(false);
+    });
+    setisRefresh(true);
+    setloading(true);
+    getProducts().then(res => {
+      const list = res.reverse();
+      setproducts(list);
+      setisRefresh(false);
+      setloading(false);
+    });
+  };
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Categories'} back {...props} />
@@ -38,78 +65,95 @@ const CategoryScreen = props => {
         }}
         placeholder="Search Category.."
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{elevation: 2, backgroundColor: colors.white}}>
-          <CustomHeading header1={'Popular Categories'} />
-          <FlatList
-            // style={{backgroundColor: 'red'}}
-            data={categories}
-            numColumns={3}
-            renderItem={({item}) => <CategoryCard item={item} />}
-          />
+      {loading ? (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator />
         </View>
-        {/* Scroll banner */}
-        <View style={styles.bannerContainer}>
-          <Swiper
-            autoplay
-            dotStyle={{bottom: -40}}
-            activeDotStyle={{bottom: -40}}>
-            <Banner image={Images.banners5} />
-            <Banner image={Images.banners} />
-            <Banner image={Images.banners6} />
-          </Swiper>
-        </View>
-        {/* horizontal product */}
-        <View
-          style={{
-            elevation: 2,
-            backgroundColor: colors.white,
-
-            marginVertical: 10,
-          }}>
-          <CustomHeading header1={'Popular Products'} />
-          <FlatList
-            style={{marginVertical: 5}}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            // scrollEnabled={false}
-            data={products}
-            renderItem={({item, index}) =>
-              index < 5 && <PrimaryProductCard item={item} />
-            }
-          />
-        </View>
-        {/* simple banner */}
-        <View style={styles.bannerContainer}>
-          <View style={styles.slide}>
-            <Image
-              source={Images.banners3}
-              style={{flex: 1, resizeMode: 'cover', height: 200, width: 500}}
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{elevation: 2, backgroundColor: colors.white}}>
+            <CustomHeading header1={'Popular Categories'} />
+            <FlatList
+              // style={{backgroundColor: 'red'}}
+              data={categories}
+              numColumns={3}
+              renderItem={({item, index}) =>
+                index <= 5 && (
+                  <CategoryCard
+                    item={item}
+                    onPress={() => {
+                      props.navigation.navigate(ScreenNames.ProductScreen, {
+                        cat_id: item.id,
+                      });
+                    }}
+                  />
+                )
+              }
             />
           </View>
-        </View>
-        {/* vertical products */}
-        <FlatList
-          style={{
-            flex: 1,
-            backgroundColor: colors.white,
-            marginVertical: 10,
-            elevation: 2,
-          }}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                borderWidth: 0.5,
-                borderColor: colors.darkgray,
-                margin: 10,
-              }}
+          {/* Scroll banner */}
+          <View style={styles.bannerContainer}>
+            <Swiper
+              autoplay
+              dotStyle={{bottom: -40}}
+              activeDotStyle={{bottom: -40}}>
+              <Banner image={Images.banners5} />
+              <Banner image={Images.banners} />
+              <Banner image={Images.banners6} />
+            </Swiper>
+          </View>
+          {/* horizontal product */}
+          <View
+            style={{
+              elevation: 2,
+              backgroundColor: colors.white,
+
+              marginVertical: 10,
+            }}>
+            <CustomHeading header1={'Popular Products'} />
+            <FlatList
+              style={{marginVertical: 5}}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              // scrollEnabled={false}
+              data={products}
+              renderItem={({item, index}) =>
+                index < 5 && <PrimaryProductCard item={item} />
+              }
             />
-          )}
-          data={products}
-          renderItem={({item}) => <SecondaryProductCard item={item} />}
-        />
-        <Text>CategoryScreen</Text>
-      </ScrollView>
+          </View>
+          {/* simple banner */}
+          <View style={styles.bannerContainer}>
+            <View style={styles.slide}>
+              <Image
+                source={Images.banners3}
+                style={{flex: 1, resizeMode: 'cover', height: 200, width: 500}}
+              />
+            </View>
+          </View>
+          {/* vertical products */}
+          <FlatList
+            style={{
+              flex: 1,
+              backgroundColor: colors.white,
+              marginVertical: 10,
+              elevation: 2,
+            }}
+            ItemSeparatorComponent={() => (
+              <View
+                style={{
+                  borderWidth: 0.5,
+                  borderColor: colors.darkgray,
+                  margin: 10,
+                }}
+              />
+            )}
+            data={products}
+            renderItem={({item}) => <SecondaryProductCard item={item} />}
+          />
+          <Text>CategoryScreen</Text>
+        </ScrollView>
+      )}
     </View>
   );
 };

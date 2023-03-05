@@ -8,12 +8,12 @@ import GlobalStyles from '../../styles/GlobalStyles';
 import AdminButtons from '../admin/AdminButtons';
 
 const SecondaryProductCard = ({item, isAdmin, editPress, deletePress}) => {
-  const discountedPrice =
-    item.price - parseFloat(item.price) / parseFloat(item.discount);
+  // const discountedPrice =
+  //   item.price - parseFloat(item.price) / parseFloat(item.discount);
 
   return (
     <View style={styles.productCard}>
-      <Image source={item.image} style={{height: 120, width: 120}} />
+      <Image source={{uri: item.thumbnail}} style={{height: 120, width: 120}} />
       <View style={{width: 20}} />
       <View style={{flex: 1}}>
         <Text style={fonts.h4}>{item.name}</Text>
@@ -24,9 +24,9 @@ const SecondaryProductCard = ({item, isAdmin, editPress, deletePress}) => {
           <Text style={{...fonts.h3, color: colors.darkgray}}>
             {item.rate}{' '}
           </Text>
-          <Text style={{...fonts.h3, color: colors.darkgray}}>
+          {/* <Text style={{...fonts.h3, color: colors.darkgray}}>
             ({item.rating} ratings)
-          </Text>
+          </Text> */}
         </View>
         <View
           style={{
@@ -34,55 +34,22 @@ const SecondaryProductCard = ({item, isAdmin, editPress, deletePress}) => {
             alignItems: 'center',
             marginVertical: 5,
           }}>
-          <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text>
-          <Text
+          {/* <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text> */}
+          <Text style={fonts.h6}>Rs.{item.price} </Text>
+          {/* <Text
             style={{
               ...fonts.h3,
               color: colors.darkgray,
               textDecorationLine: 'line-through',
             }}>
             Rs.{item.price}{' '}
-          </Text>
-          <Text style={{...fonts.h3, color: colors.primary_color}}>
+          </Text> */}
+          {/* <Text style={{...fonts.h3, color: colors.primary_color}}>
             {item.discount} % off
-          </Text>
+          </Text> */}
         </View>
         {/* <CustomButton title={'Add to Cart'} /> */}
         {isAdmin ? (
-          // <View style={GlobalStyles.rowContainer}>
-          //   {/* <Button title="Edit" onPress={editPress} />
-          //   <Button title="Delete" onPress={deletePress} /> */}
-          //   <View
-          //     style={{
-          //       // flex:1,
-          //       ...styles.btn,
-          //     }}>
-          //     <Text
-          //       style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
-          //       Edit
-          //     </Text>
-          //   </View>
-          //   {/* <Icon
-          //     name="pencil"
-          //     color={colors.primary_color}
-          //     size={25}
-          //     onPress={() => {
-          //       console.log(item.id);
-          //     }}
-          //   /> */}
-          //   {/* <View style={{width: 20}} /> */}
-          //   <View style={styles.btn}>
-          //     <Icon
-          //       name="trash-o"
-          //       color={colors.primary_color}
-          //       size={25}
-          //       style={{margin: 8}}
-          //       onPress={() => {
-          //         console.log('Deleted Item id : ', item.id);
-          //       }}
-          //     />
-          //   </View>
-          // </View>
           <AdminButtons item={item} />
         ) : (
           <View

@@ -5,6 +5,7 @@ export default ScreenName = {
   AdminLabScreen: 'AdminLabScreen',
   AdminTestScreen: 'AdminTestScreen',
   AdminCategoryScreen: 'AdminCategoryScreen',
+  AdminFormScreen: 'AdminFormScreen',
 
   //user
   AuthStack: 'AuthStack',

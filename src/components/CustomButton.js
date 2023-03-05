@@ -12,6 +12,8 @@ const CustomButton = props => {
           flex: 1,
           backgroundColor: props.secondary
             ? Colors.white
+            : props.isAdmin
+            ? colors.primary_color_admin
             : Colors.primary_color,
           // height: size.height / 13,
           // width: size.width / 1.06,
@@ -20,7 +22,10 @@ const CustomButton = props => {
           borderRadius: 15,
           marginHorizontal: 10,
           borderWidth: props.secondary ? 1 : 0,
-          borderColor: props.secondary && colors.primary_color,
+          borderColor:
+            props.secondary && props.isAdmin
+              ? colors.primary_color_admin
+              : colors.primary_color,
         }}>
         <Text
           style={{

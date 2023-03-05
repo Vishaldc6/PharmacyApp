@@ -39,7 +39,7 @@ const DoctorScreen = () => {
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader search={true} title={'Docters'} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Banners */}
         <View style={styles.bannerContainer}>
           <Swiper

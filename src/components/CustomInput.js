@@ -9,17 +9,19 @@ const CustomInput = props => {
   const [isVisible, setisVisible] = useState(false);
 
   return (
-    <View>
+    <View {...props}>
       <Text style={{...fonts.h3, marginLeft: 10}}>{props.title}</Text>
       <View style={styles.inputContainer}>
-        <View style={styles.iconBox}>
-          <Icon
-            name={props.iconName}
-            size={22}
-            color={isFocus ? Colors.primary_color : Colors.darkgray}
-            style={{alignSelf: 'center'}}
-          />
-        </View>
+        {props.iconName && (
+          <View style={styles.iconBox}>
+            <Icon
+              name={props.iconName}
+              size={22}
+              color={isFocus ? Colors.primary_color : Colors.darkgray}
+              style={{alignSelf: 'center'}}
+            />
+          </View>
+        )}
         <TextInput
           onFocus={() => {
             setisFocus(true);
@@ -38,8 +40,8 @@ const CustomInput = props => {
           keyboardType={props.keyboardType}
           secureTextEntry={isVisible ? false : true}
         />
-        <View style={styles.iconBox}>
-          {props.passwordField && (
+        {props.passwordField && (
+          <View style={styles.iconBox}>
             <Icon
               onPress={() => {
                 setisVisible(!isVisible);
@@ -49,8 +51,8 @@ const CustomInput = props => {
               color={isVisible ? Colors.primary_color : Colors.darkgray}
               style={{alignSelf: 'center'}}
             />
-          )}
-        </View>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -58,10 +60,10 @@ const CustomInput = props => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     // marginVertical:10,
-    // backgroundColor:'red'
+    // backgroundColor: 'red',
   },
   input: {
     flex: 1,

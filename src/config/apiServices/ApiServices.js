@@ -25,8 +25,9 @@ export const getToken = async () => {
 //Api Call
 export const ApiCall = async (endpoint, method = 'GET', data = null) => {
   const headers = {
-    // Accept: 'application/json',
-    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    // 'Content-Type': 'application/json',
+    // 'Content-Type': 'multipart/form-data',
   };
 
   const token = JSON.parse(await AsyncStorage.getItem('TOKEN'));
@@ -39,18 +40,16 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     const res = await fetch(AppStrings.BASE_URL + endpoint, {
       method,
       headers,
-      body: data ? JSON.stringify(data) : null,
+      body: data ? data : null,
     });
+    console.log(res);
     let response = await res.json();
     console.log('response:::', response);
-    if (!res.ok) {
-      console.log(response);
-      if (response.success) {
-        Alert.alert(AppStrings.appName, response.message);
-        return response.data;
-      } else {
-        return Alert.alert(AppStrings.appName, response.message);
-      }
+    if (response.success) {
+      // Alert.alert(AppStrings.appName, response.message);
+      // response = response.data;
+      return response.data;
+
       // if (response.errors == null) {
       //   return Alert.alert(AppStrings.appName, response.MESSAGE);
       // } else {
@@ -59,12 +58,37 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
       //     Object.values(response.DATA.errors)[0].toString(),
       //   );
       // }
+    } else {
+      Alert.alert(AppStrings.appName, response.message);
     }
 
     return response;
   } catch (error) {
-    Alert.alert(AppStrings.appName, error.toString());
+    console.log(error);
+    // Alert.alert(AppStrings.appName, error.toString());
   }
+};
+
+export const getProducts = async () => {
+  const res = await ApiCall('/product', 'GET');
+  return res;
+  // setproducts(res.length);
+  // setloading(false);
+  // setisRefresh(false);
+};
+export const getCategories = async () => {
+  const res = await ApiCall('/category', 'GET');
+  return res;
+  // setcategories(res.length);
+  // setloading(false);
+  // setisRefresh(false);
+};
+export const getLabs = async () => {
+  const res = await ApiCall('/lab', 'GET');
+  return res;
+  // setlabs(res.length);
+  // setloading(false);
+  // setisRefresh(false);
 };
 
 //USER REGISTER
