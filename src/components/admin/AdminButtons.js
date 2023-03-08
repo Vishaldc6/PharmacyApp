@@ -12,16 +12,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 
-const AdminButtons = ({item}) => {
+const AdminButtons = ({item, editPress, deletePress}) => {
   return (
     <View style={GlobalStyles.rowContainer}>
       {/* <Button title="Edit" onPress={editPress} />
     <Button title="Delete" onPress={deletePress} /> */}
-      <TouchableOpacity
-        style={{flex: 1}}
-        onPress={() => {
-          console.log('Edited Item id : ', item.id);
-        }}>
+      <TouchableOpacity style={{flex: 1}} onPress={editPress}>
         <View style={styles.btn}>
           <Text
             style={{
@@ -42,20 +38,13 @@ const AdminButtons = ({item}) => {
       }}
     /> */}
       {/* <View style={{width: 20}} /> */}
-      <TouchableOpacity
-        style={{flex: 1}}
-        onPress={() => {
-          console.log('Edited Item id : ', item.id);
-        }}>
+      <TouchableOpacity style={{flex: 1}} onPress={deletePress}>
         <View style={styles.btn}>
           <Icon
             name="trash-o"
             color={colors.primary_color_admin}
             size={25}
             style={{margin: 8}}
-            onPress={() => {
-              console.log('Deleted Item id : ', item.id);
-            }}
           />
         </View>
       </TouchableOpacity>

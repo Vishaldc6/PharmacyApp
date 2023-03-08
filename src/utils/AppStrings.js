@@ -22,6 +22,17 @@ export const AppStrings = {
   radipDelivery: 'Rapid Delivery',
   choosePlan: "Choose a plan that's right for you",
 
+  // ProductDetailScreen
+  productInfo: 'Product Information',
+  ingredients: 'Key Ingredients',
+  benefits: 'Key Benefits',
+  expire: 'Expires on or after ',
+
+  earlyDelivery: 'Earliest delivery by ',
+  deliverTo: 'Delivering to : Your Location',
+  cod: 'Cash on delivery available',
+  return: 'Easy 7 days return available',
+
   //DoctorlistScreen
   onlineDoctor: 'Online doctor consultation with qualified doctors',
   talk: 'Talk within 30 mins',

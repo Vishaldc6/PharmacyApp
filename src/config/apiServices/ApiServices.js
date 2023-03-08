@@ -48,7 +48,8 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     if (response.success) {
       // Alert.alert(AppStrings.appName, response.message);
       // response = response.data;
-      return response.data;
+      // console.log('response:::', response.data);
+      return response.data ? response.data : response.message;
 
       // if (response.errors == null) {
       //   return Alert.alert(AppStrings.appName, response.MESSAGE);
@@ -69,8 +70,8 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
   }
 };
 
-export const getProducts = async () => {
-  const res = await ApiCall('/product', 'GET');
+export const getProducts = async id => {
+  const res = await ApiCall(id ? `/product/${id}` : '/product', 'GET');
   return res;
   // setproducts(res.length);
   // setloading(false);
@@ -87,6 +88,20 @@ export const getLabs = async () => {
   const res = await ApiCall('/lab', 'GET');
   return res;
   // setlabs(res.length);
+  // setloading(false);
+  // setisRefresh(false);
+};
+export const getTests = async () => {
+  const res = await ApiCall('/report', 'GET');
+  return res;
+  // setcategories(res.length);
+  // setloading(false);
+  // setisRefresh(false);
+};
+export const getDoctors = async () => {
+  const res = await ApiCall('/doctors', 'GET');
+  return res;
+  // setcategories(res.length);
   // setloading(false);
   // setisRefresh(false);
 };

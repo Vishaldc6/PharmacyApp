@@ -4,6 +4,7 @@ import {
   FlatList,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomHeader from '../../components/CustomHeader';
@@ -12,9 +13,10 @@ import GlobalStyles from '../../styles/GlobalStyles';
 
 import SecondaryProductCard from '../../components/product/SecondaryProductCard';
 import colors from '../../styles/colors';
-import {getProducts} from '../../config/apiServices/ApiServices';
+import {ApiCall, getProducts} from '../../config/apiServices/ApiServices';
 import FloatingButton from '../../components/admin/FloatingButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
+import {AppStrings} from '../../utils/AppStrings';
 
 const AdminProductScreen = props => {
   const [products, setproducts] = useState([]);
@@ -32,6 +34,15 @@ const AdminProductScreen = props => {
       setisRefresh(false);
       setloading(false);
     });
+  };
+
+  const deleteProduct = async id => {
+    const res = await ApiCall(`/productDelete/${id}`, 'DELETE');
+    console.log('deleted product res : ', res);
+    if (res) {
+      Alert.alert(AppStrings.appName, res);
+      getData();
+    }
   };
 
   return (
@@ -84,6 +95,7 @@ const AdminProductScreen = props => {
                 }}
                 deletePress={() => {
                   console.log('Deleted Item id : ', item.id);
+                  deleteProduct(item.id);
                 }}
               />
             )}

@@ -20,6 +20,7 @@ import {
   getCategories,
   getLabs,
   getProducts,
+  getTests,
 } from '../../config/apiServices/ApiServices';
 import {ActivityIndicator} from 'react-native-paper';
 
@@ -40,6 +41,7 @@ const AdminHomeScreen = props => {
   const [products, setproducts] = useState(0);
   const [categories, setcategories] = useState(0);
   const [labs, setlabs] = useState(0);
+  const [tests, setTests] = useState(0);
 
   const [isRefresh, setisRefresh] = useState(false);
 
@@ -70,6 +72,7 @@ const AdminHomeScreen = props => {
     getProducts().then(res => setproducts(res.length));
     getCategories().then(res => setcategories(res.length));
     getLabs().then(res => setlabs(res.length));
+    getTests().then(res => setTests(res.length));
     setisRefresh(true);
     setloading(false);
     setisRefresh(false);
@@ -114,7 +117,7 @@ const AdminHomeScreen = props => {
           />
           <Card
             title={'Tests'}
-            number={tests.length}
+            number={tests}
             onPress={() => {
               props.navigation.navigate(ScreenNames.AdminTestScreen);
             }}
@@ -127,7 +130,8 @@ const AdminHomeScreen = props => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: colors.primary_color,
+    backgroundColor: colors.primary_color_admin,
+    elevation: 5,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

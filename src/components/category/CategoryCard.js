@@ -9,7 +9,7 @@ import React from 'react';
 import fonts from '../../styles/fonts';
 import AdminButtons from '../admin/AdminButtons';
 
-const CategoryCard = ({item, isAdmin, onPress}) => {
+const CategoryCard = ({item, isAdmin, onPress, editPress, deletePress}) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View
@@ -34,7 +34,13 @@ const CategoryCard = ({item, isAdmin, onPress}) => {
             {item.name}
           </Text>
         </View>
-        {isAdmin && <AdminButtons item={item} />}
+        {isAdmin && (
+          <AdminButtons
+            item={item}
+            deletePress={deletePress}
+            editPress={editPress}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

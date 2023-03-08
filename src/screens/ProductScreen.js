@@ -137,9 +137,17 @@ const ProductScreen = props => {
               />
             )}
             data={products}
-            renderItem={({item}) => <SecondaryProductCard item={item} />}
+            renderItem={({item}) => (
+              <SecondaryProductCard
+                item={item}
+                onPress={() => {
+                  props.navigation.navigate(ScreenNames.ProductDetailScreen, {
+                    id: item.id,
+                  });
+                }}
+              />
+            )}
           />
-          <Text>ProductScreen</Text>
         </ScrollView>
       )}
     </View>

@@ -29,6 +29,7 @@ import colors from './src/styles/colors';
 import SplashScreen from 'react-native-splash-screen';
 import ProfileScreen from './src/screens/tabs/ProfileScreen';
 import AdminFormScreen from './src/screens/admin/AdminFormScreen';
+import ProductDetailScreen from './src/screens/ProductDetailScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,8 +65,9 @@ const App = () => {
         <Stack.Navigator
           screenOptions={{headerShown: false}}
           initialRouteName={
-            token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
+            // token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
             // ScreenNames.AdminHomeScreen
+            ScreenNames.DoctorHomeScreen
           }>
           <Stack.Screen name={ScreenNames.AuthStack} component={AuthStack} />
 
@@ -92,6 +94,10 @@ const App = () => {
           <Stack.Screen
             name={ScreenNames.ProductScreen}
             component={ProductScreen}
+          />
+          <Stack.Screen
+            name={ScreenNames.ProductDetailScreen}
+            component={ProductDetailScreen}
           />
           <Stack.Screen
             name={ScreenNames.SearchScreen}

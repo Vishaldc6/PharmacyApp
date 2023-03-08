@@ -55,6 +55,17 @@ const SignInScreen = props => {
       const {idToken} = await GoogleSignin.signIn();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
+      const body = new FormData();
+      body.append('name', userInfo.user.name);
+      body.append('email', userInfo.user.email);
+      body.append('image', userInfo.user.photo);
+      body.append('social_id', userInfo.idToken);
+      const res = await ApiCall(
+        isCheck ? '/doctorRegister' : '/patientRegister',
+        'POST',
+        body,
+      );
+      console.log(res);
       // const { access_token } = response.data;
       // await AsyncStorage.setItem('ACCESS_TOKEN', access_token);
       // setUser(response.data.user);
@@ -224,9 +235,14 @@ const SignInScreen = props => {
                 <View style={{height: 10}} />
                 <View style={{justifyContent: 'center', alignItems: 'center'}}>
                   <Text>OR</Text>
-                  <GoogleSigninButton onPress={signIn} />
+                  {/* <GoogleSigninButton onPress={signIn} /> */}
                 </View>
-                {/* <Icon name={'google'} size={25} onPress={signIn} /> */}
+                <Icon
+                  name={'google'}
+                  size={25}
+                  onPress={signIn}
+                  style={{alignSelf: 'center'}}
+                />
                 <Text style={{...fonts.h3, alignSelf: 'center'}}>
                   New User ?{' '}
                   <Text

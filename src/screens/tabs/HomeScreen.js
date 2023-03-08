@@ -88,7 +88,7 @@ const HomeScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       {/* Header */}
-      <CustomHeader cart={true} tag={true} title={'Home'} />
+      <CustomHeader title={'Home'} />
 
       {/* SearchBar */}
       <TouchableWithoutFeedback
@@ -133,7 +133,7 @@ const HomeScreen = props => {
             icon={'pills'}
             onPress={() => {
               console.log('Medicine Page');
-              props.navigation.navigate(ScreenNames.MedicineScreen);
+              props.navigation.navigate(ScreenNames.ProductScreen);
             }}
           />
           <Card
@@ -141,6 +141,7 @@ const HomeScreen = props => {
             icon={'shopping-store'}
             onPress={() => {
               console.log('Health Product Page');
+              props.navigation.navigate(ScreenNames.ProductScreen);
             }}
           />
           <Card

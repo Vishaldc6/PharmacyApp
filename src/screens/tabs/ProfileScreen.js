@@ -18,6 +18,7 @@ import {Images} from '../../assets/images';
 import {ApiCall} from '../../config/apiServices/ApiServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
+import ReactNativeParallaxHeader from 'react-native-parallax-header';
 
 const ListTile = ({icon, title, onPress}) => (
   <View
@@ -85,7 +86,69 @@ const ProfileScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       {/* <CustomHeader cart={true} /> */}
-      <Animated.View
+
+      <ReactNativeParallaxHeader
+        // extraScrollHeight={300}
+        scrollViewProps={{
+          onScroll: () =>
+            Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: {
+                      y: scrollY,
+                    },
+                  },
+                },
+              ],
+              {
+                useNativeDriver: false,
+              },
+            ),
+        }}
+        headerMaxHeight={HeaderMaxHeight}
+        headerMinHeight={HeaderMinHeight}
+        title={
+          <Image
+            source={Images.noImage}
+            // style={{borderRadius: 100}}
+            style={{
+              // top: imagetransformationTopHandller,
+              // left: imagetransformationLeftHandller,
+              borderRadius: 100,
+              height: imageheightHandller,
+              width: imageheightHandller,
+              // margin: 10,
+              // transform: [
+              //   {
+              //     scale: scaleImageHandler,
+              //   },
+              // ],
+            }}
+          />
+        }
+        renderContent={() => (
+          <View>
+            <ListTile icon={'shopping-cart'} title={'My Cart'} />
+            <ListTile icon={'shopping-cart'} title={'My Doctors'} />
+            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+            <ListTile icon={'shopping-cart'} title={'My Cart'} />
+            <ListTile icon={'shopping-cart'} title={'My Doctors'} />
+            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+            <ListTile icon={'shopping-cart'} title={'My Cart'} />
+            <ListTile icon={'shopping-cart'} title={'My Doctors'} />
+            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+            <ListTile icon={'shopping-cart'} title={'My Cart'} />
+            <ListTile icon={'shopping-cart'} title={'My Doctors'} />
+            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+            <ListTile icon={'shopping-cart'} title={'My Cart'} />
+            <ListTile icon={'shopping-cart'} title={'My Doctors'} />
+            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+          </View>
+        )}
+      />
+
+      {/* <Animated.View
         style={{
           // backgroundColor: 'red',
           height: heightHandller,
@@ -108,11 +171,10 @@ const ProfileScreen = props => {
             ],
           }}
         />
-        {/* <Text style={fonts.h1}>Hello User</Text>
-        <Text style={fonts.h2}>20, Male</Text> */}
-      </Animated.View>
 
-      <Animated.ScrollView
+      </Animated.View> */}
+
+      {/* <Animated.ScrollView
         style={{
           // flex: 1,
           width: '100%',
@@ -139,7 +201,7 @@ const ProfileScreen = props => {
             useNativeDriver: false,
           },
         )}>
-        {/* <View style={styles.indicator} /> */}
+        
 
         <Text
           style={{...fonts.h1, alignSelf: 'center', padding: 10}}
@@ -158,30 +220,7 @@ const ProfileScreen = props => {
         <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
         <ListTile icon={'shopping-cart'} title={'My Orders'} />
         <View style={{height: HeaderMaxHeight, backgroundColor: 'white'}} />
-      </Animated.ScrollView>
-
-      {/* <View
-        style={{
-          width: '100%',
-          position: 'absolute',
-          bottom: 0,
-          alignSelf: 'center',
-          padding: 10,
-          borderRadius: 20,
-          backgroundColor: colors.black,
-        }}>
-        <ScrollView>
-          <View style={styles.indicator} />
-
-          <Text style={{...fonts.h1, alignSelf: 'center', padding: 10}}>
-            My Information
-          </Text>
-          <ListTile icon={'shopping-cart'} title={'My Cart'} />
-          <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-          <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
-          <ListTile icon={'shopping-cart'} title={'My Orders'} />
-        </ScrollView>
-      </View> */}
+      </Animated.ScrollView> */}
     </View>
   );
 };

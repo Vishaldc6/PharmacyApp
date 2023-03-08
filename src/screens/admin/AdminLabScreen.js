@@ -7,6 +7,7 @@ import {
   Button,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -21,8 +22,9 @@ import AdminButtons from '../../components/admin/AdminButtons';
 import {ApiCall, getLabs} from '../../config/apiServices/ApiServices';
 import FloatingButton from '../../components/admin/FloatingButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
+import {AppStrings} from '../../utils/AppStrings';
 
-const LabCard = ({item}) => {
+const LabCard = ({item, editPress, deletePress}) => {
   // const discountedPrice =
   //   item.price - parseFloat(item.price) / parseFloat(item.discount);
 
@@ -50,7 +52,11 @@ const LabCard = ({item}) => {
         </Text> */}
         {/* <View style={{height: 20}} /> */}
 
-        <AdminButtons item={item} />
+        <AdminButtons
+          item={item}
+          editPress={editPress}
+          deletePress={deletePress}
+        />
       </View>
     </View>
   );
@@ -73,6 +79,16 @@ const AdminLabScreen = props => {
       setloading(false);
     });
   };
+
+  const deleteLab = async id => {
+    const res = await ApiCall(`/labDelete/${id}`, 'DELETE');
+    console.log('deleted lab res : ', res);
+    if (res) {
+      Alert.alert(AppStrings.appName, res);
+      getData();
+    }
+  };
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Laboratories'} back {...props} />
@@ -115,7 +131,12 @@ const AdminLabScreen = props => {
             )}
             data={labs}
             renderItem={({item}) => (
-              <LabCard item={item} />
+              <LabCard
+                item={item}
+                deletePress={() => {
+                  deleteLab(item.id);
+                }}
+              />
               // <Text>{item.name}</Text>
             )}
           />

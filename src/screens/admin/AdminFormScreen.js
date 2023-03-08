@@ -32,6 +32,19 @@ const AdminFormScreen = props => {
   //   const [imgName, setimgName] = useState('No image');
   //   const [imgPath, setimgPath] = useState('');
 
+  const addTest = async () => {
+    let body = new FormData();
+    body.append('Content-type', 'multipart/form-data');
+    body.append('name', name);
+    body.append('price', price);
+
+    const res = await ApiCall('/reportAdd', 'POST', body);
+    console.log(res);
+    if (res) {
+      props.navigation.goBack();
+    }
+  };
+
   const addCategory = async () => {
     let body = new FormData();
     body.append('Content-type', 'multipart/form-data');
@@ -106,18 +119,20 @@ const AdminFormScreen = props => {
       <CustomHeader title={title} back {...props} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <CustomInput
+          isAdmin={true}
           onChangeText={val => {
             setname(val);
           }}
           value={name}
           title={`${title} Name`}
-          placeholder={'Enter Laboratory name'}
+          placeholder={`Enter ${title} name`}
           keyboardType={'email-address'}
         />
         <View style={{height: 15}} />
         {props.route.params.add && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setaddress(val);
               }}
@@ -132,6 +147,7 @@ const AdminFormScreen = props => {
         {props.route.params.desc && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setdesc(val);
               }}
@@ -146,6 +162,7 @@ const AdminFormScreen = props => {
         {props.route.params.included_test && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setincluded_test(val);
               }}
@@ -160,6 +177,7 @@ const AdminFormScreen = props => {
         {props.route.params.benefits && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setbenefits(val);
               }}
@@ -174,6 +192,7 @@ const AdminFormScreen = props => {
         {props.route.params.brand && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setbrand(val);
               }}
@@ -194,6 +213,7 @@ const AdminFormScreen = props => {
                 // justifyContent: 'space-evenly',
               }}>
               <CustomInput
+                isAdmin={true}
                 style={{flex: 1}}
                 onChangeText={val => {
                   setcategory_id(val);
@@ -207,6 +227,7 @@ const AdminFormScreen = props => {
               {props.route.params.expiry_date && (
                 <>
                   <CustomInput
+                    isAdmin={true}
                     style={{flex: 1}}
                     onChangeText={val => {
                       setexpiry_date(val);
@@ -227,6 +248,7 @@ const AdminFormScreen = props => {
         {props.route.params.dieses_types && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setdieses_types(val);
               }}
@@ -242,6 +264,7 @@ const AdminFormScreen = props => {
         {props.route.params.information && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setinformation(val);
               }}
@@ -256,6 +279,7 @@ const AdminFormScreen = props => {
         {props.route.params.ingredients && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setingredients(val);
               }}
@@ -274,6 +298,7 @@ const AdminFormScreen = props => {
                 flexDirection: 'row',
               }}>
               <CustomInput
+                isAdmin={true}
                 style={{flex: 1}}
                 onChangeText={val => {
                   setprice(val);
@@ -287,6 +312,7 @@ const AdminFormScreen = props => {
               {props.route.params.quantity && (
                 <>
                   <CustomInput
+                    isAdmin={true}
                     style={{flex: 1}}
                     onChangeText={val => {
                       setquantity(val);
@@ -302,6 +328,7 @@ const AdminFormScreen = props => {
               {props.route.params.rate && (
                 <>
                   <CustomInput
+                    isAdmin={true}
                     style={{flex: 1}}
                     onChangeText={val => {
                       setrate(val);
@@ -322,6 +349,7 @@ const AdminFormScreen = props => {
         {props.route.params.side_effects && (
           <>
             <CustomInput
+              isAdmin={true}
               onChangeText={val => {
                 setside_effects(val);
               }}
@@ -379,6 +407,8 @@ const AdminFormScreen = props => {
                 addLaboratory();
               } else if (title == 'Product') {
                 addProduct();
+              } else if (title == 'Test') {
+                addTest();
               }
             }}
           />

@@ -4,6 +4,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import colors from '../../styles/colors';
@@ -14,7 +15,8 @@ import CustomSearchBar from '../../components/CustomSearchBar';
 import CategoryCard from '../../components/category/CategoryCard';
 import FloatingButton from '../../components/admin/FloatingButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
-import {getCategories} from '../../config/apiServices/ApiServices';
+import {ApiCall, getCategories} from '../../config/apiServices/ApiServices';
+import {AppStrings} from '../../utils/AppStrings';
 
 const AdminCategoryScreen = props => {
   const [categories, setcategories] = useState([]);
@@ -32,6 +34,15 @@ const AdminCategoryScreen = props => {
       setisRefresh(false);
       setloading(false);
     });
+  };
+
+  const deleteCategory = async id => {
+    const res = await ApiCall(`/categoryDelete/${id}`, 'DELETE');
+    console.log('deleted category res : ', res);
+    if (res) {
+      Alert.alert(AppStrings.appName, res);
+      getData();
+    }
   };
 
   return (
@@ -79,7 +90,13 @@ const AdminCategoryScreen = props => {
             data={categories}
             renderItem={({item}) => (
               <View style={{flex: 1, flexDirection: 'row'}}>
-                <CategoryCard item={item} isAdmin />
+                <CategoryCard
+                  item={item}
+                  isAdmin
+                  deletePress={() => {
+                    deleteCategory(item.id);
+                  }}
+                />
               </View>
             )}
           />

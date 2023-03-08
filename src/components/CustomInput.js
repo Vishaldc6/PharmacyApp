@@ -17,7 +17,13 @@ const CustomInput = props => {
             <Icon
               name={props.iconName}
               size={22}
-              color={isFocus ? Colors.primary_color : Colors.darkgray}
+              color={
+                isFocus
+                  ? props.isAdmin
+                    ? Colors.primary_color_admin
+                    : Colors.primary_color
+                  : Colors.darkgray
+              }
               style={{alignSelf: 'center'}}
             />
           </View>
@@ -31,7 +37,12 @@ const CustomInput = props => {
           }}
           style={
             isFocus
-              ? styles.input
+              ? props.isAdmin
+                ? {
+                    ...styles.input,
+                    borderBottomColor: Colors.primary_color_admin,
+                  }
+                : styles.input
               : {...styles.input, borderBottomColor: Colors.darkgray}
           }
           placeholder={props.placeholder}
@@ -48,7 +59,13 @@ const CustomInput = props => {
               }}
               name={isVisible ? 'eye' : 'eye-slash'}
               size={22}
-              color={isVisible ? Colors.primary_color : Colors.darkgray}
+              color={
+                isVisible
+                  ? props.isAdmin
+                    ? Colors.primary_color_admin
+                    : Colors.primary_color
+                  : Colors.darkgray
+              }
               style={{alignSelf: 'center'}}
             />
           </View>

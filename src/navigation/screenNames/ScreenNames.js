@@ -26,6 +26,7 @@ export default ScreenName = {
   MedicineScreen: 'MedicineScreen',
   CategoryScreen: 'CategoryScreen',
   ProductScreen: 'ProductScreen',
+  ProductDetailScreen: 'ProductDetailScreen',
   CarePlanScreen: 'CarePlanScreen',
   UploadPrescriptionScreen: 'UploadPrescriptionScreen',
 

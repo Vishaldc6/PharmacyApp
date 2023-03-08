@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -26,7 +27,7 @@ import {labs} from '../assets/data/labs';
 import {AppStrings} from '../utils/AppStrings';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
 import InformationCard from '../components/InformationCard';
-import {getLabs} from '../config/apiServices/ApiServices';
+import {getLabs, getTests} from '../config/apiServices/ApiServices';
 
 const TestCard = ({item, index, onPress}) => {
   const [isChecked, setisChecked] = useState(false);
@@ -113,6 +114,7 @@ const LabCard = ({item}) => {
 
 const LabScreen = props => {
   const [labs, setlabs] = useState([]);
+  const [tests, setTests] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
 
@@ -128,9 +130,10 @@ const LabScreen = props => {
     getLabs().then(res => {
       const list = res.reverse();
       setlabs(list);
-      setloading(false);
-      isRefresh(false);
     });
+    getTests().then(res => setTests(res));
+    setloading(false);
+    setisRefresh(false);
   };
 
   return (
@@ -142,7 +145,16 @@ const LabScreen = props => {
           <ActivityIndicator />
         </View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefresh}
+              onRefresh={() => {
+                getData();
+              }}
+            />
+          }>
           {/* Simple Banner */}
           <SimpleBanner />
           {/* Book Lab with Prescription */}
