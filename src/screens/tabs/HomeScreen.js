@@ -68,6 +68,8 @@ const HomeScreen = props => {
   const [categories, setCategories] = useState([]);
   const [products, setproducts] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
+  const [searchproducts, setsearchproducts] = useState([]);
+  const [srcTxt, setsrcTxt] = useState('');
 
   useEffect(() => {
     getData();
@@ -96,10 +98,21 @@ const HomeScreen = props => {
           props.navigation.navigate(ScreenNames.SearchScreen);
         }}>
         <CustomSearchBar
-          placeholder="Search Medicine.."
+          placeholder="Search Products.."
           // onPress={() => {
           //   props.navigation.navigate(ScreenNames.SearchScreen);
           // }}
+          value={srcTxt}
+          onChangeText={val => {
+            if (val == '') {
+              setsearchproducts([]);
+            }
+            setsrcTxt(val);
+          }}
+          onSearch={() => {
+            let list = products.filter(item => item.name == srcTxt);
+            setsearchproducts(list);
+          }}
         />
       </TouchableWithoutFeedback>
       {/* <Text
@@ -118,6 +131,34 @@ const HomeScreen = props => {
             refreshing={isRefresh}
           />
         }>
+        {searchproducts.length !== 0 && srcTxt !== '' && (
+          <View style={{elevation: 2, backgroundColor: colors.white}}>
+            <CustomHeading header1={'Searched Products'} />
+            <FlatList
+              style={{marginVertical: 5}}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              // scrollEnabled={false}
+              data={searchproducts}
+              renderItem={({item, index}) =>
+                index < 5 && (
+                  <PrimaryProductCard
+                    item={item}
+                    onPress={() => {
+                      props.navigation.navigate(
+                        ScreenNames.ProductDetailScreen,
+                        {
+                          id: item.id,
+                          products: products,
+                        },
+                      );
+                    }}
+                  />
+                )
+              }
+            />
+          </View>
+        )}
         {/* Card View Container */}
         <View style={styles.cardContainer}>
           <Card
@@ -249,7 +290,17 @@ const HomeScreen = props => {
             // scrollEnabled={false}
             data={products}
             renderItem={({item, index}) =>
-              index < 5 && <PrimaryProductCard item={item} />
+              index < 5 && (
+                <PrimaryProductCard
+                  item={item}
+                  onPress={() => {
+                    props.navigation.navigate(ScreenNames.ProductDetailScreen, {
+                      id: item.id,
+                      products: products,
+                    });
+                  }}
+                />
+              )
             }
           />
         </View>

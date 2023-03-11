@@ -70,7 +70,11 @@ const ProductCard = ({item}) => {
 };
 
 const ProductScreen = props => {
+  console.log('Cat id : ', props.route.params?.cat_id);
+
+  const [srcTxt, setsrcTxt] = useState('');
   const [products, setproducts] = useState([]);
+  const [searchproducts, setsearchproducts] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
 
@@ -80,7 +84,13 @@ const ProductScreen = props => {
 
   const getData = () => {
     getProducts().then(res => {
-      const list = res.reverse();
+      let list = res.reverse();
+      if (props.route.params?.cat_id) {
+        list = list.filter(
+          item => item.category_id == props.route.params?.cat_id,
+        );
+      }
+
       setproducts(list);
       setisRefresh(false);
       setloading(false);
@@ -91,10 +101,21 @@ const ProductScreen = props => {
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Products'} back {...props} />
       <CustomSearchBar
-        onPress={() => {
-          //   props.navigation.navigate(ScreenNames.SearchScreen);
+        // onPress={() => {
+        //   //   props.navigation.navigate(ScreenNames.SearchScreen);
+        // }}
+        value={srcTxt}
+        onChangeText={val => {
+          if (val == '') {
+            setsearchproducts([]);
+          }
+          setsrcTxt(val);
         }}
         placeholder="Search Product.."
+        onSearch={() => {
+          let list = products.filter(item => item.name == srcTxt);
+          setsearchproducts(list);
+        }}
       />
       {loading ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -102,6 +123,34 @@ const ProductScreen = props => {
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
+          {searchproducts.length !== 0 && srcTxt !== '' && (
+            <View style={{elevation: 2, backgroundColor: colors.white}}>
+              <CustomHeading header1={'Searched Products'} />
+              <FlatList
+                style={{marginVertical: 5}}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                // scrollEnabled={false}
+                data={searchproducts}
+                renderItem={({item, index}) =>
+                  index < 5 && (
+                    <PrimaryProductCard
+                      item={item}
+                      onPress={() => {
+                        props.navigation.navigate(
+                          ScreenNames.ProductDetailScreen,
+                          {
+                            id: item.id,
+                            products: products,
+                          },
+                        );
+                      }}
+                    />
+                  )
+                }
+              />
+            </View>
+          )}
           {/* simple banner */}
           <SimpleBanner />
           {/* horizontal products */}
@@ -114,7 +163,20 @@ const ProductScreen = props => {
               // scrollEnabled={false}
               data={products}
               renderItem={({item, index}) =>
-                index < 5 && <PrimaryProductCard item={item} />
+                index < 5 && (
+                  <PrimaryProductCard
+                    item={item}
+                    onPress={() => {
+                      props.navigation.navigate(
+                        ScreenNames.ProductDetailScreen,
+                        {
+                          id: item.id,
+                          products: products,
+                        },
+                      );
+                    }}
+                  />
+                )
               }
             />
           </View>
@@ -143,6 +205,7 @@ const ProductScreen = props => {
                 onPress={() => {
                   props.navigation.navigate(ScreenNames.ProductDetailScreen, {
                     id: item.id,
+                    products: products,
                   });
                 }}
               />

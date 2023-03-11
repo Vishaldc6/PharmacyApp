@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: colors.primary_color_admin,
     padding: 25,
+    elevation: 5,
   },
 });
 

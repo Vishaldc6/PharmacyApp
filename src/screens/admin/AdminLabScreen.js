@@ -136,6 +136,17 @@ const AdminLabScreen = props => {
                 deletePress={() => {
                   deleteLab(item.id);
                 }}
+                editPress={() => {
+                  props.navigation.navigate(ScreenNames.AdminFormScreen, {
+                    title: 'Laboratory',
+                    add: true,
+                    included_test: true,
+                    desc: true,
+                    img: true,
+                    name: true,
+                    ID: item.id,
+                  });
+                }}
               />
               // <Text>{item.name}</Text>
             )}

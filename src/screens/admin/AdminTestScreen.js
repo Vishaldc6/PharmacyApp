@@ -97,7 +97,7 @@ const AdminTestScreen = props => {
                 }}>
                 <View>
                   <Text style={fonts.h2}>{item.name}</Text>
-                  <Text style={fonts.h3}>{item.price}</Text>
+                  <Text style={fonts.h3}>Rs. {item.price}</Text>
                 </View>
                 {/* <View style={GlobalStyles.rowContainer}>
               <Icon
@@ -123,6 +123,13 @@ const AdminTestScreen = props => {
                 item={item}
                 deletePress={() => {
                   deleteTest(item.id);
+                }}
+                editPress={() => {
+                  props.navigation.navigate(ScreenNames.AdminFormScreen, {
+                    title: 'Test',
+                    price: true,
+                    ID: item.id,
+                  });
                 }}
               />
             </View>

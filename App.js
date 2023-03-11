@@ -30,6 +30,9 @@ import SplashScreen from 'react-native-splash-screen';
 import ProfileScreen from './src/screens/tabs/ProfileScreen';
 import AdminFormScreen from './src/screens/admin/AdminFormScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
+import ConsultScreen from './src/screens/ConsultScreen';
+import LabListScreen from './src/screens/LabListScreen';
+import ScheduleScreen from './src/screens/ScheduleScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -66,8 +69,9 @@ const App = () => {
           screenOptions={{headerShown: false}}
           initialRouteName={
             // token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
+            ScreenNames.Home
             // ScreenNames.AdminHomeScreen
-            ScreenNames.DoctorHomeScreen
+            // ScreenNames.DoctorHomeScreen
           }>
           <Stack.Screen name={ScreenNames.AuthStack} component={AuthStack} />
 
@@ -114,6 +118,18 @@ const App = () => {
           <Stack.Screen
             name={ScreenNames.UploadPrescriptionScreen}
             component={UploadPrescriptionScreen}
+          />
+          <Stack.Screen
+            name={ScreenNames.ConsultScreen}
+            component={ConsultScreen}
+          />
+          <Stack.Screen
+            name={ScreenNames.LabListScreen}
+            component={LabListScreen}
+          />
+          <Stack.Screen
+            name={ScreenNames.ScheduleScreen}
+            component={ScheduleScreen}
           />
           <Stack.Screen name={ScreenNames.LabScreen} component={LabScreen} />
           <Stack.Screen

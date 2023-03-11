@@ -91,7 +91,23 @@ const AdminProductScreen = props => {
                 item={item}
                 isAdmin
                 editPress={() => {
-                  console.log(item.id);
+                  props.navigation.navigate(ScreenNames.AdminFormScreen, {
+                    title: 'Product',
+                    brand: true,
+                    category_id: true,
+                    dieses_types: true,
+                    expiry_date: true,
+                    information: true,
+                    ingredients: true,
+                    price: true,
+                    quantity: true,
+                    rate: true,
+                    side_effects: true,
+                    thumbnail: true,
+                    img: true,
+                    benefits: true,
+                    ID: item.id,
+                  });
                 }}
                 deletePress={() => {
                   console.log('Deleted Item id : ', item.id);

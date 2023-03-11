@@ -71,6 +71,7 @@ const BottomNavigationTab = () => {
         }}
       />
       <Tab.Screen
+        initialParams={{isAdmin: false}}
         name={ScreenNames.ProfileScreen}
         component={ProfileScreen}
         options={{

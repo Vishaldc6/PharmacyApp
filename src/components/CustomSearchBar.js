@@ -12,12 +12,19 @@ const CustomSearchBar = props => {
         <Icon name={'chevron-left'} size={25} style={styles.icon} />
       )}
       <TextInput
-        onPressIn={props.onPress}
+        // onPressIn={props.onPress}
+        value={props.value}
+        onChangeText={props.onChangeText}
         placeholder={props.placeholder}
         style={{...fonts.h3, flex: 1}}
       />
       <View style={{width: 15}} />
-      <Icon name={'search'} size={25} style={styles.icon} />
+      <Icon
+        name={'search'}
+        size={25}
+        style={styles.icon}
+        onPress={props.onSearch}
+      />
     </View>
   );
 };

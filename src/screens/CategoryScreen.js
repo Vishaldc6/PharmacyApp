@@ -34,6 +34,8 @@ const CategoryScreen = props => {
   const [products, setproducts] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
+  const [searchproducts, setsearchproducts] = useState([]);
+  const [srcTxt, setsrcTxt] = useState('');
 
   useEffect(() => {
     getData();
@@ -60,8 +62,19 @@ const CategoryScreen = props => {
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Categories'} back {...props} />
       <CustomSearchBar
-        onPress={() => {
-          //   props.navigation.navigate(ScreenNames.SearchScreen);
+        // onPress={() => {
+        //   //   props.navigation.navigate(ScreenNames.SearchScreen);
+        // }}
+        value={srcTxt}
+        onChangeText={val => {
+          if (val == '') {
+            setsearchproducts([]);
+          }
+          setsrcTxt(val);
+        }}
+        onSearch={() => {
+          let list = categories.filter(item => item.name == srcTxt);
+          setsearchproducts(list);
         }}
         placeholder="Search Category.."
       />
@@ -71,6 +84,28 @@ const CategoryScreen = props => {
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
+          {searchproducts.length !== 0 && srcTxt !== '' && (
+            <View style={{elevation: 2, backgroundColor: colors.white}}>
+              <CustomHeading header1={'Searched Categories'} />
+              <FlatList
+                // style={{backgroundColor: 'red'}}
+                data={searchproducts}
+                numColumns={3}
+                renderItem={({item, index}) =>
+                  index <= 5 && (
+                    <CategoryCard
+                      item={item}
+                      onPress={() => {
+                        props.navigation.navigate(ScreenNames.ProductScreen, {
+                          cat_id: item.id,
+                        });
+                      }}
+                    />
+                  )
+                }
+              />
+            </View>
+          )}
           <View style={{elevation: 2, backgroundColor: colors.white}}>
             <CustomHeading header1={'Popular Categories'} />
             <FlatList

@@ -68,7 +68,9 @@ const DoctorHomeScreen = props => {
       {/* Doctor Header */}
       <TouchableWithoutFeedback
         onPress={() => {
-          props.navigation.navigate(ScreenNames.ProfileScreen);
+          props.navigation.navigate(ScreenNames.ProfileScreen, {
+            isAdmin: true,
+          });
         }}>
         <View style={styels.header}>
           <Image

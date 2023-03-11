@@ -28,13 +28,14 @@ import {AppStrings} from '../utils/AppStrings';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
 import InformationCard from '../components/InformationCard';
 import {getLabs, getTests} from '../config/apiServices/ApiServices';
+import CustomButton from '../components/CustomButton';
 
-const TestCard = ({item, index, onPress}) => {
+const TestCard = ({item, index, onPress, selectedIndex}) => {
   const [isChecked, setisChecked] = useState(false);
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        setisChecked(!isChecked);
+        // setisChecked(!isChecked);
         onPress();
       }}>
       <View
@@ -47,7 +48,7 @@ const TestCard = ({item, index, onPress}) => {
           <Text style={{...fonts.h2}}>{item.name}</Text>
           <Text style={{...fonts.h3}}>{item.details}</Text>
         </View>
-        {isChecked && (
+        {index == selectedIndex && (
           <Icon name={'check'} size={20} color={colors.primary_color} />
         )}
       </View>
@@ -118,8 +119,9 @@ const LabScreen = props => {
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
 
-  const [selectedTests, setselectedTests] = useState([]);
-  const [total, settotal] = useState(0);
+  const [selectedTests, setselectedTests] = useState();
+  // const [total, settotal] = useState(0);
+  const [selectedIndex, setselectedIndex] = useState(null);
   console.log('Test list : ', selectedTests);
 
   useEffect(() => {
@@ -139,7 +141,7 @@ const LabScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Laboratory'} back {...props} />
-      <CustomSearchBar placeholder={'Search Labs or Tests (CBC, WD3, ect.)'} />
+      {/* <CustomSearchBar placeholder={'Search Labs or Tests (CBC, WD3, ect.)'} /> */}
       {loading ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator />
@@ -228,28 +230,10 @@ const LabScreen = props => {
                 <TestCard
                   item={item}
                   index={index}
+                  selectedIndex={selectedIndex}
                   onPress={() => {
-                    if (selectedTests.length == 0) {
-                      const nlist = [...selectedTests, item];
-                      console.log('nlist : ', nlist);
-                      setselectedTests(nlist);
-                    } else {
-                      selectedTests.map((itm, i) => {
-                        console.log(item.id);
-                        console.log(itm.id);
-                        if (itm.id != item.id) {
-                          const nlist = [...selectedTests, item];
-                          console.log('nlist : ', nlist);
-                          settotal(t => t + itm.price);
-                          setselectedTests(nlist);
-                        } else {
-                          const list = selectedTests.filter(
-                            itm => itm.id != item.id,
-                          );
-                          setselectedTests(list);
-                        }
-                      });
-                    }
+                    setselectedIndex(index);
+                    setselectedTests(item);
                   }}
                 />
               )}
@@ -302,18 +286,32 @@ const LabScreen = props => {
           </View>
         </ScrollView>
       )}
-      {selectedTests.length != 0 ? (
+      {selectedTests && (
         <View
           style={{
+            ...GlobalStyles.rowContainer,
+            paddingVertical: 10,
             backgroundColor: colors.white,
-            padding: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
           }}>
-          <Text>{selectedTests.length} test selected</Text>
-          <Text>RS. {total}</Text>
+          <View
+            style={{
+              justifyContent: 'center',
+              // alignItems: 'center',
+              paddingHorizontal: 15,
+            }}>
+            <Text style={fonts.h4}>{selectedTests.name} test selected</Text>
+            <Text style={fonts.h4}>RS. {selectedTests.price}</Text>
+          </View>
+          <CustomButton
+            title={'Select Lab'}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.LabListScreen, {
+                test: selectedTests,
+              });
+            }}
+          />
         </View>
-      ) : null}
+      )}
     </View>
   );
 };

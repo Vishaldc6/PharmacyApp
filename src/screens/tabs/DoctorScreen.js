@@ -2,12 +2,11 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ScrollView,
   FlatList,
-  TouchableHighlight,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
@@ -21,15 +20,16 @@ import fonts from '../../styles/fonts';
 import SmallInfoCard from '../../components/SmallInfoCard';
 import CustomButton from '../../components/CustomButton';
 import {diseases} from '../../assets/data/diseases';
-
 import SimpleBanner from '../../components/banner/SimpleBanner';
 import DoctorCard from '../../components/DoctorCard';
 import CustomHeading from '../../components/CustomHeading';
 import {getDoctors} from '../../config/apiServices/ApiServices';
+import CustomSearchBar from '../../components/CustomSearchBar';
+import ScreenNames from '../../navigation/screenNames/ScreenNames';
 
-const SymptomTab = ({item}) => {
+export const SymptomTab = ({item, onPress}) => {
   return (
-    <TouchableHighlight>
+    <TouchableOpacity onPress={onPress}>
       <View
         style={{
           // flex: 1,
@@ -40,14 +40,16 @@ const SymptomTab = ({item}) => {
         }}>
         <Text>{item.name}</Text>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 };
 
-const DoctorScreen = () => {
+const DoctorScreen = props => {
   const [doctors, setdoctors] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
+  const [srcTxt, setsrcTxt] = useState('');
+  const [searchdoctor, setsearchdoctor] = useState([]);
 
   useEffect(() => {
     getData();
@@ -65,7 +67,24 @@ const DoctorScreen = () => {
 
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader search={true} title={'Docters'} />
+      <CustomHeader title={'Docters'} />
+      <CustomSearchBar
+        placeholder="Search Doctors.."
+        // onPress={() => {
+        //   props.navigation.navigate(ScreenNames.SearchScreen);
+        // }}
+        value={srcTxt}
+        onChangeText={val => {
+          if (val == '') {
+            setsearchdoctor([]);
+          }
+          setsrcTxt(val);
+        }}
+        onSearch={() => {
+          let list = doctors.filter(item => item.name == srcTxt);
+          setsearchdoctor(list);
+        }}
+      />
       {loading ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator />
@@ -81,6 +100,21 @@ const DoctorScreen = () => {
               }}
             />
           }>
+          {searchdoctor.length !== 0 && srcTxt !== '' && (
+            <View style={{elevation: 2, backgroundColor: colors.white}}>
+              <CustomHeading header1={'Searched Doctors'} />
+              <FlatList
+                style={{marginVertical: 5}}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                // scrollEnabled={false}
+                data={searchdoctor}
+                renderItem={({item, index}) =>
+                  index < 5 && <DoctorCard item={item} />
+                }
+              />
+            </View>
+          )}
           {/* Banners */}
           <View style={styles.bannerContainer}>
             <Swiper
@@ -105,7 +139,12 @@ const DoctorScreen = () => {
             <SmallInfoCard title={AppStrings.freeFollowUp} />
             <SmallInfoCard title={AppStrings.getPrescription} />
           </View>
-          <CustomButton title={AppStrings.consultNow} />
+          <CustomButton
+            title={AppStrings.consultNow}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.ConsultScreen);
+            }}
+          />
 
           <Text style={{alignSelf: 'center', marginVertical: 10}}>OR</Text>
 
@@ -113,31 +152,57 @@ const DoctorScreen = () => {
           <View>
             <Text style={fonts.h1}>{AppStrings.consultDoctor1Click}</Text>
             <Text style={fonts.h2}>{AppStrings.selectSymptom}</Text>
-            <FlatList
+            {/* <FlatList
               style={{padding: 5}}
               keyExtractor={(item, index) => item.name}
               numColumns={3}
               data={diseases}
-              renderItem={({item}) => <SymptomTab item={item} />}
-            />
-            {/* <View
-            style={{
-              flex: 1,
-              backgroundColor: 'red',
-              height: 100,
-              padding: 5,
-              flexWrap: 'wrap',
-            }}>
-            {diseases.map(itm => {
-              <SymptomTab item={itm} />;
-            })}
-          </View> */}
+              renderItem={({item}) => (
+                <SymptomTab
+                  item={item}
+                  onPress={() => {
+                    props.navigation.navigate(ScreenNames.ConsultScreen, {
+                      disease: item.name,
+                    });
+                  }}
+                />
+              )}
+            /> */}
+            <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+              {diseases.map(item => (
+                // <TouchableOpacity>
+                //   <View
+                //     style={{
+                //       // flex: 1,
+                //       borderWidth: 0.5,
+                //       borderRadius: 10,
+                //       margin: 5,
+                //       padding: 10,
+                //     }}>
+                //     <Text>{item.name}</Text>
+                //   </View>
+                // </TouchableOpacity>
+                <SymptomTab
+                  item={item}
+                  onPress={() => {
+                    props.navigation.navigate(ScreenNames.ConsultScreen, {
+                      disease: item.name,
+                    });
+                  }}
+                />
+              ))}
+            </View>
           </View>
           {/* Care Plan Banner */}
           <SimpleBanner />
           {/* Horizontal Doctor List */}
           <CustomHeading header1={AppStrings.meetDoctor} />
-          <View style={{paddingBottom: 20}}>
+          <View
+            style={{
+              paddingBottom: 20,
+              // backgroundColor: 'red',
+              // marginBottom: 100,
+            }}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {doctors.map(item => {
                 console.log(item);

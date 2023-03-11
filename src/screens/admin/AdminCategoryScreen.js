@@ -96,6 +96,13 @@ const AdminCategoryScreen = props => {
                   deletePress={() => {
                     deleteCategory(item.id);
                   }}
+                  editPress={() => {
+                    props.navigation.navigate(ScreenNames.AdminFormScreen, {
+                      title: 'Category',
+                      img: true,
+                      ID: item.id,
+                    });
+                  }}
                 />
               </View>
             )}

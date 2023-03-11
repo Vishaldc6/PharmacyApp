@@ -29,6 +29,9 @@ export default ScreenName = {
   ProductDetailScreen: 'ProductDetailScreen',
   CarePlanScreen: 'CarePlanScreen',
   UploadPrescriptionScreen: 'UploadPrescriptionScreen',
+  ConsultScreen: 'ConsultScreen',
+  LabListScreen: 'LabListScreen',
+  ScheduleScreen: 'ScheduleScreen',
 
   // doctor
   DoctorHomeScreen: 'DoctorHomeScreen',

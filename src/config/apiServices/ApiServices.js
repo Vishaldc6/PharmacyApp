@@ -66,7 +66,7 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     return response;
   } catch (error) {
     console.log(error);
-    // Alert.alert(AppStrings.appName, error.toString());
+    Alert.alert(AppStrings.appName, error.toString());
   }
 };
 

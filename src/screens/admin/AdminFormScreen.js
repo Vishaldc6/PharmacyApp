@@ -1,5 +1,5 @@
 import {View, Text, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomInput from '../../components/CustomInput';
@@ -10,6 +10,57 @@ import {ApiCall} from '../../config/apiServices/ApiServices';
 
 const AdminFormScreen = props => {
   const title = props.route.params.title;
+  const ID = props.route.params.ID;
+  console.log('ID : ', ID);
+
+  useEffect(() => {
+    if (ID) {
+      getDataFromID(ID);
+    }
+  }, []);
+
+  const getDataFromID = async id => {
+    let endPoint;
+    if (title == 'Category') {
+      endPoint = '/category';
+    } else if (title == 'Laboratory') {
+      endPoint = '/lab';
+    } else if (title == 'Product') {
+      endPoint = '/product';
+    } else if (title == 'Test') {
+      endPoint = '/report';
+    }
+    const res = await ApiCall(`${endPoint}/${id}`, 'GET');
+    console.log('GET info : ', res);
+    if (title == 'Category') {
+      setname(res.name);
+      setimg(res.image);
+    } else if (title == 'Laboratory') {
+      setname(res.name);
+      setaddress(res.address);
+      setincluded_test(res.included_test);
+      setdesc(res.description);
+      setimg(res.image);
+    } else if (title == 'Product') {
+      setname(res.name);
+      setbenefits(res.benefits);
+      setbrand(res.brand);
+      setcategory_id(res.category_id.toString());
+      setexpiry_date(res.expiry_date);
+      setdieses_types(res.dieses_types);
+      setinformation(res.information);
+      setingredients(res.ingredients);
+      setprice(res.price.toString());
+      setquantity(res.quantity.toString());
+      setrate(res.rate.toString());
+      setside_effects(res.side_effects);
+      setthumb(res.thumbnail);
+      setimg(res.images[0].image);
+    } else if (title == 'Test') {
+      setname(res.name);
+      setprice(res.price.toString());
+    }
+  };
 
   const [name, setname] = useState('');
   const [address, setaddress] = useState('');
@@ -38,7 +89,11 @@ const AdminFormScreen = props => {
     body.append('name', name);
     body.append('price', price);
 
-    const res = await ApiCall('/reportAdd', 'POST', body);
+    const res = await ApiCall(
+      ID ? `/reportUpdate/${ID}` : '/reportAdd',
+      'POST',
+      body,
+    );
     console.log(res);
     if (res) {
       props.navigation.goBack();
@@ -55,7 +110,11 @@ const AdminFormScreen = props => {
     });
     body.append('name', name);
 
-    const res = await ApiCall('/categoryAdd', 'POST', body);
+    const res = await ApiCall(
+      ID ? `/categoryUpdate/${ID}` : '/categoryAdd',
+      'POST',
+      body,
+    );
     console.log(res);
     if (res) {
       props.navigation.goBack();
@@ -75,7 +134,11 @@ const AdminFormScreen = props => {
     body.append('included_test', included_test);
     body.append('description', desc);
 
-    const res = await ApiCall('/labAdd', 'POST', body);
+    const res = await ApiCall(
+      ID ? `/labUpdate/${ID}` : '/labAdd',
+      'POST',
+      body,
+    );
     console.log(res);
     if (res) {
       props.navigation.goBack();
@@ -108,7 +171,11 @@ const AdminFormScreen = props => {
     body.append('side_effects', side_effects);
     body.append('ingredients', ingredients);
 
-    const res = await ApiCall('/productAdd', 'POST', body);
+    const res = await ApiCall(
+      ID ? `/productUpdate/${ID}` : '/productAdd',
+      'POST',
+      body,
+    );
     console.log(res);
     if (res) {
       props.navigation.goBack();
@@ -366,8 +433,8 @@ const AdminFormScreen = props => {
           <>
             <ChooseImage
               title={'Thumbnail'}
-              imgName={thumb.fileName}
-              imgPath={thumb.uri}
+              imgName={thumb?.fileName ? thumb.uri : thumb}
+              imgPath={thumb?.uri ? thumb.uri : thumb}
               onPress={async () => {
                 const res = await openGallery();
                 console.log(res);
@@ -383,8 +450,8 @@ const AdminFormScreen = props => {
           <>
             <ChooseImage
               title={'Image'}
-              imgName={img.fileName}
-              imgPath={img.uri}
+              imgName={img?.fileName ? img.fileName : img}
+              imgPath={img?.uri ? img.uri : img}
               onPress={async () => {
                 const res = await openGallery();
                 console.log(res);
@@ -399,7 +466,7 @@ const AdminFormScreen = props => {
         <View style={{flexDirection: 'row'}}>
           <CustomButton
             isAdmin={true}
-            title={'Add'}
+            title={ID ? 'Update' : 'Add'}
             onPress={() => {
               if (title == 'Category') {
                 addCategory();

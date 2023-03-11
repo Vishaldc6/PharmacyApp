@@ -45,7 +45,7 @@ const ListTile = ({icon, title, onPress}) => (
 );
 
 HeaderMaxHeight = size.height / 2;
-HeaderMinHeight = size.height / 10;
+HeaderMinHeight = size.height / 14;
 ImageMaxHeight = size.height / 5;
 ImageMinHeight = size.height / 12;
 ImageTop = size.height / 8;
@@ -54,7 +54,7 @@ ImageMinTop = 5;
 ImageMinLeft = 5;
 
 const ProfileScreen = props => {
-  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollY = useRef(new Animated.Value(0.01)).current;
 
   const heightHandller = scrollY.interpolate({
     inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
@@ -79,33 +79,56 @@ const ProfileScreen = props => {
   });
   const scaleImageHandler = scrollY.interpolate({
     inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
-    outputRange: [1.5, 1],
+    outputRange: [1, 0.5],
     extrapolate: 'clamp',
   });
 
   return (
     <View style={GlobalStyles.mainContainer}>
       {/* <CustomHeader cart={true} /> */}
-
+      <Text
+        style={{...fonts.h1, alignSelf: 'center', padding: 10}}
+        onPress={async () => {
+          // const res = await ApiCall('/logout', 'POST');
+          // console.log('logout user ', res);
+          // if (res.success) {
+          await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
+          props.navigation.replace(ScreenNames.AuthStack);
+          // }
+        }}>
+        Log Out
+      </Text>
       <ReactNativeParallaxHeader
         // extraScrollHeight={300}
+        backgroundImage={Images.noImage}
+        navbarColor={
+          props.route.params.isAdmin ? colors.primary_color_admin : null
+        }
         scrollViewProps={{
-          onScroll: () =>
-            Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: {
-                      y: scrollY,
+          onScroll:
+            // e => console.log(e.nativeEvent),
+            () => {
+              console.log('first0');
+              Animated.event(
+                [
+                  {
+                    nativeEvent: {
+                      contentOffset: {
+                        y: scrollY,
+                      },
                     },
                   },
+                ],
+                {
+                  useNativeDriver: false,
                 },
-              ],
-              {
-                useNativeDriver: false,
-              },
-            ),
+              );
+            },
         }}
+        // scrollViewProps={{
+        //   onScrollBeginDrag: e => console.log('onScrollBeginDrag', e),
+        //   onScrollEndDrag: e => console.log('onScrollEndDrag', e),
+        // }}
         headerMaxHeight={HeaderMaxHeight}
         headerMinHeight={HeaderMinHeight}
         title={
@@ -119,17 +142,21 @@ const ProfileScreen = props => {
               height: imageheightHandller,
               width: imageheightHandller,
               // margin: 10,
-              // transform: [
-              //   {
-              //     scale: scaleImageHandler,
-              //   },
-              // ],
+              transform: [
+                {
+                  scale: 0.35,
+                },
+              ],
             }}
           />
         }
         renderContent={() => (
           <View>
             <ListTile icon={'shopping-cart'} title={'My Cart'} />
+            <ListTile icon={'user-md'} title={'My Doctors'} />
+            <ListTile icon={'flask'} title={'My Lab Tests'} />
+            <ListTile icon={'heart'} title={'My Care Plans'} />
+            {/* <ListTile icon={'shopping-cart'} title={'My Cart'} />
             <ListTile icon={'shopping-cart'} title={'My Doctors'} />
             <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
             <ListTile icon={'shopping-cart'} title={'My Cart'} />
@@ -140,10 +167,7 @@ const ProfileScreen = props => {
             <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
             <ListTile icon={'shopping-cart'} title={'My Cart'} />
             <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
-            <ListTile icon={'shopping-cart'} title={'My Cart'} />
-            <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
+            <ListTile icon={'shopping-cart'} title={'My Lab Tests'} /> */}
           </View>
         )}
       />
