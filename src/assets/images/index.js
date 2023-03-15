@@ -1,5 +1,6 @@
 export const Images = {
   noImage: require('../images/noImage.jpg'),
+  appLogo: require('../images/logo/applogo.jpg'),
 
   backgroundImage: require('../images/BackGroundImage.jpg'),
   onboarding1: require('../images/Onboarding1.gif'),

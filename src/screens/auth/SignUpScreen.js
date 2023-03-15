@@ -19,18 +19,26 @@ import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
 import {Images} from '../../assets/images';
-import {userRegister} from '../../config/apiServices/ApiServices';
+import {ApiCall, userRegister} from '../../config/apiServices/ApiServices';
 import {AppStrings} from '../../utils/AppStrings';
 
 const SignUpScreen = props => {
   const [email, setemail] = useState('');
+  const [mob, setmob] = useState('');
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
+  const [education, seteducation] = useState('');
+  const [experiance, setexperiance] = useState('');
+  const [specialist, setspecialist] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
   const [isCheck, setisCheck] = useState(false);
 
   const [emailError, setemailError] = useState('');
   const [usernameError, setusernameError] = useState('');
+  const [mobError, setmobError] = useState('');
+  const [educationError, seteducationError] = useState('');
+  const [specialistError, setspecialistError] = useState('');
+  const [experianceError, setexperianceError] = useState('');
   const [passwordError, setpasswordError] = useState('');
   const [confirmPasswordError, setconfirmPasswordError] = useState('');
 
@@ -40,9 +48,17 @@ const SignUpScreen = props => {
       setemail('');
       setpassword('');
       setusername('');
+      setmob('');
+      seteducation('');
+      setexperiance('');
+      setspecialist('');
       setemailError('');
       setusernameError('');
       setconfirmPasswordError('');
+      setmobError('');
+      seteducationError('');
+      setexperianceError('');
+      setspecialistError('');
     });
   }, []);
 
@@ -57,6 +73,17 @@ const SignUpScreen = props => {
                 <View style={{height: 20}} />
                 <CustomInput
                   onChangeText={val => {
+                    setusername(val);
+                  }}
+                  value={username}
+                  title={'Username'}
+                  placeholder={'Enter Username'}
+                  keyboardType={'email-address'}
+                  iconName={'user-circle-o'}
+                />
+                <Text style={styles.errorText}>{usernameError}</Text>
+                <CustomInput
+                  onChangeText={val => {
                     setemail(val);
                   }}
                   value={email}
@@ -68,15 +95,15 @@ const SignUpScreen = props => {
                 <Text style={styles.errorText}>{emailError}</Text>
                 <CustomInput
                   onChangeText={val => {
-                    setusername(val);
+                    setmob(val);
                   }}
-                  value={username}
-                  title={'Username'}
-                  placeholder={'Enter Username'}
-                  keyboardType={'email-address'}
-                  iconName={'user-circle-o'}
+                  value={mob}
+                  title={'Mobile'}
+                  placeholder={'Enter Mobile'}
+                  keyboardType={'phone-pad'}
+                  iconName={'mobile-phone'}
                 />
-                <Text style={styles.errorText}>{usernameError}</Text>
+                <Text style={styles.errorText}>{mobError}</Text>
                 <CustomInput
                   passwordField={true}
                   onChangeText={val => {
@@ -99,6 +126,43 @@ const SignUpScreen = props => {
                   iconName={'key'}
                 />
                 <Text style={styles.errorText}>{confirmPasswordError}</Text>
+                {isCheck && (
+                  <>
+                    <CustomInput
+                      onChangeText={val => {
+                        seteducation(val);
+                      }}
+                      value={education}
+                      title={'Education'}
+                      placeholder={'Enter Education'}
+                      keyboardType={'email-address'}
+                      iconName={'info'}
+                    />
+                    <Text style={styles.errorText}>{educationError}</Text>
+                    <CustomInput
+                      onChangeText={val => {
+                        setexperiance(val);
+                      }}
+                      value={experiance}
+                      title={'Experiance'}
+                      placeholder={'Enter Experiance'}
+                      keyboardType={'email-address'}
+                      iconName={'info'}
+                    />
+                    <Text style={styles.errorText}>{experianceError}</Text>
+                    <CustomInput
+                      onChangeText={val => {
+                        setspecialist(val);
+                      }}
+                      value={specialist}
+                      title={'Specialist'}
+                      placeholder={'Enter Specialist'}
+                      keyboardType={'email-address'}
+                      iconName={'info'}
+                    />
+                    <Text style={styles.errorText}>{specialistError}</Text>
+                  </>
+                )}
                 <View
                   style={{...GlobalStyles.rowContainer, marginHorizontal: 10}}>
                   <View style={GlobalStyles.rowContainer}>
@@ -122,7 +186,8 @@ const SignUpScreen = props => {
                         email == '' &&
                         username == '' &&
                         password == '' &&
-                        confirmPassword == ''
+                        confirmPassword == '' &&
+                        mob == ''
                       ) {
                         // Alert.alert('Sign in',"All flieds are empty")
                         setemailError('* Please enter Email');
@@ -131,27 +196,90 @@ const SignUpScreen = props => {
                         setconfirmPasswordError(
                           '* Please enter Confirm Password',
                         );
-                      } else {
+                        setmobError('* Please enter Mobile');
                         if (isCheck) {
-                          console.log('ischeck');
-                        } else {
-                          const res = await userRegister(
-                            username,
-                            email,
-                            password,
-                            confirmPassword,
-                          );
-                          console.log('ressss : ', res);
-                          if (res.errors == null) {
-                            Alert.alert(AppStrings.appName, res.MESSAGE);
-                            props.navigation.navigate(ScreenNames.SignInScreen);
-                          } else {
-                            Alert.alert(
-                              AppStrings.appName,
-                              Object.values(res.errors)[0].toString(),
-                            );
+                          if (
+                            education == '' &&
+                            specialist == '' &&
+                            experiance == ''
+                          ) {
+                            setexperianceError('* Please enter Experiance');
+                            setspecialistError('* Please enter Specialist');
+                            seteducationError('* Please enter Education');
                           }
                         }
+                      } else {
+                        const body = new FormData();
+                        body.append('name', username);
+                        body.append('email', email);
+                        body.append('mobile', mob);
+                        body.append('password', password);
+                        body.append('password_confirmation', confirmPassword);
+                        if (isCheck) {
+                          body.append('specialist', specialist);
+                          body.append('education', education);
+                          body.append('experience', experiance);
+                        }
+                        const res = await fetch(
+                          isCheck
+                            ? AppStrings.BASE_URL + '/doctorRegister'
+                            : AppStrings.BASE_URL + '/patientRegister',
+                          {
+                            headers: {
+                              Accept: 'application/json',
+                            },
+                            method: 'POST',
+                            body: body,
+                          },
+                        );
+                        const jsonRes = await res.json();
+                        console.log('Screen res :', jsonRes);
+                        console.log(res);
+                        // if (res.ok) {
+                        if (jsonRes.flag) {
+                          Alert.alert(AppStrings.appName, jsonRes.message);
+                          props.navigation.navigate(ScreenNames.SignInScreen);
+                        } else if (jsonRes.flag == false) {
+                          if (jsonRes.data?.errors != null) {
+                            Alert.alert(
+                              AppStrings.appName,
+                              jsonRes.data.errors[0],
+                            );
+                          } else {
+                            Alert.alert(AppStrings.appName, jsonRes.message);
+                          }
+                        }
+                        // }
+                        else {
+                          Alert.alert(
+                            AppStrings.appName,
+                            'Something went wrong !',
+                          );
+                        }
+                        // if (res?.data.errors) {
+                        //   Alert.alert(AppStrings.appName, res.data.errors[0]);
+                        // } else {
+                        //   Alert.alert(AppStrings.appName, res.toString());
+                        //   props.navigation.navigate(ScreenNames.SignInScreen);
+                        // }
+                        // Alert.alert(AppStrings.appName, res);
+                        // props.navigation.navigate(ScreenNames.SignInScreen);
+                        // const res = await userRegister(
+                        //   username,
+                        //   email,
+                        //   password,
+                        //   confirmPassword,
+                        // );
+                        // console.log('ressss : ', res);
+                        // if (res.errors == null) {
+                        //   Alert.alert(AppStrings.appName, res.MESSAGE);
+                        //   props.navigation.navigate(ScreenNames.SignInScreen);
+                        // } else {
+                        //   Alert.alert(
+                        //     AppStrings.appName,
+                        //     Object.values(res.errors)[0].toString(),
+                        //   );
+                        // }
                       }
                     }}
                   />

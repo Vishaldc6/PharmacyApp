@@ -202,17 +202,54 @@ const SignInScreen = props => {
                           const body = new FormData();
                           body.append('email', email);
                           body.append('password', password);
-                          const res = await ApiCall('/login', 'POST', body);
-                          console.log('res        :::::: ', res);
-                          if (res) {
-                            saveUser(res.token);
+                          const res = await fetch(
+                            AppStrings.BASE_URL + '/login',
+                            {
+                              headers: {
+                                Accept: 'application/json',
+                              },
+                              method: 'POST',
+                              body: body,
+                            },
+                          );
+                          const jsonRes = await res.json();
+                          console.log('Screen res :', jsonRes);
+                          console.log(res);
+                          // if (res.ok) {
+                          if (jsonRes.flag) {
+                            Alert.alert(AppStrings.appName, jsonRes.message);
+                            saveUser(jsonRes.data);
                             props.navigation.replace(ScreenNames.Home);
-                          } else {
+                          } else if (jsonRes.flag == false) {
+                            if (jsonRes.data?.errors != null) {
+                              Alert.alert(
+                                AppStrings.appName,
+                                jsonRes.data.errors[0],
+                              );
+                            } else {
+                              Alert.alert(AppStrings.appName, jsonRes.message);
+                            }
+                          }
+                          // }
+                          else {
                             Alert.alert(
                               AppStrings.appName,
                               'Something went wrong !',
                             );
                           }
+
+                          // const res = await ApiCall('/login', 'POST', body);
+                          // console.log('res        :::::: ', res);
+                          // if (res) {
+                          //   saveUser(res.token);
+                          //   props.navigation.replace(ScreenNames.Home);
+                          // } else {
+                          //   Alert.alert(
+                          //     AppStrings.appName,
+                          //     'Something went wrong !',
+                          //   );
+                          // }
+
                           // const res = await userLogin(email, password);
                           // console.log('resss : ', res);
                           // if (res.errors == null) {
@@ -233,16 +270,16 @@ const SignInScreen = props => {
                   />
                 </View>
                 <View style={{height: 10}} />
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                {/* <View style={{justifyContent: 'center', alignItems: 'center'}}>
                   <Text>OR</Text>
-                  {/* <GoogleSigninButton onPress={signIn} /> */}
+                  
                 </View>
                 <Icon
                   name={'google'}
                   size={25}
                   onPress={signIn}
                   style={{alignSelf: 'center'}}
-                />
+                /> */}
                 <Text style={{...fonts.h3, alignSelf: 'center'}}>
                   New User ?{' '}
                   <Text

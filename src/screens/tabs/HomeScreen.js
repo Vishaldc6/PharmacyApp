@@ -90,7 +90,7 @@ const HomeScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       {/* Header */}
-      <CustomHeader title={'Home'} />
+      <CustomHeader title={'Home'} cart {...props} />
 
       {/* SearchBar */}
       <TouchableWithoutFeedback

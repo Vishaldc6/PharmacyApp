@@ -4,6 +4,7 @@ import {size} from '../styles/size';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import ScreenNames from '../navigation/screenNames/ScreenNames';
 
 const CustomHeader = props => {
   return (
@@ -38,7 +39,14 @@ const CustomHeader = props => {
         {props.tag && <Icon name={'tag'} size={25} style={styles.icon} />}
         {props.search && <Icon name={'search'} size={25} style={styles.icon} />}
         {props.cart && (
-          <Icon name={'shopping-cart'} size={25} style={styles.icon} />
+          <Icon
+            name={'shopping-cart'}
+            size={25}
+            style={styles.icon}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.CartScreen);
+            }}
+          />
         )}
       </View>
     </View>

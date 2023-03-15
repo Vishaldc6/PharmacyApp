@@ -29,6 +29,7 @@ const CustomInput = props => {
           </View>
         )}
         <TextInput
+          editable={props.editable}
           onFocus={() => {
             setisFocus(true);
           }}

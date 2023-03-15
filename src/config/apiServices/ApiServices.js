@@ -3,9 +3,9 @@ import {Alert} from 'react-native';
 import {AppStrings} from '../../utils/AppStrings';
 
 //save User to local storage
-export const saveUser = async token => {
+export const saveUser = async data => {
   try {
-    await AsyncStorage.setItem('TOKEN', JSON.stringify(token));
+    await AsyncStorage.setItem('TOKEN', JSON.stringify(data));
   } catch (e) {
     console.log(e);
   }
@@ -13,13 +13,20 @@ export const saveUser = async token => {
 
 //GET TOKEN
 export const getToken = async () => {
-  const token = JSON.parse(await AsyncStorage.getItem('TOKEN'));
-  console.log(token);
-  if (token == null) {
+  const data = JSON.parse(await AsyncStorage.getItem('TOKEN'));
+  console.log(data?.token);
+  if (data?.token == null) {
     saveUser('logout');
     return 'logout';
   }
-  return token;
+  return data.token;
+};
+
+export const getUserData = async () => {
+  const data = JSON.parse(await AsyncStorage.getItem('TOKEN'));
+  console.log(data);
+
+  return data.user;
 };
 
 //Api Call

@@ -33,6 +33,8 @@ import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import ConsultScreen from './src/screens/ConsultScreen';
 import LabListScreen from './src/screens/LabListScreen';
 import ScheduleScreen from './src/screens/ScheduleScreen';
+import CartScreen from './src/screens/CartScreen';
+import TestPaymentScreen from './src/screens/payment/TestPaymentScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,12 +66,13 @@ const App = () => {
   return (
     <>
       <StatusBar backgroundColor={'grey'} />
+      {/* <TestPaymentScreen /> */}
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{headerShown: false}}
           initialRouteName={
-            // token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
-            ScreenNames.Home
+            token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
+            // ScreenNames.Home
             // ScreenNames.AdminHomeScreen
             // ScreenNames.DoctorHomeScreen
           }>
@@ -99,6 +102,7 @@ const App = () => {
             name={ScreenNames.ProductScreen}
             component={ProductScreen}
           />
+          <Stack.Screen name={ScreenNames.CartScreen} component={CartScreen} />
           <Stack.Screen
             name={ScreenNames.ProductDetailScreen}
             component={ProductDetailScreen}
