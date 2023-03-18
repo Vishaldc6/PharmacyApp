@@ -194,77 +194,77 @@ const SignInScreen = props => {
                       } else if (email == 'admin' && password == 'admin123') {
                         props.navigation.navigate(ScreenNames.AdminHomeScreen);
                       } else {
-                        if (isCheck) {
-                          props.navigation.navigate(
-                            ScreenNames.DoctorHomeScreen,
-                          );
-                        } else {
-                          const body = new FormData();
-                          body.append('email', email);
-                          body.append('password', password);
-                          const res = await fetch(
-                            AppStrings.BASE_URL + '/login',
-                            {
-                              headers: {
-                                Accept: 'application/json',
-                              },
-                              method: 'POST',
-                              body: body,
+                        const body = new FormData();
+                        body.append('email', email);
+                        body.append('password', password);
+                        const res = await fetch(
+                          AppStrings.BASE_URL + '/login',
+                          {
+                            headers: {
+                              Accept: 'application/json',
                             },
-                          );
-                          const jsonRes = await res.json();
-                          console.log('Screen res :', jsonRes);
-                          console.log(res);
-                          // if (res.ok) {
-                          if (jsonRes.flag) {
-                            Alert.alert(AppStrings.appName, jsonRes.message);
-                            saveUser(jsonRes.data);
+                            method: 'POST',
+                            body: body,
+                          },
+                        );
+                        const jsonRes = await res.json();
+                        console.log('Screen res :', jsonRes);
+                        console.log(res);
+                        // if (res.ok) {
+                        if (jsonRes.flag) {
+                          Alert.alert(AppStrings.appName, jsonRes.message);
+                          saveUser(jsonRes.data);
+                          if (isCheck) {
+                            props.navigation.replace(
+                              ScreenNames.DoctorHomeScreen,
+                            );
+                          } else {
                             props.navigation.replace(ScreenNames.Home);
-                          } else if (jsonRes.flag == false) {
-                            if (jsonRes.data?.errors != null) {
-                              Alert.alert(
-                                AppStrings.appName,
-                                jsonRes.data.errors[0],
-                              );
-                            } else {
-                              Alert.alert(AppStrings.appName, jsonRes.message);
-                            }
                           }
-                          // }
-                          else {
+                        } else if (jsonRes.flag == false) {
+                          if (jsonRes.data?.errors != null) {
                             Alert.alert(
                               AppStrings.appName,
-                              'Something went wrong !',
+                              jsonRes.data.errors[0],
                             );
+                          } else {
+                            Alert.alert(AppStrings.appName, jsonRes.message);
                           }
-
-                          // const res = await ApiCall('/login', 'POST', body);
-                          // console.log('res        :::::: ', res);
-                          // if (res) {
-                          //   saveUser(res.token);
-                          //   props.navigation.replace(ScreenNames.Home);
-                          // } else {
-                          //   Alert.alert(
-                          //     AppStrings.appName,
-                          //     'Something went wrong !',
-                          //   );
-                          // }
-
-                          // const res = await userLogin(email, password);
-                          // console.log('resss : ', res);
-                          // if (res.errors == null) {
-                          //   Alert.alert(AppStrings.appName, res.MESSAGE);
-                          //   if (res.FLAG) {
-                          //     props.navigation.navigate(ScreenNames.Home);
-                          //   }
-                          //   console.log(res);
-                          // } else {
-                          //   Alert.alert(
-                          //     AppStrings.appName,
-                          //     Object.values(res.errors)[0].toString(),
-                          //   );
-                          // }
                         }
+                        // }
+                        else {
+                          Alert.alert(
+                            AppStrings.appName,
+                            'Something went wrong !',
+                          );
+                        }
+
+                        // const res = await ApiCall('/login', 'POST', body);
+                        // console.log('res        :::::: ', res);
+                        // if (res) {
+                        //   saveUser(res.token);
+                        //   props.navigation.replace(ScreenNames.Home);
+                        // } else {
+                        //   Alert.alert(
+                        //     AppStrings.appName,
+                        //     'Something went wrong !',
+                        //   );
+                        // }
+
+                        // const res = await userLogin(email, password);
+                        // console.log('resss : ', res);
+                        // if (res.errors == null) {
+                        //   Alert.alert(AppStrings.appName, res.MESSAGE);
+                        //   if (res.FLAG) {
+                        //     props.navigation.navigate(ScreenNames.Home);
+                        //   }
+                        //   console.log(res);
+                        // } else {
+                        //   Alert.alert(
+                        //     AppStrings.appName,
+                        //     Object.values(res.errors)[0].toString(),
+                        //   );
+                        // }
                       }
                     }}
                   />

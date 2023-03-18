@@ -1,4 +1,4 @@
-import {View, Text, ScrollView} from 'react-native';
+import {View, Text, ScrollView, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
@@ -7,11 +7,17 @@ import ChooseImage from '../../components/admin/ChooseImage';
 import CustomButton from '../../components/CustomButton';
 import {openGallery} from '../../utils/functions';
 import {ApiCall} from '../../config/apiServices/ApiServices';
+import {Dropdown} from 'react-native-element-dropdown';
+import {doctorTypeList} from '../../assets/data/doctorTypeList';
+import fonts from '../../styles/fonts';
+import colors from '../../styles/colors';
+import CheckBox from 'react-native-check-box';
 
 const AdminFormScreen = props => {
   const title = props.route.params.title;
   const ID = props.route.params.ID;
   console.log('ID : ', ID);
+  console.log('params : ', props.route.params);
 
   useEffect(() => {
     if (ID) {
@@ -62,6 +68,8 @@ const AdminFormScreen = props => {
     }
   };
 
+  const [focus, setFocus] = useState(false);
+
   const [name, setname] = useState('');
   const [address, setaddress] = useState('');
   const [desc, setdesc] = useState('');
@@ -79,6 +87,9 @@ const AdminFormScreen = props => {
   const [side_effects, setside_effects] = useState('');
   const [img, setimg] = useState('');
   const [thumb, setthumb] = useState('');
+  const [doctor_type, setdoctor_type] = useState('');
+  const [is_required_report, setis_required_report] = useState(false);
+  const [is_required_doctor, setis_required_doctor] = useState(false);
 
   //   const [imgName, setimgName] = useState('No image');
   //   const [imgPath, setimgPath] = useState('');
@@ -170,6 +181,9 @@ const AdminFormScreen = props => {
     body.append('rate', rate);
     body.append('side_effects', side_effects);
     body.append('ingredients', ingredients);
+    body.append('is_required_report', is_required_report ? 1 : 0);
+    body.append('is_required_doctor', is_required_doctor ? 1 : 0);
+    // body.append('doctor_type', doctor_type);
 
     const res = await ApiCall(
       ID ? `/productUpdate/${ID}` : '/productAdd',
@@ -428,7 +442,77 @@ const AdminFormScreen = props => {
             <View style={{height: 15}} />
           </>
         )}
-
+        <View
+          style={{
+            flexDirection: 'row',
+            // alignItems: 'center',
+            justifyContent: 'space-evenly',
+            margin: 10,
+          }}>
+          {props.route.params.is_required_doctor && (
+            <CheckBox
+              style={{flex: 1}}
+              rightText="Doctor Requires"
+              rightTextStyle={fonts.h3}
+              isChecked={is_required_doctor}
+              onClick={() => {
+                setis_required_doctor(!is_required_doctor);
+              }}
+              // checkBoxColor={colors.primary_color}
+              checkedCheckBoxColor={colors.primary_color_admin}
+              uncheckedCheckBoxColor={colors.darkgray}
+            />
+          )}
+          {props.route.params.is_required_report && (
+            <CheckBox
+              style={{flex: 1}}
+              rightText="Report Requires"
+              rightTextStyle={fonts.h3}
+              isChecked={is_required_report}
+              onClick={() => {
+                setis_required_report(!is_required_report);
+              }}
+              // checkBoxColor={colors.primary_color}
+              checkedCheckBoxColor={colors.primary_color_admin}
+              uncheckedCheckBoxColor={colors.darkgray}
+            />
+          )}
+        </View>
+        {props.route.params.doctor_type && (
+          <>
+            <Text style={{...fonts.h3, marginLeft: 10}}>Doctor Type</Text>
+            <Dropdown
+              style={{
+                margin: 10,
+                borderBottomWidth: 1.5,
+                borderBottomColor: focus
+                  ? colors.primary_color_admin
+                  : colors.darkgray,
+              }}
+              onFocus={() => {
+                console.log('focus');
+                setFocus(true);
+              }}
+              onBlur={() => {
+                console.log('blur');
+                setFocus(false);
+              }}
+              data={doctorTypeList}
+              // search
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              value={doctor_type}
+              selectedTextStyle={fonts.h3}
+              onChange={item => {
+                setdoctor_type(item.value);
+                console.log('doctor_type : ', doctor_type);
+                console.log(item.label);
+              }}
+            />
+            <View style={{height: 15}} />
+          </>
+        )}
         {props.route.params.thumbnail && (
           <>
             <ChooseImage

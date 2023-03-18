@@ -1,0 +1,15 @@
+export const doctorTypeList = [
+  {label: 'Audiologists', value: '1'},
+  {label: 'Cardiologists', value: '2'},
+  {label: 'Dentist', value: '3'},
+  {label: 'Endocrinologist', value: '4'},
+  {label: 'ENT Specialists', value: '5'},
+  {label: 'Gynecologists', value: '6'},
+  {label: 'Neuroligists', value: '7'},
+  {label: 'Oncologists', value: '8'},
+  {label: 'Orthopedic Surgeon', value: '9'},
+  {label: 'Pediatrician', value: '10'},
+  {label: 'Pulmonologists', value: '11'},
+  {label: 'Radiologists', value: '12'},
+  {label: 'Veterinarian', value: '13'},
+];

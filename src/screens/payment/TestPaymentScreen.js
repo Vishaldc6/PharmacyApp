@@ -4,6 +4,7 @@ import RazorpayCheckout from 'react-native-razorpay';
 import GlobalStyles from '../../styles/GlobalStyles';
 import colors from '../../styles/colors';
 import {Images} from '../../assets/images';
+import fonts from '../../styles/fonts';
 
 const TestPaymentScreen = () => {
   return (
@@ -13,7 +14,6 @@ const TestPaymentScreen = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text>TestPaymentScreen</Text>
       <TouchableHighlight
         onPress={async () => {
           var options = {
@@ -42,7 +42,7 @@ const TestPaymentScreen = () => {
           //   const res = await RazorpayCheckout.open(options);
           //   console.log(res);
         }}>
-        <Text>payment</Text>
+        <Text style={fonts.h1}>payment</Text>
       </TouchableHighlight>
     </View>
   );

@@ -7,6 +7,7 @@ import {
   Animated,
   Alert,
   KeyboardAvoidingView,
+  RefreshControl,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import CustomHeader from '../../components/CustomHeader';
@@ -30,6 +31,8 @@ import CustomButton from '../../components/CustomButton';
 import {AppStrings} from '../../utils/AppStrings';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {openGallery} from '../../utils/functions';
+import {Dropdown} from 'react-native-element-dropdown';
+import {doctorTypeList} from '../../assets/data/doctorTypeList';
 
 const ListTile = ({icon, title, onPress}) => (
   <View
@@ -279,6 +282,7 @@ const ProfileScreen = props => {
   const [educationError, seteducationError] = useState('');
   const [specialistError, setspecialistError] = useState('');
   const [experianceError, setexperianceError] = useState('');
+  const [isRefresh, setisRefresh] = useState(false);
 
   useEffect(() => {
     getData();
@@ -308,131 +312,218 @@ const ProfileScreen = props => {
     setdob(USER.data.date_of_birth);
     seteducation(USER.data.education);
     setspecialist(USER.data.specialist);
-    setexperiance(USER.data.experiance);
+    setexperiance(USER.data.experience);
     setimg(USER.data.image);
+    setisRefresh(false);
   };
 
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Profile'} />
-      <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={isRefresh} onRefresh={() => getData()} />
+        }>
         <View
           style={{
-            // backgroundColor: 'red',
-            alignItems: 'center',
+            margin: 10,
+            elevation: 3,
+            borderWidth: 0.5,
+            padding: 20,
+            backgroundColor: colors.white,
+            borderRadius: 10,
           }}>
-          <Image
-            source={user.image ? {uri: user.image_url} : Images.noImage}
-            style={{
-              borderRadius: 100,
-              height: size.width / 4,
-              width: size.width / 4,
-            }}
-          />
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
+              // backgroundColor: 'red',
               alignItems: 'center',
             }}>
-            <Icon name={'pencil'} size={25} style={{marginHorizontal: 10}} />
-            <Text
-              onPress={async () => {
-                const res = await openGallery();
-                console.log(res);
-                //   setimgName(res.fileName);
-                //   setimgPath(res.uri);
-                setimg(res);
+            <Image
+              source={
+                img?.uri
+                  ? {uri: img?.uri}
+                  : user.image
+                  ? {uri: user.image}
+                  : Images.noImage
+              }
+              style={{
+                borderRadius: 100,
+                height: size.width / 4,
+                width: size.width / 4,
+              }}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              Update Profile Picture
-            </Text>
+              <Icon
+                name={'pencil'}
+                size={20}
+                color={colors.primary_color}
+                style={{
+                  marginHorizontal: 5,
+                  position: 'absolute',
+                  bottom: 20,
+                  right: 15,
+                  borderWidth: 1,
+                  borderRadius: 20,
+                  backgroundColor: colors.white,
+                  padding: 5,
+                  paddingLeft: 8,
+                }}
+                onPress={async () => {
+                  const res = await openGallery();
+                  console.log(res);
+                  //   setimgName(res.fileName);
+                  //   setimgPath(res.uri);
+                  setimg(res);
+                }}
+              />
+              <Text
+                style={fonts.h3}
+                // onPress={async () => {
+                //   const res = await openGallery();
+                //   console.log(res);
+                //   //   setimgName(res.fileName);
+                //   //   setimgPath(res.uri);
+                //   setimg(res);
+                // }}
+              >
+                Update Profile Picture
+              </Text>
+            </View>
+          </View>
+          <View>
+            <CustomInput
+              onChangeText={val => {
+                setusername(val);
+              }}
+              value={username}
+              title={'Username'}
+              placeholder={'Enter Username'}
+              keyboardType={'email-address'}
+              iconName={'user-circle-o'}
+            />
+            <Text style={styles.errorText}>{usernameError}</Text>
+            <CustomInput
+              editable={false}
+              onChangeText={val => {
+                setemail(val);
+              }}
+              value={email}
+              title={'Email'}
+              placeholder={'Enter Email'}
+              keyboardType={'email-address'}
+              iconName={'envelope-o'}
+            />
+            <Text style={styles.errorText}>{emailError}</Text>
+            <CustomInput
+              onChangeText={val => {
+                setmob(val);
+              }}
+              value={mob}
+              title={'Mobile'}
+              placeholder={'Enter Mobile'}
+              keyboardType={'phone-pad'}
+              iconName={'mobile-phone'}
+            />
+            <Text style={styles.errorText}>{mobError}</Text>
+            <CustomInput
+              onChangeText={val => {
+                setdob(val);
+              }}
+              value={dob}
+              title={'Date of Birth'}
+              placeholder={'Enter Date of Birth'}
+              iconName={'calendar'}
+              keyboardType={'email-address'}
+            />
+            <Text style={styles.errorText}>{dobError}</Text>
+            {user.education && (
+              <>
+                <CustomInput
+                  onChangeText={val => {
+                    seteducation(val);
+                  }}
+                  value={education}
+                  title={'Education'}
+                  placeholder={'Enter Education'}
+                  keyboardType={'email-address'}
+                  iconName={'info'}
+                />
+                <Text style={styles.errorText}>{educationError}</Text>
+              </>
+            )}
+            {user.experience && (
+              <>
+                <CustomInput
+                  onChangeText={val => {
+                    setexperiance(val);
+                  }}
+                  value={experiance}
+                  title={'Experiance'}
+                  placeholder={'Enter Experiance'}
+                  keyboardType={'email-address'}
+                  iconName={'info'}
+                />
+                <Text style={styles.errorText}>{experianceError}</Text>
+              </>
+            )}
+            {/* {user.role_id == 2 && ( */}
+            {user.specialist && (
+              <>
+                <>
+                  <Text style={{...fonts.h3, marginLeft: 10}}>Specialist</Text>
+                  <Dropdown
+                    style={{
+                      margin: 10,
+                      borderBottomWidth: 1.5,
+                      // borderBottomColor: focus
+                      //   ? colors.primary_color_admin
+                      //   : colors.darkgray,
+                    }}
+                    // onFocus={() => {
+                    //   console.log('focus');
+                    //   setFocus(true);
+                    // }}
+                    // onBlur={() => {
+                    //   console.log('blur');
+                    //   setFocus(false);
+                    // }}
+                    data={doctorTypeList}
+                    // search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    // value={doctor_type}
+                    selectedTextStyle={fonts.h3}
+                    onChange={item => {
+                      // setdoctor_type(item.value);
+                      // console.log('doctor_type : ', doctor_type);
+                      console.log(item.label);
+                    }}
+                  />
+                  <View style={{height: 15}} />
+                </>
+                <CustomInput
+                  onChangeText={val => {
+                    setspecialist(val);
+                  }}
+                  value={specialist}
+                  title={'Specialist'}
+                  placeholder={'Enter Specialist'}
+                  keyboardType={'email-address'}
+                  iconName={'info'}
+                />
+                <Text style={styles.errorText}>{specialistError}</Text>
+              </>
+            )}
           </View>
         </View>
-        <View>
-          <CustomInput
-            onChangeText={val => {
-              setusername(val);
-            }}
-            value={username}
-            title={'Username'}
-            placeholder={'Enter Username'}
-            keyboardType={'email-address'}
-            iconName={'user-circle-o'}
-          />
-          <Text style={styles.errorText}>{usernameError}</Text>
-          <CustomInput
-            editable={false}
-            onChangeText={val => {
-              setemail(val);
-            }}
-            value={email}
-            title={'Email'}
-            placeholder={'Enter Email'}
-            keyboardType={'email-address'}
-            iconName={'envelope-o'}
-          />
-          <Text style={styles.errorText}>{emailError}</Text>
-          <CustomInput
-            onChangeText={val => {
-              setmob(val);
-            }}
-            value={mob}
-            title={'Mobile'}
-            placeholder={'Enter Mobile'}
-            keyboardType={'phone-pad'}
-            iconName={'mobile-phone'}
-          />
-          <Text style={styles.errorText}>{mobError}</Text>
-          <CustomInput
-            onChangeText={val => {
-              setdob(val);
-            }}
-            value={dob}
-            title={'Date of Birth'}
-            placeholder={'Enter Date of Birth'}
-            iconName={'calendar'}
-            keyboardType={'email-address'}
-          />
-          <Text style={styles.errorText}>{dobError}</Text>
-          {user.role_id == 2 && (
-            <>
-              <CustomInput
-                onChangeText={val => {
-                  seteducation(val);
-                }}
-                value={education}
-                title={'Education'}
-                placeholder={'Enter Education'}
-                keyboardType={'email-address'}
-                iconName={'info'}
-              />
-              <Text style={styles.errorText}>{educationError}</Text>
-              <CustomInput
-                onChangeText={val => {
-                  setexperiance(val);
-                }}
-                value={experiance}
-                title={'Experiance'}
-                placeholder={'Enter Experiance'}
-                keyboardType={'email-address'}
-                iconName={'info'}
-              />
-              <Text style={styles.errorText}>{experianceError}</Text>
-              <CustomInput
-                onChangeText={val => {
-                  setspecialist(val);
-                }}
-                value={specialist}
-                title={'Specialist'}
-                placeholder={'Enter Specialist'}
-                keyboardType={'email-address'}
-                iconName={'info'}
-              />
-              <Text style={styles.errorText}>{specialistError}</Text>
-            </>
-          )}
-        </View>
-        <View style={{flexDirection: 'row', marginVertical: 30}}>
+        <View style={{marginVertical: 20}}>
           <CustomButton
             title={'Update'}
             onPress={async () => {
@@ -496,8 +587,21 @@ const ProfileScreen = props => {
               }
             }}
           />
+          <View style={{height: 20}} />
+          <CustomButton
+            title={'Log Out'}
+            secondary
+            onPress={async () => {
+              // const res = await ApiCall('/logout', 'POST');
+              // console.log('logout user ', res);
+              // if (res.success) {
+              await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
+              props.navigation.replace(ScreenNames.AuthStack);
+              // }
+            }}
+          />
         </View>
-        <Text
+        {/* <Text
           style={{...fonts.h1, alignSelf: 'center', padding: 10}}
           onPress={async () => {
             // const res = await ApiCall('/logout', 'POST');
@@ -508,7 +612,7 @@ const ProfileScreen = props => {
             // }
           }}>
           Log Out
-        </Text>
+        </Text> */}
       </KeyboardAwareScrollView>
     </View>
   );

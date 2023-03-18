@@ -63,9 +63,13 @@ const CartScreen = props => {
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator />
         </View>
+      ) : cartList.length == 0 ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>No items found</Text>
+        </View>
       ) : (
         <FlatList
-          // style={{backgroundColor: 'red'}}
+          // style={{flex: 1}}
           refreshControl={
             <RefreshControl
               refreshing={isRefresh}
@@ -89,9 +93,6 @@ const CartScreen = props => {
                 <View style={{width: 20}} />
                 <View style={{flex: 1}}>
                   <Text style={fonts.h4}>{item.product_detail.name}</Text>
-                  <Text style={{...fonts.h3, color: colors.darkgray}}>
-                    {item.qty} items
-                  </Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{...fonts.h3, color: colors.darkgray}}>
                       {item.product_detail.rate} rate
@@ -107,31 +108,36 @@ const CartScreen = props => {
                       Rs.{item.product_detail.price}{' '}
                     </Text>
                   </View>
+                  <Text style={{...fonts.h6, color: colors.darkgray}}>
+                    {item.qty} items
+                  </Text>
                 </View>
               </View>
             );
           }}
         />
       )}
-      <View
-        style={{
-          padding: 10,
-          // flex: 1,
-          bottom: 5,
-          left: 5,
-          right: 5,
-          // backgroundColor: 'blue',
-          position: 'absolute',
-        }}>
-        <CustomButton
-          title={'Order Place'}
-          onPress={() => {
-            // props.navigation.navigate(ScreenNames.LabListScreen, {
-            //   test: selectedTests,
-            // });
-          }}
-        />
-      </View>
+      {cartList.length == 0 ? null : (
+        <View
+          style={{
+            padding: 10,
+            // flex: 1,
+            bottom: 5,
+            left: 5,
+            right: 5,
+            // backgroundColor: 'blue',
+            position: 'absolute',
+          }}>
+          <CustomButton
+            title={'Checkout'}
+            onPress={() => {
+              // props.navigation.navigate(ScreenNames.LabListScreen, {
+              //   test: selectedTests,
+              // });
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 };

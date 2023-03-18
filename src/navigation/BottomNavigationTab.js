@@ -36,9 +36,9 @@ const BottomNavigationTab = () => {
           ),
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name={ScreenNames.OrderScreen}
-        component={CarePlanScreen}
+        component={OrderScreen}
         options={{
           tabBarLabel: 'Orders',
           tabBarIcon: ({focused, color}) => (
@@ -49,7 +49,7 @@ const BottomNavigationTab = () => {
             />
           ),
         }}
-      /> */}
+      />
       <Tab.Screen
         name={ScreenNames.DoctorScreen}
         component={DoctorScreen}
