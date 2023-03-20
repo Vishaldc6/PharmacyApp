@@ -268,6 +268,7 @@ const ProfileScreen = props => {
   const [mob, setmob] = useState('');
   const [username, setusername] = useState('');
   const [dob, setdob] = useState('');
+  const [add, setadd] = useState('');
   const [img, setimg] = useState('');
   const [education, seteducation] = useState(null);
   const [experiance, setexperiance] = useState(null);
@@ -279,6 +280,7 @@ const ProfileScreen = props => {
   const [usernameError, setusernameError] = useState('');
   const [mobError, setmobError] = useState('');
   const [dobError, setdobError] = useState('');
+  const [addError, setaddError] = useState('');
   const [educationError, seteducationError] = useState('');
   const [specialistError, setspecialistError] = useState('');
   const [experianceError, setexperianceError] = useState('');
@@ -309,6 +311,7 @@ const ProfileScreen = props => {
     setemail(USER.data.email);
     setusername(USER.data.name);
     setmob(USER.data.mobile);
+    setadd(USER.data.address);
     setdob(USER.data.date_of_birth);
     seteducation(USER.data.education);
     setspecialist(USER.data.specialist);
@@ -422,6 +425,17 @@ const ProfileScreen = props => {
             <Text style={styles.errorText}>{emailError}</Text>
             <CustomInput
               onChangeText={val => {
+                setadd(val);
+              }}
+              value={add}
+              title={'Address'}
+              placeholder={'Enter Address'}
+              keyboardType={'email-address'}
+              iconName={'home'}
+            />
+            <Text style={styles.errorText}>{addError}</Text>
+            <CustomInput
+              onChangeText={val => {
                 setmob(val);
               }}
               value={mob}
@@ -481,20 +495,9 @@ const ProfileScreen = props => {
                     style={{
                       margin: 10,
                       borderBottomWidth: 1.5,
-                      // borderBottomColor: focus
-                      //   ? colors.primary_color_admin
-                      //   : colors.darkgray,
+                      borderBottomColor: colors.darkgray,
                     }}
-                    // onFocus={() => {
-                    //   console.log('focus');
-                    //   setFocus(true);
-                    // }}
-                    // onBlur={() => {
-                    //   console.log('blur');
-                    //   setFocus(false);
-                    // }}
                     data={doctorTypeList}
-                    // search
                     maxHeight={300}
                     labelField="label"
                     valueField="value"
@@ -504,11 +507,12 @@ const ProfileScreen = props => {
                       // setdoctor_type(item.value);
                       // console.log('doctor_type : ', doctor_type);
                       console.log(item.label);
+                      setspecialist(item.label);
                     }}
                   />
                   <View style={{height: 15}} />
                 </>
-                <CustomInput
+                {/* <CustomInput
                   onChangeText={val => {
                     setspecialist(val);
                   }}
@@ -517,7 +521,7 @@ const ProfileScreen = props => {
                   placeholder={'Enter Specialist'}
                   keyboardType={'email-address'}
                   iconName={'info'}
-                />
+                /> */}
                 <Text style={styles.errorText}>{specialistError}</Text>
               </>
             )}
@@ -547,6 +551,9 @@ const ProfileScreen = props => {
               if (dob == '' || dob == null) {
                 setdobError('* Please enter Date of birth');
               }
+              if (add == '' || add == null) {
+                setaddError('* Please enter Address');
+              }
               if (mob == '' || mob == null) {
                 // Alert.alert('Sign in',"All flieds are empty")
                 setmobError('* Please enter Mobile');
@@ -555,11 +562,17 @@ const ProfileScreen = props => {
                 body.append('name', username);
                 body.append('mobile', mob);
                 body.append('date_of_birth', dob);
-                body.append('image', {
-                  uri: img.uri,
-                  name: img.fileName,
-                  type: img.type,
-                });
+                body.append('address', add);
+                body.append('specialist', specialist);
+                body.append('education', education);
+                body.append('experience', experiance);
+                if (img.uri) {
+                  body.append('image', {
+                    uri: img.uri,
+                    name: img.fileName,
+                    type: img.type,
+                  });
+                }
                 const res = await fetch(
                   AppStrings.BASE_URL + '/userUpdate/' + ID,
                   {

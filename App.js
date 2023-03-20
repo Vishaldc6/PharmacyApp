@@ -35,6 +35,7 @@ import LabListScreen from './src/screens/LabListScreen';
 import ScheduleScreen from './src/screens/ScheduleScreen';
 import CartScreen from './src/screens/CartScreen';
 import TestPaymentScreen from './src/screens/payment/TestPaymentScreen';
+import CheckoutScreen from './src/screens/CheckoutScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -71,10 +72,10 @@ const App = () => {
         <Stack.Navigator
           screenOptions={{headerShown: false}}
           initialRouteName={
-            token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
+            // token == 'logout' ? ScreenNames.AuthStack : ScreenNames.Home
             // ScreenNames.Home
             // ScreenNames.AdminHomeScreen
-            // ScreenNames.DoctorHomeScreen
+            ScreenNames.DoctorHomeScreen
           }>
           <Stack.Screen name={ScreenNames.AuthStack} component={AuthStack} />
 
@@ -130,6 +131,10 @@ const App = () => {
           <Stack.Screen
             name={ScreenNames.LabListScreen}
             component={LabListScreen}
+          />
+          <Stack.Screen
+            name={ScreenNames.CheckoutScreen}
+            component={CheckoutScreen}
           />
           <Stack.Screen
             name={ScreenNames.ScheduleScreen}

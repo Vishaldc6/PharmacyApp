@@ -7,7 +7,7 @@ export default colors = {
   primary_color: '#2879FF',
 
   //Doctor Theme
-  primary_color_doc: '#483D8B',
+  primary_color_doc: '#483DCC',
 
   white: '#ffffff',
   black: '#000000',

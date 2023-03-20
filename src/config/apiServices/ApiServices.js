@@ -67,7 +67,11 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
       //   );
       // }
     } else {
-      Alert.alert(AppStrings.appName, response.message);
+      // Alert.alert(AppStrings.appName, response.message);
+
+      const errors = Object.values(response.data);
+      console.log(errors);
+      Alert.alert(AppStrings.appName, errors[0]);
     }
 
     return response;
@@ -112,6 +116,13 @@ export const getDoctors = async () => {
   // setloading(false);
   // setisRefresh(false);
 };
+// export const getTests = async () => {
+//   const res = await ApiCall('/report', 'GET');
+//   return res;
+//   // setcategories(res.length);
+//   // setloading(false);
+//   // setisRefresh(false);
+// };
 
 //USER REGISTER
 export const userRegister = async (name, email, password, confirm_password) => {

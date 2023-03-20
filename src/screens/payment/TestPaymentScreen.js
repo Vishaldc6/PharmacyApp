@@ -20,6 +20,7 @@ const TestPaymentScreen = () => {
             description: 'Credits towards consultation',
             image: Images.appLogo,
             currency: 'INR',
+            // order_id: '',
             key: 'rzp_test_A2KSQPyJSFzQl6', // Your api key
             amount: '100',
             name: 'MedCare',
@@ -33,6 +34,7 @@ const TestPaymentScreen = () => {
           RazorpayCheckout.open(options)
             .then(data => {
               // handle success
+              console.log(data);
               alert(`Success: ${data.razorpay_payment_id}`);
             })
             .catch(error => {

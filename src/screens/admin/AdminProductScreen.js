@@ -106,10 +106,10 @@ const AdminProductScreen = props => {
                     thumbnail: true,
                     img: true,
                     benefits: true,
-                    // tax_percentage: true,
-                    // is_required_doctor: true,
-                    // is_required_report: true,
-                    // doctor_type: true,
+                    tax_percentage: true,
+                    is_required_doctor: true,
+                    is_required_report: true,
+                    doctor_type: true,
                     ID: item.id,
                   });
                 }}

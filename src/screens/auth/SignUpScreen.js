@@ -21,6 +21,9 @@ import CheckBox from 'react-native-check-box';
 import {Images} from '../../assets/images';
 import {ApiCall, userRegister} from '../../config/apiServices/ApiServices';
 import {AppStrings} from '../../utils/AppStrings';
+import {Dropdown} from 'react-native-element-dropdown';
+import {doctorTypeList} from '../../assets/data/doctorTypeList';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SignUpScreen = props => {
   const [email, setemail] = useState('');
@@ -150,7 +153,7 @@ const SignUpScreen = props => {
                       iconName={'info'}
                     />
                     <Text style={styles.errorText}>{experianceError}</Text>
-                    <CustomInput
+                    {/* <CustomInput
                       onChangeText={val => {
                         setspecialist(val);
                       }}
@@ -159,6 +162,45 @@ const SignUpScreen = props => {
                       placeholder={'Enter Specialist'}
                       keyboardType={'email-address'}
                       iconName={'info'}
+                    /> */}
+                    <Text style={{...fonts.h3, marginLeft: 10}}>
+                      Doctor Type
+                    </Text>
+                    <Dropdown
+                      style={{
+                        margin: 10,
+                        borderBottomWidth: 1.5,
+                        borderBottomColor: colors.darkgray,
+                      }}
+                      // onFocus={() => {
+                      //   console.log('focus');
+                      //   setFocus(true);
+                      // }}
+                      // onBlur={() => {
+                      //   console.log('blur');
+                      //   setFocus(false);
+                      // }}
+                      renderLeftIcon={() => (
+                        <Icon
+                          name={'user'}
+                          size={20}
+                          color={colors.darkgray}
+                          style={{marginHorizontal: 10}}
+                        />
+                      )}
+                      data={doctorTypeList}
+                      // search
+                      maxHeight={300}
+                      labelField="label"
+                      valueField="value"
+                      // value={doctor_type}
+                      selectedTextStyle={fonts.h3}
+                      onChange={item => {
+                        // setdoctor_type(item.value);
+                        // console.log('doctor_type : ', doctor_type);
+                        console.log(item.label);
+                        setspecialist(item.label);
+                      }}
                     />
                     <Text style={styles.errorText}>{specialistError}</Text>
                   </>

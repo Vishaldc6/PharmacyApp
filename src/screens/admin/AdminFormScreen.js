@@ -60,8 +60,12 @@ const AdminFormScreen = props => {
       setquantity(res.quantity.toString());
       setrate(res.rate.toString());
       setside_effects(res.side_effects);
+      settax_percentage(res.tax_percentage.toString());
       setthumb(res.thumbnail);
       setimg(res.images[0].image);
+      setis_required_doctor(res.is_required_doctor ? true : false);
+      setis_required_report(res.is_required_report ? true : false);
+      setdoctor_type(res.doctor_type);
     } else if (title == 'Test') {
       setname(res.name);
       setprice(res.price.toString());
@@ -87,7 +91,9 @@ const AdminFormScreen = props => {
   const [side_effects, setside_effects] = useState('');
   const [img, setimg] = useState('');
   const [thumb, setthumb] = useState('');
+  const [tax_percentage, settax_percentage] = useState('');
   const [doctor_type, setdoctor_type] = useState('');
+  const [doctor, setdoctor] = useState('');
   const [is_required_report, setis_required_report] = useState(false);
   const [is_required_doctor, setis_required_doctor] = useState(false);
 
@@ -181,16 +187,17 @@ const AdminFormScreen = props => {
     body.append('rate', rate);
     body.append('side_effects', side_effects);
     body.append('ingredients', ingredients);
+    body.append('tax_percentage', tax_percentage);
     body.append('is_required_report', is_required_report ? 1 : 0);
     body.append('is_required_doctor', is_required_doctor ? 1 : 0);
-    // body.append('doctor_type', doctor_type);
+    body.append('doctor_type', doctor_type);
 
     const res = await ApiCall(
       ID ? `/productUpdate/${ID}` : '/productAdd',
       'POST',
       body,
     );
-    console.log(res);
+    console.log('Screen res : ', res);
     if (res) {
       props.navigation.goBack();
     }
@@ -427,6 +434,22 @@ const AdminFormScreen = props => {
           </>
         )}
 
+        {props.route.params.tax_percentage && (
+          <>
+            <CustomInput
+              isAdmin={true}
+              style={{flex: 1}}
+              onChangeText={val => {
+                settax_percentage(val);
+              }}
+              value={tax_percentage}
+              title={'Tax percentage'}
+              placeholder={'Enter tax_percentage'}
+              keyboardType={'email-address'}
+            />
+            <View style={{height: 15}} />
+          </>
+        )}
         {props.route.params.side_effects && (
           <>
             <CustomInput
@@ -502,12 +525,13 @@ const AdminFormScreen = props => {
               maxHeight={300}
               labelField="label"
               valueField="value"
-              value={doctor_type}
+              value={doctor}
               selectedTextStyle={fonts.h3}
               onChange={item => {
-                setdoctor_type(item.value);
-                console.log('doctor_type : ', doctor_type);
+                setdoctor(item.value);
+                // console.log('doctor_type : ', doctor_type);
                 console.log(item.label);
+                setdoctor_type(item.label);
               }}
             />
             <View style={{height: 15}} />
@@ -558,6 +582,7 @@ const AdminFormScreen = props => {
                 addLaboratory();
               } else if (title == 'Product') {
                 addProduct();
+                // console.log(doctor_type);
               } else if (title == 'Test') {
                 addTest();
               }

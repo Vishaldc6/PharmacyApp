@@ -18,6 +18,7 @@ import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {
   ApiCall,
   getCategories,
+  getDoctors,
   getLabs,
   getProducts,
   getTests,
@@ -42,6 +43,7 @@ const AdminHomeScreen = props => {
   const [categories, setcategories] = useState(0);
   const [labs, setlabs] = useState(0);
   const [tests, setTests] = useState(0);
+  const [doctors, setdoctors] = useState(0);
 
   const [isRefresh, setisRefresh] = useState(false);
 
@@ -73,6 +75,7 @@ const AdminHomeScreen = props => {
     getCategories().then(res => setcategories(res.length));
     getLabs().then(res => setlabs(res.length));
     getTests().then(res => setTests(res.length));
+    getDoctors().then(res => setdoctors(res.length));
     setisRefresh(true);
     setloading(false);
     setisRefresh(false);
@@ -116,12 +119,19 @@ const AdminHomeScreen = props => {
             }}
           />
           <Card
+            title={'Doctors'}
+            number={doctors}
+            onPress={() => {
+              // props.navigation.navigate(ScreenNames.AdminTestScreen);
+            }}
+          />
+          {/* <Card
             title={'Tests'}
             number={tests}
             onPress={() => {
               props.navigation.navigate(ScreenNames.AdminTestScreen);
             }}
-          />
+          /> */}
         </ScrollView>
       )}
     </View>
