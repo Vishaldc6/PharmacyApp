@@ -33,7 +33,7 @@ export default ScreenName = {
   LabListScreen: 'LabListScreen',
   ScheduleScreen: 'ScheduleScreen',
   CheckoutScreen: 'CheckoutScreen',
-
+  OrderDetailScreen: 'OrderDetailScreen',
   // doctor
   DoctorHomeScreen: 'DoctorHomeScreen',
   PatientDetailScreen: 'PatientDetailScreen',

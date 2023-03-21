@@ -106,6 +106,7 @@ const ProductScreen = props => {
         // }}
         value={srcTxt}
         onChangeText={val => {
+          console.log('value : ', val);
           if (val == '') {
             setsearchproducts([]);
           }
@@ -113,6 +114,7 @@ const ProductScreen = props => {
         }}
         placeholder="Search Product.."
         onSearch={() => {
+          // products.map(item => console.log(item.name));
           let list = products.filter(item => item.name == srcTxt);
           setsearchproducts(list);
         }}

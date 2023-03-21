@@ -9,6 +9,8 @@ import {
   Alert,
   ScrollView,
   Modal,
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
@@ -69,42 +71,32 @@ const PatientCard = ({name, age, gender, date, onPress}) => (
   </TouchableOpacity>
 );
 
-const ConsultationCard = ({item, accept, reject, addNote}) => {
+const ConsultationCard = ({item, onPress}) => {
   return (
-    <View style={styles.card}>
-      <Text style={{...fonts.h1, color: colors.white}}>
-        Order ID {item.order_number}
-      </Text>
-      {/* <Text>{item.billing_address}</Text> */}
-      {/* <Text>{item.doctor_name}</Text> */}
-      <Text style={{...fonts.h2, color: colors.white}}>
-        {item.shipping_name}
-      </Text>
-      <Text style={{...fonts.h2, color: colors.white}}>
-        Mob. {item.shipping_mobile}
-      </Text>
-      {/* <Text>{item.shipping_address}</Text> */}
-      <View style={{flexDirection: 'row', marginVertical: 5}}>
-        <CustomButton title={'Reject'} secondary={true} onPress={reject} />
-        <CustomButton title={'Accept'} onPress={accept} />
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.card}>
+        <Text style={{...fonts.h1, color: colors.white}}>
+          Order ID {item.order_number}
+        </Text>
+        {/* <Text>{item.billing_address}</Text> */}
+        {/* <Text>{item.doctor_name}</Text> */}
+        <Text style={{...fonts.h2, color: colors.white}}>
+          {item.shipping_name}
+        </Text>
+        <Text style={{...fonts.h2, color: colors.white}}>
+          Mob. {item.shipping_mobile}
+        </Text>
+        {/* <Text>{item.shipping_address}</Text> */}
       </View>
-      <Text
-        style={{
-          ...fonts.h7,
-          color: colors.white,
-          marginVertical: 10,
-          textAlign: 'right',
-        }}
-        onPress={addNote}>
-        + Add Consultation Notes
-      </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 const DoctorHomeScreen = props => {
   const [consultationList, setConsultationList] = useState([]);
   const [isModal, setisModal] = useState(false);
+  const [isRefresh, setisRefresh] = useState(false);
+  const [loading, setloading] = useState(true);
   const [ID, setID] = useState('');
   const [note, setnote] = useState('');
 
@@ -127,6 +119,8 @@ const DoctorHomeScreen = props => {
     console.log(data);
     if (data.flag) {
       setConsultationList(data.data.orders);
+      setisRefresh(false);
+      setloading(false);
     } else {
       Alert.alert(AppStrings.appName, 'Something went wrong.');
     }
@@ -205,120 +199,196 @@ const DoctorHomeScreen = props => {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <View style={{...GlobalStyles.mainContainer, marginVertical: 10}}>
-        {/* Patients List */}
-        {/* <View
-          style={{
-            elevation: 2,
-            backgroundColor: colors.white,
-            padding: 10,
-            // marginVertical: 5,
-          }}> */}
-        {/* <FlatList
-          // ItemSeparatorComponent={() => (
-          //   <View
-          //     style={{
-          //       borderWidth: 0.5,
-          //       borderColor: colors.darkgray,
-          //       margin: 10,
-          //     }}
-          //   />
-          // )}
-          data={patients}
-          renderItem={({item}) => (
-            <PatientCard
-              name={item.name}
-              age={item.age}
-              gender={item.gender}
-              date={item.date}
-              onPress={() =>
-                props.navigation.navigate(ScreenNames.PatientDetailScreen, {
-                  patient: item,
-                })
-              }
-            />
-          )}
-        /> */}
-        {/* </View> */}
 
-        <ScrollView>
+      {loading ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <View style={{...GlobalStyles.mainContainer, marginVertical: 10}}>
           <Text style={{...fonts.h1, margin: 5}}>Consultation List</Text>
+          <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefresh}
+                onRefresh={() => {
+                  getData();
+                }}
+              />
+            }
+            data={consultationList}
+            renderItem={({item}) => (
+              <ConsultationCard
+                item={item}
+                onPress={async () => {
+                  console.log(item);
+                  props.navigation.navigate(ScreenNames.OrderDetailScreen, {
+                    data: item,
+                  });
+                  // const token = await getToken();
+                  // const res = await fetch(
+                  //   AppStrings.BASE_URL + '/orderDetail/' + item.id,
+                  //   {
+                  //     headers: {
+                  //       Accept: 'application/json',
+                  //       Authorization: 'Bearer ' + token,
+                  //     },
+                  //     method: 'GET',
+                  //   },
+                  // );
+
+                  // const jsonRes = await res.json();
+                  // console.log('Screen res :', jsonRes);
+                  // // console.log(res);
+
+                  // if (jsonRes.flag) {
+                  //   props.navigation.navigate(ScreenNames.OrderDetailScreen, {
+                  //     data: jsonRes.data,
+                  //   });
+                  // } else if (jsonRes.flag == false) {
+                  //   if (jsonRes.data?.errors != null) {
+                  //     Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
+                  //   } else {
+                  //     Alert.alert(AppStrings.appName, jsonRes.message);
+                  //   }
+                  // }
+                }}
+                // accept={() => acceptRejectConsultation(item.id, '1')}
+                // reject={() => acceptRejectConsultation(item.id, '0')}
+                // addNote={
+                //   () => {
+                //     setisModal(true);
+                //     setID(item.id);
+                //   }
+                //   // addConsultationNote(
+                //   //   item.id,
+                //   //   'Ea non pariatur sunt quis in elit nostrud occaecat.',
+                //   // )
+                // }
+              />
+              // <PatientCard
+              //   name={item.name}
+              //   age={item.age}
+              //   gender={item.gender}
+              //   date={item.date}
+              //   onPress={() =>
+              //     props.navigation.navigate(ScreenNames.PatientDetailScreen, {
+              //       patient: item,
+              //     })
+              //   }
+              // />
+            )}
+          />
+          {/* </View> */}
+
+          {/* <ScrollView>
+         
           {consultationList.map(
             item => (
               <ConsultationCard
                 item={item}
-                accept={() => acceptRejectConsultation(item.id, '1')}
-                reject={() => acceptRejectConsultation(item.id, '0')}
-                addNote={
-                  () => {
-                    setisModal(true);
-                    setID(item.id);
+                onPress={async () => {
+                  const token = await getToken();
+                  const res = await fetch(
+                    AppStrings.BASE_URL + '/orderDetail/' + item.id,
+                    {
+                      headers: {
+                        Accept: 'application/json',
+                        Authorization: 'Bearer ' + token,
+                      },
+                      method: 'GET',
+                    },
+                  );
+
+                  const jsonRes = await res.json();
+                  console.log('Screen res :', jsonRes);
+                  // console.log(res);
+
+                  if (jsonRes.flag) {
+                    props.navigation.navigate(ScreenNames.OrderDetailScreen, {
+                      data: jsonRes.data,
+                    });
+                  } else if (jsonRes.flag == false) {
+                    if (jsonRes.data?.errors != null) {
+                      Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
+                    } else {
+                      Alert.alert(AppStrings.appName, jsonRes.message);
+                    }
                   }
-                  // addConsultationNote(
-                  //   item.id,
-                  //   'Ea non pariatur sunt quis in elit nostrud occaecat.',
-                  // )
-                }
+                }}
+                // accept={() => acceptRejectConsultation(item.id, '1')}
+                // reject={() => acceptRejectConsultation(item.id, '0')}
+                // addNote={
+                //   () => {
+                //     setisModal(true);
+                //     setID(item.id);
+                //   }
+                //   // addConsultationNote(
+                //   //   item.id,
+                //   //   'Ea non pariatur sunt quis in elit nostrud occaecat.',
+                //   // )
+                // }
               />
             ),
             // console.log(item.id),
           )}
-        </ScrollView>
-        <Modal visible={isModal} animationType={'slide'} transparent={true}>
-          <View
-            style={{
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+        </ScrollView> */}
+          <Modal visible={isModal} animationType={'slide'} transparent={true}>
             <View
               style={{
-                width: '75%',
-                backgroundColor: 'white',
-                padding: 15,
-                elevation: 5,
-                borderRadius: 20,
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              <Text style={{...fonts.h1, marginVertical: 10}}>
-                Add Consultation Note
-              </Text>
-
-              <CustomInput
-                onChangeText={val => {
-                  setnote(val);
-                }}
-                value={note}
-                title={'Consulatation Note'}
-                placeholder={'Enter Note'}
-                keyboardType={'email-address'}
-                // iconName={'mobile-phone'}
-              />
-              <TouchableOpacity
-                // style={{flex: 1}}
-                onPress={async () => {
-                  addConsultationNote(ID, note).then(() => setisModal(false));
+              <View
+                style={{
+                  width: '75%',
+                  backgroundColor: 'white',
+                  padding: 15,
+                  elevation: 5,
+                  borderRadius: 20,
                 }}>
-                {/* <View style={styles.btn}> */}
-                <Text
-                  style={{
-                    ...fonts.h6,
-                    margin: 10,
-                    alignSelf: 'center',
-                    color: colors.primary_color_doc,
-                  }}>
-                  Add note
+                <Text style={{...fonts.h1, marginVertical: 10}}>
+                  Add Consultation Note
                 </Text>
-                {/* </View> */}
-              </TouchableOpacity>
-              <Text
-                onPress={() => setisModal(false)}
-                style={{...fonts.h5, alignSelf: 'center', margin: 10}}>
-                Cancel
-              </Text>
+
+                <CustomInput
+                  onChangeText={val => {
+                    setnote(val);
+                  }}
+                  value={note}
+                  title={'Consulatation Note'}
+                  placeholder={'Enter Note'}
+                  keyboardType={'email-address'}
+                  // iconName={'mobile-phone'}
+                />
+                <TouchableOpacity
+                  // style={{flex: 1}}
+                  onPress={async () => {
+                    addConsultationNote(ID, note).then(() => setisModal(false));
+                  }}>
+                  {/* <View style={styles.btn}> */}
+                  <Text
+                    style={{
+                      ...fonts.h6,
+                      margin: 10,
+                      alignSelf: 'center',
+                      color: colors.primary_color_doc,
+                    }}>
+                    Add note
+                  </Text>
+                  {/* </View> */}
+                </TouchableOpacity>
+                <Text
+                  onPress={() => setisModal(false)}
+                  style={{...fonts.h5, alignSelf: 'center', margin: 10}}>
+                  Cancel
+                </Text>
+              </View>
             </View>
-          </View>
-        </Modal>
-      </View>
+          </Modal>
+        </View>
+      )}
     </View>
   );
 };

@@ -4,7 +4,8 @@ export default colors = {
 
   // Patient Theme
   // primary_color: '#87CEFA',
-  primary_color: '#2879FF',
+  // primary_color: '#29B6F6',
+  primary_color: '#0099FF',
 
   //Doctor Theme
   primary_color_doc: '#483DCC',
