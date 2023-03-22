@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 const CustomHeader = props => {
   return (
@@ -38,6 +39,14 @@ const CustomHeader = props => {
       <View style={styles.postIconContainer}>
         {props.tag && <Icon name={'tag'} size={25} style={styles.icon} />}
         {props.search && <Icon name={'search'} size={25} style={styles.icon} />}
+        {props.call && (
+          <Icon
+            name={'phone'}
+            size={25}
+            style={styles.icon}
+            onPress={props.onCall}
+          />
+        )}
         {props.cart && (
           <Icon
             name={'shopping-cart'}
@@ -55,15 +64,18 @@ const CustomHeader = props => {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: 'blue',
+    backgroundColor: colors.white,
     // height: size.height / 15,
     // width: size.width,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
+    padding: widthPercentageToDP(4),
     // borderBottomWidth: 0.5,
     marginHorizontal: -10,
+    marginVertical: -10,
+    marginBottom: 10,
+    elevation: 5,
   },
   postIconContainer: {
     flexDirection: 'row',

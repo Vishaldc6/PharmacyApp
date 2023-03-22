@@ -14,6 +14,8 @@ const CustomButton = props => {
             ? Colors.white
             : props.isAdmin
             ? colors.primary_color_admin
+            : props.isDoctor
+            ? colors.primary_color_doc
             : Colors.primary_color,
           // height: size.height / 13,
           // width: size.width / 1.06,
@@ -25,13 +27,19 @@ const CustomButton = props => {
           borderColor:
             props.secondary && props.isAdmin
               ? colors.primary_color_admin
+              : props.isDoctor
+              ? colors.primary_color_doc
               : colors.primary_color,
         }}>
         <Text
           style={{
             ...fonts.h5,
             margin: 20,
-            color: props.secondary ? Colors.primary_color : Colors.white,
+            color: props.secondary
+              ? props.isDoctor
+                ? colors.primary_color_doc
+                : Colors.primary_color
+              : Colors.white,
           }}>
           {props.title}
         </Text>

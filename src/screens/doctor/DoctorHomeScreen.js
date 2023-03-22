@@ -11,6 +11,7 @@ import {
   Modal,
   RefreshControl,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
@@ -86,7 +87,14 @@ const ConsultationCard = ({item, onPress}) => {
         <Text style={{...fonts.h2, color: colors.white}}>
           Mob. {item.shipping_mobile}
         </Text>
-        {/* <Text>{item.shipping_address}</Text> */}
+        <Text style={{...fonts.h2, color: colors.white, alignSelf: 'flex-end'}}>
+          Status :{' '}
+          {item.order_acceptance_for_self == null
+            ? 'Pending'
+            : item.order_acceptance_for_self.status == '1'
+            ? 'Accepted'
+            : 'Rejected'}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -101,6 +109,9 @@ const DoctorHomeScreen = props => {
   const [note, setnote] = useState('');
 
   useEffect(() => {
+    props.navigation.addListener('focus', () => {
+      getData();
+    });
     getData();
   }, []);
 
@@ -121,53 +132,6 @@ const DoctorHomeScreen = props => {
       setConsultationList(data.data.orders);
       setisRefresh(false);
       setloading(false);
-    } else {
-      Alert.alert(AppStrings.appName, 'Something went wrong.');
-    }
-  };
-
-  const acceptRejectConsultation = async (order_id, status) => {
-    // console.log(`order id : ${order_id}   status : ${status}`);
-    const token = await getToken();
-
-    const body = new FormData();
-    body.append('order_id', order_id);
-    body.append('status', status);
-    const res = await fetch(AppStrings.BASE_URL + '/acceptRejectConsultation', {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-      method: 'POST',
-      body: body,
-    });
-    const data = await res.json();
-    console.log(data);
-    if (data.flag) {
-      Alert.alert(AppStrings.appName, data.message);
-    } else {
-      Alert.alert(AppStrings.appName, 'Something went wrong.');
-    }
-  };
-
-  const addConsultationNote = async (order_id, note) => {
-    const token = await getToken();
-
-    const body = new FormData();
-    body.append('order_id', order_id);
-    body.append('consultation', note);
-    const res = await fetch(AppStrings.BASE_URL + '/addConsultationNotes', {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-      method: 'POST',
-      body: body,
-    });
-    const data = await res.json();
-    console.log(data);
-    if (data.flag) {
-      Alert.alert(AppStrings.appName, data.message);
     } else {
       Alert.alert(AppStrings.appName, 'Something went wrong.');
     }
@@ -221,37 +185,12 @@ const DoctorHomeScreen = props => {
               <ConsultationCard
                 item={item}
                 onPress={async () => {
-                  console.log(item);
+                  // console.log(item.shipping_mobile);
+                  // Linking.openURL(`tel:+91${item.shipping_mobile}`);
                   props.navigation.navigate(ScreenNames.OrderDetailScreen, {
                     data: item,
+                    isDoctor: true,
                   });
-                  // const token = await getToken();
-                  // const res = await fetch(
-                  //   AppStrings.BASE_URL + '/orderDetail/' + item.id,
-                  //   {
-                  //     headers: {
-                  //       Accept: 'application/json',
-                  //       Authorization: 'Bearer ' + token,
-                  //     },
-                  //     method: 'GET',
-                  //   },
-                  // );
-
-                  // const jsonRes = await res.json();
-                  // console.log('Screen res :', jsonRes);
-                  // // console.log(res);
-
-                  // if (jsonRes.flag) {
-                  //   props.navigation.navigate(ScreenNames.OrderDetailScreen, {
-                  //     data: jsonRes.data,
-                  //   });
-                  // } else if (jsonRes.flag == false) {
-                  //   if (jsonRes.data?.errors != null) {
-                  //     Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
-                  //   } else {
-                  //     Alert.alert(AppStrings.appName, jsonRes.message);
-                  //   }
-                  // }
                 }}
                 // accept={() => acceptRejectConsultation(item.id, '1')}
                 // reject={() => acceptRejectConsultation(item.id, '0')}
@@ -333,60 +272,6 @@ const DoctorHomeScreen = props => {
             // console.log(item.id),
           )}
         </ScrollView> */}
-          <Modal visible={isModal} animationType={'slide'} transparent={true}>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  width: '75%',
-                  backgroundColor: 'white',
-                  padding: 15,
-                  elevation: 5,
-                  borderRadius: 20,
-                }}>
-                <Text style={{...fonts.h1, marginVertical: 10}}>
-                  Add Consultation Note
-                </Text>
-
-                <CustomInput
-                  onChangeText={val => {
-                    setnote(val);
-                  }}
-                  value={note}
-                  title={'Consulatation Note'}
-                  placeholder={'Enter Note'}
-                  keyboardType={'email-address'}
-                  // iconName={'mobile-phone'}
-                />
-                <TouchableOpacity
-                  // style={{flex: 1}}
-                  onPress={async () => {
-                    addConsultationNote(ID, note).then(() => setisModal(false));
-                  }}>
-                  {/* <View style={styles.btn}> */}
-                  <Text
-                    style={{
-                      ...fonts.h6,
-                      margin: 10,
-                      alignSelf: 'center',
-                      color: colors.primary_color_doc,
-                    }}>
-                    Add note
-                  </Text>
-                  {/* </View> */}
-                </TouchableOpacity>
-                <Text
-                  onPress={() => setisModal(false)}
-                  style={{...fonts.h5, alignSelf: 'center', margin: 10}}>
-                  Cancel
-                </Text>
-              </View>
-            </View>
-          </Modal>
         </View>
       )}
     </View>
