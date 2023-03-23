@@ -7,70 +7,64 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Alert,
-  ScrollView,
-  Modal,
   RefreshControl,
   ActivityIndicator,
-  Linking,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import fonts from '../../styles/fonts';
 import {Images} from '../../assets/images';
 import {size} from '../../styles/size';
-import {patients} from '../../assets/data/patients';
 import colors from '../../styles/colors';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {AppStrings} from '../../utils/AppStrings';
 import {getToken} from '../../config/apiServices/ApiServices';
-import CustomButton from '../../components/CustomButton';
-import CustomInput from '../../components/CustomInput';
 
-const PatientCard = ({name, age, gender, date, onPress}) => (
-  <TouchableOpacity onPress={onPress}>
-    <View
-      style={{
-        // flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        // justifyContent: 'space-evenly',
-        borderWidth: 1,
-        borderRadius: 10,
-        borderColor: colors.lightgrey,
-        padding: 10,
-        margin: 5,
-        backgroundColor: colors.white,
-        elevation: 5,
-      }}>
-      {/* <View style={{width: 20}} /> */}
-      <View style={{flex: 1}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={{...fonts.h7}}>{name}</Text>
-          {/* <Text style={{...fonts.h5}}>{date}</Text> */}
-        </View>
-        <Text style={{...fonts.h4}}>
-          {age}, {gender}
-        </Text>
-        {/* <Text style={{...fonts.h5}}>Mr. Abc</Text> */}
-      </View>
-      <View>
-        <Image
-          source={Images.noImage}
-          style={{
-            height: size.height / 13,
-            width: size.height / 13,
-            borderRadius: 50,
-          }}
-        />
-      </View>
-    </View>
-  </TouchableOpacity>
-);
+// const PatientCard = ({name, age, gender, date, onPress}) => (
+//   <TouchableOpacity onPress={onPress}>
+//     <View
+//       style={{
+//         // flex: 1,
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//         // justifyContent: 'space-evenly',
+//         borderWidth: 1,
+//         borderRadius: 10,
+//         borderColor: colors.lightgrey,
+//         padding: 10,
+//         margin: 5,
+//         backgroundColor: colors.white,
+//         elevation: 5,
+//       }}>
+//       {/* <View style={{width: 20}} /> */}
+//       <View style={{flex: 1}}>
+//         <View
+//           style={{
+//             flexDirection: 'row',
+//             alignItems: 'center',
+//             justifyContent: 'space-between',
+//           }}>
+//           <Text style={{...fonts.h7}}>{name}</Text>
+//           {/* <Text style={{...fonts.h5}}>{date}</Text> */}
+//         </View>
+//         <Text style={{...fonts.h4}}>
+//           {age}, {gender}
+//         </Text>
+//         {/* <Text style={{...fonts.h5}}>Mr. Abc</Text> */}
+//       </View>
+//       <View>
+//         <Image
+//           source={Images.noImage}
+//           style={{
+//             height: size.height / 13,
+//             width: size.height / 13,
+//             borderRadius: 50,
+//           }}
+//         />
+//       </View>
+//     </View>
+//   </TouchableOpacity>
+// );
 
 const ConsultationCard = ({item, onPress}) => {
   return (
@@ -102,11 +96,11 @@ const ConsultationCard = ({item, onPress}) => {
 
 const DoctorHomeScreen = props => {
   const [consultationList, setConsultationList] = useState([]);
-  const [isModal, setisModal] = useState(false);
+  // const [isModal, setisModal] = useState(false);
   const [isRefresh, setisRefresh] = useState(false);
-  const [loading, setloading] = useState(true);
-  const [ID, setID] = useState('');
-  const [note, setnote] = useState('');
+  // const [loading, setloading] = useState(true);
+  // const [ID, setID] = useState('');
+  // const [note, setnote] = useState('');
 
   useEffect(() => {
     props.navigation.addListener('focus', () => {
@@ -126,7 +120,10 @@ const DoctorHomeScreen = props => {
       method: 'GET',
       // body: body,
     });
-    const data = await res.json();
+    // const data = await res.json();
+    console.log(res);
+    let responseText = await res.text();
+    let data = JSON.parse(responseText);
     console.log(data);
     if (data.flag) {
       setConsultationList(data.data.orders);

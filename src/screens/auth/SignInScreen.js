@@ -30,6 +30,7 @@ import {
   userLogin,
 } from '../../config/apiServices/ApiServices';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
 const GOOGLE_CLIENT_ID =
   '59510826670-7lilbhlo1mt18c6l2c685uae1sp3v9k6.apps.googleusercontent.com';
@@ -197,6 +198,12 @@ const SignInScreen = props => {
                         const body = new FormData();
                         body.append('email', email);
                         body.append('password', password);
+                        console.log(body);
+
+                        // axios
+                        //   .post(AppStrings.BASE_URL + '/login', body)
+                        //   .then(res => console.log('axios : ', res.data));
+
                         const res = await fetch(
                           AppStrings.BASE_URL + '/login',
                           {
@@ -206,10 +213,14 @@ const SignInScreen = props => {
                             method: 'POST',
                             body: body,
                           },
+                        ).catch(e =>
+                          Alert.alert(AppStrings.appName, 'Server Error !! '),
                         );
-                        const jsonRes = await res.json();
-                        console.log('Screen res :', jsonRes);
                         console.log(res);
+                        // const jsonRes = await res.json();
+                        let responseText = await res.text();
+                        let jsonRes = JSON.parse(responseText);
+                        console.log('Screen res :', jsonRes);
                         // if (res.ok) {
                         if (jsonRes.flag) {
                           Alert.alert(AppStrings.appName, jsonRes.message);

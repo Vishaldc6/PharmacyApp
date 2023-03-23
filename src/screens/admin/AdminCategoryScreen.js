@@ -5,13 +5,12 @@ import {
   RefreshControl,
   ActivityIndicator,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import colors from '../../styles/colors';
 import CustomHeader from '../../components/CustomHeader';
 import GlobalStyles from '../../styles/GlobalStyles';
-import CustomSearchBar from '../../components/CustomSearchBar';
-
 import CategoryCard from '../../components/category/CategoryCard';
 import FloatingButton from '../../components/admin/FloatingButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
@@ -51,22 +50,15 @@ const AdminCategoryScreen = props => {
 
       {/* <CustomSearchBar placeholder="Search Cayegory.." /> */}
       {loading ? (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.container}>
           <ActivityIndicator />
         </View>
       ) : categories.length == 0 ? (
-        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
+        <View style={styles.container}>
           <Text>No labs found</Text>
         </View>
       ) : (
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: colors.white,
-            marginVertical: 10,
-            borderRadius: 20,
-            elevation: 5,
-          }}>
+        <View style={styles.cardContainer}>
           <FlatList
             refreshControl={
               <RefreshControl
@@ -121,5 +113,16 @@ const AdminCategoryScreen = props => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  cardContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    marginVertical: 10,
+    borderRadius: 20,
+    elevation: 5,
+  },
+});
 
 export default AdminCategoryScreen;

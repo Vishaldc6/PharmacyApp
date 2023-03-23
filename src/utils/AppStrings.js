@@ -2,7 +2,8 @@ export const AppStrings = {
   //App Name
   appName: 'Pharmacy App',
   // BASE URL
-  BASE_URL: 'http://192.168.29.125:8000/api',
+  // BASE_URL: 'http://192.168.29.125:8000/api',
+  BASE_URL: 'http://192.168.43.125:8000/api',
 
   //CarePlanScreen
   reduceMedial: 'Reduce your medical expenses by HALF',

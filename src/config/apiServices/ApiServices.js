@@ -49,8 +49,10 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
       headers,
       body: data ? data : null,
     });
-    console.log(res);
-    let response = await res.json();
+    // console.log('json parse : ', JSON.parse(await res.text()));
+    // let response = await res.json();
+    let responseText = await res.text();
+    let response = JSON.parse(responseText);
     console.log('response:::', response);
     if (response.success) {
       // Alert.alert(AppStrings.appName, response.message);
@@ -130,7 +132,7 @@ export const userRegister = async (name, email, password, confirm_password) => {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       name: name,
@@ -171,7 +173,7 @@ export const userLogin = async (email, password) => {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       email: email,

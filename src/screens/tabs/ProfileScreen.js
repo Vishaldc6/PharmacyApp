@@ -301,7 +301,9 @@ const ProfileScreen = props => {
       method: 'GET',
       // body: body,
     });
-    const USER = await res.json();
+    // const USER = await res.json();
+    let responseText = await res.text();
+    let USER = JSON.parse(responseText);
     console.log('Screen res :', USER);
     console.log(USER);
     settoken(tkn);
@@ -584,7 +586,9 @@ const ProfileScreen = props => {
                     body: body,
                   },
                 );
-                const jsonRes = await res.json();
+                // const jsonRes = await res.json();
+                let responseText = await res.text();
+                let jsonRes = JSON.parse(responseText);
                 console.log('Screen res :', jsonRes);
                 console.log(res);
                 // if (res.ok) {
@@ -596,6 +600,8 @@ const ProfileScreen = props => {
                   } else {
                     Alert.alert(AppStrings.appName, jsonRes.message);
                   }
+                } else {
+                  Alert.alert(AppStrings.appName, jsonRes.message);
                 }
               }
             }}

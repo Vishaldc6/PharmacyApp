@@ -7,10 +7,8 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
-import CustomSearchBar from '../../components/CustomSearchBar';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 import AdminButtons from '../../components/admin/AdminButtons';

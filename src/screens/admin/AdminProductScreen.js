@@ -8,9 +8,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomHeader from '../../components/CustomHeader';
-import CustomSearchBar from '../../components/CustomSearchBar';
 import GlobalStyles from '../../styles/GlobalStyles';
-
 import SecondaryProductCard from '../../components/product/SecondaryProductCard';
 import colors from '../../styles/colors';
 import {ApiCall, getProducts} from '../../config/apiServices/ApiServices';

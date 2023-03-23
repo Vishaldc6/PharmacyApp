@@ -38,7 +38,9 @@ const OrderScreen = props => {
       method: 'GET',
     });
 
-    const jsonRes = await res.json();
+    // const jsonRes = await res.json();
+    let responseText = await res.text();
+    let jsonRes = JSON.parse(responseText);
     console.log('Screen res :', jsonRes);
     console.log(res);
 
@@ -52,6 +54,8 @@ const OrderScreen = props => {
       } else {
         Alert.alert(AppStrings.appName, jsonRes.message);
       }
+    } else {
+      Alert.alert(AppStrings.appName, jsonRes.message);
     }
   };
 
@@ -92,7 +96,9 @@ const OrderScreen = props => {
                   },
                 );
 
-                const jsonRes = await res.json();
+                // const jsonRes = await res.json();
+                let responseText = await res.text();
+                let jsonRes = JSON.parse(responseText);
                 console.log('Screen res :', jsonRes);
                 // console.log(res);
 
@@ -106,6 +112,8 @@ const OrderScreen = props => {
                   } else {
                     Alert.alert(AppStrings.appName, jsonRes.message);
                   }
+                } else {
+                  Alert.alert(AppStrings.appName, jsonRes.message);
                 }
               }}>
               <View style={styles.card}>

@@ -17,7 +17,6 @@ import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import Colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 import {size} from '../../styles/size';
-import GlobalStyles from '../../styles/GlobalStyles';
 import {Images} from '../../assets/images';
 
 const Dots = ({selected}) => {

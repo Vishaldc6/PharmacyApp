@@ -10,13 +10,9 @@ import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import fonts from '../../styles/fonts';
-
-import {tests} from '../../assets/data/tests';
-
 import colors from '../../styles/colors';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {
-  ApiCall,
   getCategories,
   getDoctors,
   getLabs,
@@ -119,19 +115,19 @@ const AdminHomeScreen = props => {
             }}
           />
           <Card
+            title={'Tests'}
+            number={tests}
+            onPress={() => {
+              props.navigation.navigate(ScreenNames.AdminTestScreen);
+            }}
+          />
+          <Card
             title={'Doctors'}
             number={doctors}
             onPress={() => {
               // props.navigation.navigate(ScreenNames.AdminTestScreen);
             }}
           />
-          {/* <Card
-            title={'Tests'}
-            number={tests}
-            onPress={() => {
-              props.navigation.navigate(ScreenNames.AdminTestScreen);
-            }}
-          /> */}
         </ScrollView>
       )}
     </View>

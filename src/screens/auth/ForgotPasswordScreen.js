@@ -11,11 +11,9 @@ import {
 import React, {useEffect, useState} from 'react';
 import {size} from '../../styles/size';
 import colors from '../../styles/colors';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import fonts from '../../styles/fonts';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
-import GlobalStyles from '../../styles/GlobalStyles';
 import {Images} from '../../assets/images';
 
 const ForgotPasswordScreen = props => {

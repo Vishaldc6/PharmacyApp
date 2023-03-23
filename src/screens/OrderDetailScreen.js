@@ -49,7 +49,9 @@ const OrderDetailScreen = props => {
       method: 'POST',
       body: body,
     });
-    const data = await res.json();
+    // const data = await res.json();
+    let responseText = await res.text();
+    let data = JSON.parse(responseText);
     console.log(data);
     if (data.flag) {
       Alert.alert(AppStrings.appName, data.message);
@@ -74,7 +76,9 @@ const OrderDetailScreen = props => {
       method: 'POST',
       body: body,
     });
-    const data = await res.json();
+    // const data = await res.json();
+    let responseText = await res.text();
+    let data = JSON.parse(responseText);
     console.log(data);
     if (data.flag) {
       Alert.alert(AppStrings.appName, data.message);
@@ -90,7 +94,7 @@ const OrderDetailScreen = props => {
         back
         {...props}
         title={'Order ID ' + order.order_number}
-        call={isDoctor}
+        call={order.order_acceptance_for_self.status == '1' && isDoctor}
         onCall={() => {
           console.log(order.shipping_mobile);
           Linking.openURL(`tel:+91${order.shipping_mobile}`);
@@ -184,7 +188,11 @@ const OrderDetailScreen = props => {
           </View> */}
           <CustomHeading
             header1={'Consultation Notes'}
-            header2={isDoctor && '+ Add Note'}
+            header2={
+              isDoctor &&
+              order.order_acceptance_for_self.status == '1' &&
+              '+ Add Note'
+            }
             isDoctor={true}
             onPress={() => {
               setisModal(true);
@@ -252,9 +260,14 @@ const OrderDetailScreen = props => {
         )} */}
 
         {isDoctor ? (
+          // order.order_acceptance_for_self == null ?
           <>
             <CustomButton
-              title={'Reject'}
+              title={
+                order.order_acceptance_for_self.status == '0'
+                  ? 'Rejected'
+                  : 'Reject'
+              }
               secondary={true}
               isDoctor={true}
               onPress={() => {
@@ -262,7 +275,11 @@ const OrderDetailScreen = props => {
               }}
             />
             <CustomButton
-              title={'Accept'}
+              title={
+                order.order_acceptance_for_self.status == '1'
+                  ? 'Accepted'
+                  : 'Accept'
+              }
               isDoctor={true}
               onPress={() => {
                 acceptRejectConsultation(order.id, '1');
@@ -270,6 +287,11 @@ const OrderDetailScreen = props => {
             />
           </>
         ) : (
+          // : order.order_acceptance_for_self.status == '1' ? (
+          //   <CustomButton title={'Accepted'} isDoctor={true} />
+          // ) : (
+          //   <CustomButton title={'Rejected'} secondary={true} isDoctor={true} />
+          // )
           <>
             <Text style={{...fonts.h1, margin: 5}}>
               Tax Amount : {order.tax_amount}

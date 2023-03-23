@@ -202,6 +202,7 @@ const AdminFormScreen = props => {
       props.navigation.goBack();
     }
   };
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={title} back {...props} />

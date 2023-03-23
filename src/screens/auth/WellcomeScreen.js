@@ -9,7 +9,6 @@ import React from 'react';
 import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {size} from '../../styles/size';
-import GlobalStyles from '../../styles/GlobalStyles';
 import {Images} from '../../assets/images';
 
 const WellcomeScreen = props => {

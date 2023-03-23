@@ -274,7 +274,9 @@ const SignUpScreen = props => {
                             body: body,
                           },
                         );
-                        const jsonRes = await res.json();
+                        // const jsonRes = await res.json();
+                        let responseText = await res.text();
+                        let jsonRes = JSON.parse(responseText);
                         console.log('Screen res :', jsonRes);
                         console.log(res);
                         // if (res.ok) {
