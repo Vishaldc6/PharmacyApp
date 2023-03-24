@@ -620,6 +620,20 @@ const ProfileScreen = props => {
             }}
           />
         </View>
+
+        {/* LAB_TESTS */}
+        <View>
+          <CustomButton
+            title={'my tests'}
+            onPress={() => {
+              AsyncStorage.getItem('LAB_TESTS').then(res => {
+                let data = JSON.parse(res);
+                console.log(data);
+              });
+            }}
+          />
+        </View>
+
         {/* <Text
           style={{...fonts.h1, alignSelf: 'center', padding: 10}}
           onPress={async () => {

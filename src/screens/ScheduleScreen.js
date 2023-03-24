@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
@@ -7,6 +7,11 @@ import CustomHeading from '../components/CustomHeading';
 import {schedule} from '../assets/data/schedule';
 import fonts from '../styles/fonts';
 import CustomButton from '../components/CustomButton';
+import {Images} from '../assets/images';
+import RazorpayCheckout from 'react-native-razorpay';
+import {AppStrings} from '../utils/AppStrings';
+import ScreenNames from '../navigation/screenNames/ScreenNames';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TimeCard = ({item, onPress, index, selectedIndex}) => {
   return (
@@ -82,8 +87,43 @@ const ScheduleScreen = props => {
             <Text style={fonts.h4}>Time. {time}</Text>
           </View>
           <CustomButton
-            title={'Go to Cart'}
+            title={'Book & Payment'}
             onPress={() => {
+              var options = {
+                description: 'Credits towards consultation',
+                image: Images.appLogo,
+                currency: 'INR',
+                // order_id: '',
+                key: 'rzp_test_A2KSQPyJSFzQl6', // Your api key
+                amount: `${test.price}00`,
+                name: 'MedCare',
+                // prefill: {
+                //   contact: bill_mob,
+                //   name: bill_name,
+                // },
+                theme: {color: colors.primary_color},
+              };
+              RazorpayCheckout.open(options).then(async data => {
+                // handle success
+                console.log(data);
+                Alert.alert(
+                  AppStrings.appName,
+                  `Payment Success ! Your payment ID is ${data.razorpay_payment_id}`,
+                );
+                let res = {
+                  ...props.route.params,
+                  time: time,
+                  payment_id: data.razorpay_payment_id,
+                };
+                console.log(res);
+
+                AsyncStorage.setItem('LAB_TESTS', JSON.stringify(res)).then(
+                  () => {
+                    props.navigation.replace(ScreenNames.Home);
+                  },
+                );
+                // setpayment_id(data.razorpay_payment_id);
+              });
               //   props.navigation.navigate(ScreenNames.LabListScreen, {
               //     test: selectedTests,
               //   });
