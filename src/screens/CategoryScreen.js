@@ -85,7 +85,8 @@ const CategoryScreen = props => {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
           {searchproducts.length !== 0 && srcTxt !== '' && (
-            <View style={{elevation: 2, backgroundColor: colors.white}}>
+            // <View style={{elevation: 2, backgroundColor: colors.white}}>
+            <View style={{...GlobalStyles.infoCard}}>
               <CustomHeading header1={'Searched Categories'} />
               <FlatList
                 // style={{backgroundColor: 'red'}}
@@ -106,7 +107,8 @@ const CategoryScreen = props => {
               />
             </View>
           )}
-          <View style={{elevation: 2, backgroundColor: colors.white}}>
+          {/* <View style={{elevation: 2, backgroundColor: colors.white}}> */}
+          <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Popular Categories'} />
             <FlatList
               // style={{backgroundColor: 'red'}}
@@ -138,13 +140,13 @@ const CategoryScreen = props => {
             </Swiper>
           </View>
           {/* horizontal product */}
-          <View
+          {/* <View
             style={{
               elevation: 2,
               backgroundColor: colors.white,
-
               marginVertical: 10,
-            }}>
+            }}> */}
+          <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Popular Products'} />
             <FlatList
               style={{marginVertical: 5}}
@@ -167,26 +169,29 @@ const CategoryScreen = props => {
             </View>
           </View>
           {/* vertical products */}
-          <FlatList
-            style={{
-              flex: 1,
-              backgroundColor: colors.white,
-              marginVertical: 10,
-              elevation: 2,
-            }}
-            ItemSeparatorComponent={() => (
-              <View
-                style={{
-                  borderWidth: 0.5,
-                  borderColor: colors.darkgray,
-                  margin: 10,
-                }}
-              />
-            )}
-            data={products}
-            renderItem={({item}) => <SecondaryProductCard item={item} />}
-          />
-          <Text>CategoryScreen</Text>
+          <View style={{...GlobalStyles.infoCard}}>
+            <CustomHeading header1={'Products'} />
+            <FlatList
+              style={{
+                flex: 1,
+                // backgroundColor: colors.white,
+                // marginVertical: 10,
+                // elevation: 2,
+              }}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    borderWidth: 0.5,
+                    borderColor: colors.darkgray,
+                    margin: 10,
+                  }}
+                />
+              )}
+              data={products}
+              renderItem={({item}) => <SecondaryProductCard item={item} />}
+            />
+          </View>
+          {/* <Text>CategoryScreen</Text> */}
         </ScrollView>
       )}
     </View>

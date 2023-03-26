@@ -144,10 +144,12 @@ const SignInScreen = props => {
                   value={email}
                   title={'Email'}
                   placeholder={'Enter Email'}
-                  keyboardType={'email-address'}
+                  // keyboardType={'email-address'}
+                  keyboardType={'default'}
                   iconName={'user-circle-o'}
+                  // passwordField={false}
                 />
-                <Text style={styles.errorText}>{emailError}</Text>
+                <Text style={GlobalStyles.errorText}>{emailError}</Text>
                 <CustomInput
                   passwordField={true}
                   value={password}
@@ -158,7 +160,7 @@ const SignInScreen = props => {
                   placeholder={'Enter Password'}
                   iconName={'key'}
                 />
-                <Text style={styles.errorText}>{passwordError}</Text>
+                <Text style={GlobalStyles.errorText}>{passwordError}</Text>
                 <View
                   style={{...GlobalStyles.rowContainer, marginHorizontal: 10}}>
                   <View style={GlobalStyles.rowContainer}>
@@ -172,15 +174,15 @@ const SignInScreen = props => {
                     <View style={{width: 10}} />
                     <Text style={fonts.h3}>As Doctor</Text>
                   </View>
-                  <Text
-                    onPress={() => {
-                      props.navigation.navigate(
-                        ScreenNames.ForgotPasswordScreen,
-                      );
-                    }}
-                    style={styles.linkText}>
-                    Forgot Password ?
-                  </Text>
+                  {/* <Text
+                      onPress={() => {
+                        props.navigation.navigate(
+                          ScreenNames.ForgotPasswordScreen,
+                        );
+                      }}
+                      style={styles.linkText}>
+                      Forgot Password ?
+                    </Text> */}
                 </View>
                 <View style={{height: 10}} />
                 <View style={{marginHorizontal: 10}}>
@@ -225,6 +227,8 @@ const SignInScreen = props => {
                         if (jsonRes.flag) {
                           Alert.alert(AppStrings.appName, jsonRes.message);
                           saveUser(jsonRes.data);
+                          setemailError('');
+                          setpasswordError('');
                           if (isCheck) {
                             props.navigation.replace(
                               ScreenNames.DoctorHomeScreen,
@@ -282,15 +286,15 @@ const SignInScreen = props => {
                 </View>
                 <View style={{height: 10}} />
                 {/* <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <Text>OR</Text>
-                  
-                </View>
-                <Icon
-                  name={'google'}
-                  size={25}
-                  onPress={signIn}
-                  style={{alignSelf: 'center'}}
-                /> */}
+                    <Text>OR</Text>
+                    
+                  </View>
+                  <Icon
+                    name={'google'}
+                    size={25}
+                    onPress={signIn}
+                    style={{alignSelf: 'center'}}
+                  /> */}
                 <Text style={{...fonts.h3, alignSelf: 'center'}}>
                   New User ?{' '}
                   <Text
@@ -314,6 +318,11 @@ const SignInScreen = props => {
 const styles = StyleSheet.create({
   bgImage: {
     flex: 1,
+    // position: 'absolute',
+    // top: 0,
+    // bottom: 300,
+    // left: 0,
+    // right: 0,
   },
   errorText: {
     color: colors.red,

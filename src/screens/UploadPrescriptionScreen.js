@@ -35,12 +35,12 @@ const UploadPrescriptionScreen = props => {
 
   return (
     <View style={GlobalStyles.mainContainer}>
-      <CustomHeader back {...props} />
+      <CustomHeader back {...props} title={'Upload Prescription'} />
       <Text style={fonts.h1}>{AppStrings.uploadPrescription}</Text>
       <Text style={fonts.h2}>{AppStrings.andLetUs}</Text>
 
       {/* Upload Image & Button */}
-      <View
+      {/* <View
         style={{
           backgroundColor: colors.white,
           // flex: 1,
@@ -49,6 +49,11 @@ const UploadPrescriptionScreen = props => {
           marginVertical: 10,
           elevation: 5,
           borderRadius: 10,
+        }}> */}
+      <View
+        style={{
+          ...GlobalStyles.infoCard,
+          alignItems: 'center',
         }}>
         {img ? (
           <Image

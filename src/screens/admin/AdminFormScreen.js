@@ -12,12 +12,13 @@ import {doctorTypeList} from '../../assets/data/doctorTypeList';
 import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import CheckBox from 'react-native-check-box';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 const AdminFormScreen = props => {
   const title = props.route.params.title;
   const ID = props.route.params.ID;
-  console.log('ID : ', ID);
-  console.log('params : ', props.route.params);
+  // console.log('ID : ', ID);
+  // console.log('params : ', props.route.params);
 
   useEffect(() => {
     if (ID) {
@@ -63,8 +64,8 @@ const AdminFormScreen = props => {
       settax_percentage(res.tax_percentage.toString());
       setthumb(res.thumbnail);
       setimg(res.images[0].image);
-      setis_required_doctor(res.is_required_doctor ? true : false);
-      setis_required_report(res.is_required_report ? true : false);
+      setis_required_doctor(res.is_required_doctor == '1' ? true : false);
+      setis_required_report(res.is_required_report == '1' ? true : false);
       setdoctor_type(res.doctor_type);
     } else if (title == 'Test') {
       setname(res.name);
@@ -97,10 +98,31 @@ const AdminFormScreen = props => {
   const [is_required_report, setis_required_report] = useState(false);
   const [is_required_doctor, setis_required_doctor] = useState(false);
 
+  const [nameError, setnameError] = useState('');
+  const [addressError, setaddressError] = useState('');
+  const [descError, setdescError] = useState('');
+  const [included_testError, setincluded_testError] = useState('');
+  const [benefitsError, setbenefitsError] = useState('');
+  const [brandError, setbrandError] = useState('');
+  const [category_idError, setcategory_idError] = useState('');
+  const [dieses_typesError, setdieses_typesError] = useState('');
+  const [expiry_dateError, setexpiry_dateError] = useState('');
+  const [informationError, setinformationError] = useState('');
+  const [ingredientsError, setingredientsError] = useState('');
+  const [priceError, setpriceError] = useState('');
+  const [quantityError, setquantityError] = useState('');
+  const [rateError, setrateError] = useState('');
+  const [side_effectsError, setside_effectsError] = useState('');
+  const [imgError, setimgError] = useState('');
+  const [thumbError, setthumbError] = useState('');
+  const [tax_percentageError, settax_percentageError] = useState('');
+  const [doctor_typeError, setdoctor_typeError] = useState('');
+
   //   const [imgName, setimgName] = useState('No image');
   //   const [imgPath, setimgPath] = useState('');
 
   const addTest = async () => {
+    console.log('first');
     let body = new FormData();
     body.append('Content-type', 'multipart/form-data');
     body.append('name', name);
@@ -163,18 +185,22 @@ const AdminFormScreen = props => {
   };
 
   const addProduct = async () => {
+    // console.log('inculude 192 : ', !thumb.includes('192.168'));
     let body = new FormData();
     body.append('Content-type', 'multipart/form-data');
+
     body.append('images[]', {
       uri: img.uri,
       name: img.fileName,
       type: img.type,
     });
+
     body.append('thumbnail', {
-      uri: img.uri,
-      name: img.fileName,
-      type: img.type,
+      uri: thumb.uri,
+      name: thumb.fileName,
+      type: thumb.type,
     });
+
     body.append('name', name);
     body.append('benefits', benefits);
     body.append('brand', brand);
@@ -217,7 +243,8 @@ const AdminFormScreen = props => {
           placeholder={`Enter ${title} name`}
           keyboardType={'email-address'}
         />
-        <View style={{height: 15}} />
+        <Text style={GlobalStyles.errorText}>{nameError}</Text>
+        {/* <View style={{height: 15}} /> */}
         {props.route.params.add && (
           <>
             <CustomInput
@@ -230,7 +257,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter Address'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{addressError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.desc && (
@@ -245,7 +273,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter Description'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{descError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.included_test && (
@@ -260,7 +289,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter Included Test'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{included_testError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.benefits && (
@@ -275,7 +305,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter Benefits'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{benefitsError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.brand && (
@@ -290,7 +321,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter Brand'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{brandError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.category_id && (
@@ -301,20 +333,23 @@ const AdminFormScreen = props => {
                 // backgroundColor: 'red',
                 // justifyContent: 'space-evenly',
               }}>
-              <CustomInput
-                isAdmin={true}
-                style={{flex: 1}}
-                onChangeText={val => {
-                  setcategory_id(val);
-                }}
-                value={category_id}
-                title={'Category id'}
-                placeholder={'Enter category id'}
-                keyboardType={'email-address'}
-              />
+              <View style={{flex: 1}}>
+                <CustomInput
+                  isAdmin={true}
+                  style={{flex: 1}}
+                  onChangeText={val => {
+                    setcategory_id(val);
+                  }}
+                  value={category_id}
+                  title={'Category id'}
+                  placeholder={'Enter category id'}
+                  keyboardType={'numeric'}
+                />
+                <Text style={GlobalStyles.errorText}>{category_idError}</Text>
+              </View>
               {/* <View style={{height: 15}} /> */}
               {props.route.params.expiry_date && (
-                <>
+                <View style={{flex: 1}}>
                   <CustomInput
                     isAdmin={true}
                     style={{flex: 1}}
@@ -323,14 +358,15 @@ const AdminFormScreen = props => {
                     }}
                     value={expiry_date}
                     title={'Expiry date'}
-                    placeholder={'Enter date (yyyy/mm/dd)'}
-                    keyboardType={'email-address'}
+                    placeholder={'Enter date (yyyy-mm-dd)'}
+                    keyboardType={'numeric'}
                   />
-                  <View style={{height: 15}} />
-                </>
+                  <Text style={GlobalStyles.errorText}>{expiry_dateError}</Text>
+                  {/* <View style={{height: 15}} /> */}
+                </View>
               )}
             </View>
-            <View style={{height: 15}} />
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
 
@@ -346,7 +382,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter dieses types'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{dieses_typesError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
 
@@ -362,7 +399,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter information'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{informationError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.ingredients && (
@@ -377,7 +415,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter ingredients'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{ingredientsError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.price && (
@@ -386,20 +425,23 @@ const AdminFormScreen = props => {
               style={{
                 flexDirection: 'row',
               }}>
-              <CustomInput
-                isAdmin={true}
-                style={{flex: 1}}
-                onChangeText={val => {
-                  setprice(val);
-                }}
-                value={price}
-                title={'Price'}
-                placeholder={'Enter price'}
-                keyboardType={'email-address'}
-              />
+              <View style={{flex: 1}}>
+                <CustomInput
+                  isAdmin={true}
+                  style={{flex: 1}}
+                  onChangeText={val => {
+                    setprice(val);
+                  }}
+                  value={price}
+                  title={'Price'}
+                  placeholder={'Enter price'}
+                  keyboardType={'numeric'}
+                />
+                <Text style={GlobalStyles.errorText}>{priceError}</Text>
+              </View>
               {/* <View style={{height: 15}} /> */}
               {props.route.params.quantity && (
-                <>
+                <View style={{flex: 1}}>
                   <CustomInput
                     isAdmin={true}
                     style={{flex: 1}}
@@ -409,13 +451,14 @@ const AdminFormScreen = props => {
                     value={quantity}
                     title={'Quantity'}
                     placeholder={'Enter quantity'}
-                    keyboardType={'email-address'}
+                    keyboardType={'numeric'}
                   />
+                  <Text style={GlobalStyles.errorText}>{quantityError}</Text>
                   {/* <View style={{height: 15}} /> */}
-                </>
+                </View>
               )}
               {props.route.params.rate && (
-                <>
+                <View style={{flex: 1}}>
                   <CustomInput
                     isAdmin={true}
                     style={{flex: 1}}
@@ -425,13 +468,14 @@ const AdminFormScreen = props => {
                     value={rate}
                     title={'Rate'}
                     placeholder={'Enter rate'}
-                    keyboardType={'email-address'}
+                    keyboardType={'numeric'}
                   />
-                  <View style={{height: 15}} />
-                </>
+                  <Text style={GlobalStyles.errorText}>{rateError}</Text>
+                  {/* <View style={{height: 15}} /> */}
+                </View>
               )}
             </View>
-            <View style={{height: 15}} />
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
 
@@ -446,9 +490,10 @@ const AdminFormScreen = props => {
               value={tax_percentage}
               title={'Tax percentage'}
               placeholder={'Enter tax_percentage'}
-              keyboardType={'email-address'}
+              keyboardType={'numeric'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{tax_percentageError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.side_effects && (
@@ -463,7 +508,8 @@ const AdminFormScreen = props => {
               placeholder={'Enter Side effects'}
               keyboardType={'email-address'}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{side_effectsError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         <View
@@ -502,7 +548,8 @@ const AdminFormScreen = props => {
             />
           )}
         </View>
-        {props.route.params.doctor_type && (
+
+        {is_required_doctor && props.route.params.doctor_type && (
           <>
             <Text style={{...fonts.h3, marginLeft: 10}}>Doctor Type</Text>
             <Dropdown
@@ -526,6 +573,7 @@ const AdminFormScreen = props => {
               maxHeight={300}
               labelField="label"
               valueField="value"
+              placeholder="Select Doctor Type"
               value={doctor}
               selectedTextStyle={fonts.h3}
               onChange={item => {
@@ -535,7 +583,8 @@ const AdminFormScreen = props => {
                 setdoctor_type(item.label);
               }}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{doctor_typeError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.thumbnail && (
@@ -552,7 +601,8 @@ const AdminFormScreen = props => {
                 setthumb(res);
               }}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{thumbError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
         {props.route.params.img && (
@@ -569,28 +619,102 @@ const AdminFormScreen = props => {
                 setimg(res);
               }}
             />
-            <View style={{height: 15}} />
+            <Text style={GlobalStyles.errorText}>{imgError}</Text>
+            {/* <View style={{height: 15}} /> */}
           </>
         )}
-        <View style={{flexDirection: 'row'}}>
-          <CustomButton
-            isAdmin={true}
-            title={ID ? 'Update' : 'Add'}
-            onPress={() => {
-              if (title == 'Category') {
+        <View style={{height: widthPercentageToDP(8)}} />
+      </ScrollView>
+      <View
+        style={{
+          flexDirection: 'row',
+          position: 'absolute',
+          bottom: 5,
+          alignItems: 'center',
+          justifyContent: 'center',
+          alignSelf: 'center',
+        }}>
+        <CustomButton
+          isAdmin={true}
+          title={ID ? 'Update' : 'Add'}
+          onPress={() => {
+            if (title == 'Category') {
+              if (name == '') {
+                setnameError('* Please enter Name');
+              } else if (img == '') {
+                setimgError('* Please choose Image');
+              } else {
                 addCategory();
-              } else if (title == 'Laboratory') {
+                setnameError('');
+                setimgError('');
+              }
+            } else if (title == 'Laboratory') {
+              if (name == '') {
+                setnameError('* Please enter Name');
+              } else if (address == '') {
+                setaddressError('* Please enter Address');
+              } else if (desc == '') {
+                setdescError('* Please enter Description');
+              } else if (included_test == '') {
+                setincluded_testError('* Please enter Included Test');
+              } else if (img == '') {
+                setimgError('* Please choose Image');
+              } else {
                 addLaboratory();
-              } else if (title == 'Product') {
+              }
+            } else if (title == 'Product') {
+              if (name == '') {
+                setnameError('* Please enter Name');
+              } else if (benefits == '') {
+                setbenefitsError('* Please enter Benefits');
+              } else if (brand == '') {
+                setbrandError('* Please enter Brand');
+              } else if (category_id == '') {
+                setcategory_idError('* Please enter Category ID');
+              } else if (expiry_date == '') {
+                setexpiry_dateError('* Please enter Expiry Date');
+              } else if (dieses_types == '') {
+                setdieses_typesError('* Please enter Dieses Type');
+              } else if (information == '') {
+                setinformationError('* Please enter Information');
+              } else if (ingredients == '') {
+                setingredientsError('* Please enter Ingredients');
+              } else if (price == '') {
+                setpriceError('* Please enter Price');
+              } else if (quantity == '') {
+                setquantityError('* Please enter Quantity');
+              } else if (rate == '') {
+                setrateError('* Please enter Rate');
+              } else if (tax_percentage == '') {
+                settax_percentageError('* Please enter Tax Percentage');
+              } else if (side_effects == '') {
+                setside_effectsError('* Please enter Side Effects');
+              } else if (thumb == '') {
+                setthumbError('* Please choose Thumbnail');
+              } else if (img == '') {
+                setimgError('* Please choose Image');
+              } else if (is_required_doctor) {
+                if (doctor == '' || doctor_type == '') {
+                  setdoctor_typeError('* Please choose Doctor Type');
+                } else {
+                  addProduct();
+                }
+              } else {
                 addProduct();
-                // console.log(doctor_type);
-              } else if (title == 'Test') {
+              }
+              // console.log(doctor_type);
+            } else if (title == 'Test') {
+              if (name == '') {
+                setnameError('* Please enter Name');
+              } else if (price == '') {
+                setpriceError('* Please enter Price');
+              } else {
                 addTest();
               }
-            }}
-          />
-        </View>
-      </ScrollView>
+            }
+          }}
+        />
+      </View>
     </View>
   );
 };

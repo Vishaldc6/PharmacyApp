@@ -4,6 +4,7 @@ import {size} from '../styles/size';
 import Colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 const CustomButton = props => {
   return (
     <TouchableWithoutFeedback {...props}>
@@ -21,8 +22,8 @@ const CustomButton = props => {
           // width: size.width / 1.06,
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: 15,
-          marginHorizontal: 10,
+          borderRadius: wp(4),
+          marginHorizontal: wp(2),
           borderWidth: props.secondary ? 1 : 0,
           borderColor:
             props.secondary && props.isAdmin
@@ -34,7 +35,7 @@ const CustomButton = props => {
         <Text
           style={{
             ...fonts.h5,
-            margin: 20,
+            margin: wp(5),
             color: props.secondary
               ? props.isDoctor
                 ? colors.primary_color_doc

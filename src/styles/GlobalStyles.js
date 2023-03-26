@@ -1,4 +1,6 @@
+import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import colors from './colors';
+import fonts from './fonts';
 import {size} from './size';
 
 export default GlobalStyles = {
@@ -21,5 +23,17 @@ export default GlobalStyles = {
     padding: 20,
     position: 'absolute',
     bottom: -size.height - size.height / 12,
+  },
+  infoCard: {
+    borderRadius: wp(3),
+    backgroundColor: colors.white,
+    padding: wp(3),
+    elevation: 5,
+    margin: wp(1),
+  },
+  errorText: {
+    ...fonts.h3,
+    color: colors.red,
+    marginLeft: wp(3),
   },
 };

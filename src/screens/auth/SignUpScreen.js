@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomButton from '../../components/CustomButton';
@@ -74,6 +75,11 @@ const SignUpScreen = props => {
               <View style={GlobalStyles.formContainer}>
                 <Text style={fonts.h1}>New Account</Text>
                 <View style={{height: 20}} />
+                {/* <ScrollView
+                  scrollEnabled={true}
+                  style={{flex: 1, backgroundColor: 'red', height: 200}}> */}
+                {/* <View style={{backgroundColor: 'red', height: 500}}> */}
+
                 <CustomInput
                   onChangeText={val => {
                     setusername(val);
@@ -84,7 +90,7 @@ const SignUpScreen = props => {
                   keyboardType={'email-address'}
                   iconName={'user-circle-o'}
                 />
-                <Text style={styles.errorText}>{usernameError}</Text>
+                <Text style={{...GlobalStyles.errorText}}>{usernameError}</Text>
                 <CustomInput
                   onChangeText={val => {
                     setemail(val);
@@ -95,7 +101,7 @@ const SignUpScreen = props => {
                   keyboardType={'email-address'}
                   iconName={'envelope-o'}
                 />
-                <Text style={styles.errorText}>{emailError}</Text>
+                <Text style={GlobalStyles.errorText}>{emailError}</Text>
                 <CustomInput
                   onChangeText={val => {
                     setmob(val);
@@ -106,7 +112,7 @@ const SignUpScreen = props => {
                   keyboardType={'phone-pad'}
                   iconName={'mobile-phone'}
                 />
-                <Text style={styles.errorText}>{mobError}</Text>
+                <Text style={GlobalStyles.errorText}>{mobError}</Text>
                 <CustomInput
                   passwordField={true}
                   onChangeText={val => {
@@ -117,7 +123,7 @@ const SignUpScreen = props => {
                   placeholder={'Enter Password'}
                   iconName={'key'}
                 />
-                <Text style={styles.errorText}>{passwordError}</Text>
+                <Text style={GlobalStyles.errorText}>{passwordError}</Text>
                 <CustomInput
                   passwordField={true}
                   onChangeText={val => {
@@ -128,7 +134,9 @@ const SignUpScreen = props => {
                   placeholder={'Enter Confirm Password'}
                   iconName={'key'}
                 />
-                <Text style={styles.errorText}>{confirmPasswordError}</Text>
+                <Text style={GlobalStyles.errorText}>
+                  {confirmPasswordError}
+                </Text>
                 {isCheck && (
                   <>
                     <CustomInput
@@ -141,7 +149,7 @@ const SignUpScreen = props => {
                       keyboardType={'email-address'}
                       iconName={'info'}
                     />
-                    <Text style={styles.errorText}>{educationError}</Text>
+                    <Text style={GlobalStyles.errorText}>{educationError}</Text>
                     <CustomInput
                       onChangeText={val => {
                         setexperiance(val);
@@ -152,7 +160,9 @@ const SignUpScreen = props => {
                       keyboardType={'email-address'}
                       iconName={'info'}
                     />
-                    <Text style={styles.errorText}>{experianceError}</Text>
+                    <Text style={GlobalStyles.errorText}>
+                      {experianceError}
+                    </Text>
                     {/* <CustomInput
                       onChangeText={val => {
                         setspecialist(val);
@@ -193,6 +203,7 @@ const SignUpScreen = props => {
                       maxHeight={300}
                       labelField="label"
                       valueField="value"
+                      placeholder="Select Doctor Type"
                       // value={doctor_type}
                       selectedTextStyle={fonts.h3}
                       onChange={item => {
@@ -202,11 +213,19 @@ const SignUpScreen = props => {
                         setspecialist(item.label);
                       }}
                     />
-                    <Text style={styles.errorText}>{specialistError}</Text>
+                    <Text style={GlobalStyles.errorText}>
+                      {specialistError}
+                    </Text>
                   </>
                 )}
+
+                {/* </View> */}
+                {/* </ScrollView> */}
                 <View
-                  style={{...GlobalStyles.rowContainer, marginHorizontal: 10}}>
+                  style={{
+                    ...GlobalStyles.rowContainer,
+                    marginHorizontal: 10,
+                  }}>
                   <View style={GlobalStyles.rowContainer}>
                     <CheckBox
                       isChecked={isCheck}
@@ -224,33 +243,21 @@ const SignUpScreen = props => {
                   <CustomButton
                     title={'Sign up'}
                     onPress={async () => {
-                      if (
-                        email == '' &&
-                        username == '' &&
-                        password == '' &&
-                        confirmPassword == '' &&
-                        mob == ''
-                      ) {
-                        // Alert.alert('Sign in',"All flieds are empty")
-                        setemailError('* Please enter Email');
+                      if (username == '') {
                         setusernameError('* Please enter Username');
+                      } else if (email == '') {
+                        setemailError('* Please enter Email');
+                      } else if (password == '') {
                         setpasswordError('* Please enter Password');
+                      } else if (confirmPassword == '') {
                         setconfirmPasswordError(
                           '* Please enter Confirm Password',
                         );
+                      } else if (mob == '') {
                         setmobError('* Please enter Mobile');
-                        if (isCheck) {
-                          if (
-                            education == '' &&
-                            specialist == '' &&
-                            experiance == ''
-                          ) {
-                            setexperianceError('* Please enter Experiance');
-                            setspecialistError('* Please enter Specialist');
-                            seteducationError('* Please enter Education');
-                          }
-                        }
-                      } else {
+                      }
+                      // Alert.alert('Sign in',"All flieds are empty")
+                      else {
                         const body = new FormData();
                         body.append('name', username);
                         body.append('email', email);
@@ -258,9 +265,17 @@ const SignUpScreen = props => {
                         body.append('password', password);
                         body.append('password_confirmation', confirmPassword);
                         if (isCheck) {
-                          body.append('specialist', specialist);
-                          body.append('education', education);
-                          body.append('experience', experiance);
+                          if (education == '') {
+                            seteducationError('* Please enter Education');
+                          } else if (specialist == '') {
+                            setspecialistError('* Please enter Specialist');
+                          } else if (experiance == '') {
+                            setexperianceError('* Please enter Experiance');
+                          } else {
+                            body.append('specialist', specialist);
+                            body.append('education', education);
+                            body.append('experience', experiance);
+                          }
                         }
                         const res = await fetch(
                           isCheck
@@ -282,6 +297,14 @@ const SignUpScreen = props => {
                         // if (res.ok) {
                         if (jsonRes.flag) {
                           Alert.alert(AppStrings.appName, jsonRes.message);
+                          setemailError('');
+                          setmobError('');
+                          seteducationError('');
+                          setpasswordError('');
+                          setusernameError('');
+                          setexperianceError('');
+                          setspecialistError('');
+                          setconfirmPasswordError('');
                           props.navigation.navigate(ScreenNames.SignInScreen);
                         } else if (jsonRes.flag == false) {
                           if (jsonRes.data?.errors != null) {
@@ -354,8 +377,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   errorText: {
+    ...fonts.h3,
     color: colors.red,
     marginLeft: 55,
+    // fontSize: 10,
   },
   linkText: {
     ...fonts.h3,

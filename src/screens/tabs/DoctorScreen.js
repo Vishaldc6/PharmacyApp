@@ -127,29 +127,32 @@ const DoctorScreen = props => {
             </Swiper>
           </View>
           {/* Consult Doctor */}
-          <Text style={fonts.h1}>{AppStrings.onlineDoctor}</Text>
-          <View
-            style={{
-              ...GlobalStyles.rowContainer,
-              // backgroundColor: 'black',
-              alignItems: 'baseline',
-              marginVertical: 10,
-            }}>
-            <SmallInfoCard title={AppStrings.talk} />
-            <SmallInfoCard title={AppStrings.freeFollowUp} />
-            <SmallInfoCard title={AppStrings.getPrescription} />
+          <View style={GlobalStyles.infoCard}>
+            <Text style={fonts.h1}>{AppStrings.onlineDoctor}</Text>
+            <View
+              style={{
+                ...GlobalStyles.rowContainer,
+                // backgroundColor: 'black',
+                alignItems: 'baseline',
+                marginVertical: 10,
+              }}>
+              <SmallInfoCard title={AppStrings.talk} />
+              <SmallInfoCard title={AppStrings.freeFollowUp} />
+              <SmallInfoCard title={AppStrings.getPrescription} />
+            </View>
+            <CustomButton
+              title={AppStrings.consultNow}
+              onPress={() => {
+                props.navigation.navigate(ScreenNames.ConsultScreen);
+              }}
+            />
           </View>
-          <CustomButton
-            title={AppStrings.consultNow}
-            onPress={() => {
-              props.navigation.navigate(ScreenNames.ConsultScreen);
-            }}
-          />
-
-          <Text style={{alignSelf: 'center', marginVertical: 10}}>OR</Text>
+          <Text style={{...fonts.h1, alignSelf: 'center', marginVertical: 10}}>
+            OR
+          </Text>
 
           {/* Symptoms cards */}
-          <View>
+          <View style={{...GlobalStyles.infoCard}}>
             <Text style={fonts.h1}>{AppStrings.consultDoctor1Click}</Text>
             <Text style={fonts.h2}>{AppStrings.selectSymptom}</Text>
             {/* <FlatList
@@ -196,19 +199,21 @@ const DoctorScreen = props => {
           {/* Care Plan Banner */}
           <SimpleBanner />
           {/* Horizontal Doctor List */}
-          <CustomHeading header1={AppStrings.meetDoctor} />
-          <View
-            style={{
-              paddingBottom: 20,
-              // backgroundColor: 'red',
-              // marginBottom: 100,
-            }}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {doctors.map(item => {
-                console.log(item);
-                return <DoctorCard item={item} />;
-              })}
-            </ScrollView>
+          <View style={GlobalStyles.infoCard}>
+            <CustomHeading header1={AppStrings.meetDoctor} />
+            <View
+              style={{
+                paddingBottom: 20,
+                // backgroundColor: 'red',
+                // marginBottom: 100,
+              }}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {doctors.map(item => {
+                  console.log(item);
+                  return <DoctorCard item={item} />;
+                })}
+              </ScrollView>
+            </View>
           </View>
         </ScrollView>
       )}

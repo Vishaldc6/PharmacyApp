@@ -134,9 +134,17 @@ const ProductDetailScreen = props => {
             </Swiper>
           </View>
           {/* Title */}
-          <View
+          {/* <View
             style={{
               ...styles.container,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}> */}
+          <View
+            style={{
+              // ...styles.container,
+              ...GlobalStyles.infoCard,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -189,7 +197,8 @@ const ProductDetailScreen = props => {
             </View>
           </View>
           {/* Price Add to cart */}
-          <View style={styles.container}>
+          {/* <View style={styles.container}> */}
+          <View style={{...GlobalStyles.infoCard}}>
             <PriceCard
               price={product.price}
               addToCart={async () => {
@@ -226,7 +235,8 @@ const ProductDetailScreen = props => {
             />
           </View>
           {/* Delivery */}
-          <View style={styles.container}>
+          {/* <View style={styles.container}> */}
+          <View style={GlobalStyles.infoCard}>
             <Text style={fonts.h1}>
               {AppStrings.earlyDelivery}
               {currentDate.toDateString().replace(date, dateafter5Day)}
@@ -251,7 +261,8 @@ const ProductDetailScreen = props => {
           <SimpleBanner />
 
           {/* Information */}
-          <View style={styles.container}>
+          {/* <View style={styles.container}> */}
+          <View style={GlobalStyles.infoCard}>
             <Text style={fonts.h1}>{AppStrings.productInfo}</Text>
             <Text>{product.information}</Text>
             <Text style={{...fonts.h6, marginTop: 10}}>
@@ -264,7 +275,8 @@ const ProductDetailScreen = props => {
             <Text>• {product.benefits}</Text>
           </View>
           {/* Expire */}
-          <View style={styles.container}>
+          {/* <View style={styles.container}> */}
+          <View style={GlobalStyles.infoCard}>
             <Text>
               {AppStrings.expire}
               <Text style={fonts.h6}>{product.expiry_date}</Text>
@@ -272,7 +284,8 @@ const ProductDetailScreen = props => {
           </View>
 
           {/* Extra Information */}
-          <View style={{...styles.container, flexDirection: 'row'}}>
+          {/* <View style={{...styles.container, flexDirection: 'row'}}> */}
+          <View style={{...GlobalStyles.infoCard, flexDirection: 'row'}}>
             <SmallInfoCard title={'100% genuine product'} />
             <SmallInfoCard title={'Safe & secure payments'} />
             <SmallInfoCard title={'Contactless delivery'} />
@@ -280,7 +293,8 @@ const ProductDetailScreen = props => {
           </View>
 
           {/* review */}
-          <View style={styles.container}>
+          {/* <View style={styles.container}> */}
+          <View style={GlobalStyles.infoCard}>
             <CustomHeading header1={'Product Reviews'} />
             {product.reviews.map(item => (
               <View
@@ -367,7 +381,8 @@ const ProductDetailScreen = props => {
           <SimpleBanner />
 
           {/* Horizontal products */}
-          <View style={styles.container}>
+          {/* <View style={styles.container}> */}
+          <View style={GlobalStyles.infoCard}>
             <CustomHeading header1={'Popular Products'} />
             <FlatList
               style={{marginVertical: 5}}

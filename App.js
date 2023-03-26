@@ -37,6 +37,8 @@ import CartScreen from './src/screens/CartScreen';
 import TestPaymentScreen from './src/screens/payment/TestPaymentScreen';
 import CheckoutScreen from './src/screens/CheckoutScreen';
 import OrderDetailScreen from './src/screens/OrderDetailScreen';
+import EditProfileScreen from './src/screens/EditProfileScreen';
+import LabTestBookScreen from './src/screens/LabTestBookScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -122,6 +124,10 @@ const App = () => {
             component={ProfileScreen}
           />
           <Stack.Screen
+            name={ScreenNames.EditProfileScreen}
+            component={EditProfileScreen}
+          />
+          <Stack.Screen
             name={ScreenNames.UploadPrescriptionScreen}
             component={UploadPrescriptionScreen}
           />
@@ -146,6 +152,10 @@ const App = () => {
             component={ScheduleScreen}
           />
           <Stack.Screen name={ScreenNames.LabScreen} component={LabScreen} />
+          <Stack.Screen
+            name={ScreenNames.LabTestBookScreen}
+            component={LabTestBookScreen}
+          />
           <Stack.Screen
             name={ScreenNames.AdminHomeScreen}
             component={AdminHomeScreen}

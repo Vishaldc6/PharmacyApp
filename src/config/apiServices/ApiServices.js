@@ -73,7 +73,7 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
 
       const errors = Object.values(response.data);
       console.log(errors);
-      Alert.alert(AppStrings.appName, errors[0]);
+      Alert.alert(AppStrings.appName, errors[0][0]);
     }
 
     return response;

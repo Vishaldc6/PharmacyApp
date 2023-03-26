@@ -82,7 +82,8 @@ const LabListScreen = props => {
         </View>
       ) : (
         <ScrollView
-          style={{marginVertical: 10}}
+          showsVerticalScrollIndicator={false}
+          // style={{marginVertical: 10}}
           refreshControl={
             <RefreshControl
               refreshing={isRefresh}
@@ -91,23 +92,25 @@ const LabListScreen = props => {
               }}
             />
           }>
-          <CustomHeading header1={'Labs'} />
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            // horizontal={true}
-            data={labs}
-            renderItem={({item, index}) => (
-              <SelectLabCard
-                item={item}
-                index={index}
-                selectedIndex={selectedIndex}
-                onPress={() => {
-                  setselectedIndex(index);
-                  setselectedLab(item);
-                }}
-              />
-            )}
-          />
+          <View style={GlobalStyles.infoCard}>
+            <CustomHeading header1={'Labs'} />
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              // horizontal={true}
+              data={labs}
+              renderItem={({item, index}) => (
+                <SelectLabCard
+                  item={item}
+                  index={index}
+                  selectedIndex={selectedIndex}
+                  onPress={() => {
+                    setselectedIndex(index);
+                    setselectedLab(item);
+                  }}
+                />
+              )}
+            />
+          </View>
         </ScrollView>
       )}
       {test && (

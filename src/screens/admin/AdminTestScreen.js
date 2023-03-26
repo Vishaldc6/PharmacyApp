@@ -57,47 +57,49 @@ const AdminTestScreen = props => {
           <Text>No tests found</Text>
         </View>
       ) : (
-        <FlatList
-          refreshControl={
-            <RefreshControl
-              tintColor={colors.primary_color_admin}
-              refreshing={isRefresh}
-              onRefresh={() => {
-                getData();
-              }}
-            />
-          }
-          showsVerticalScrollIndicator={false}
+        <View
           style={{
             flex: 1,
-            backgroundColor: colors.white,
-            marginVertical: 10,
-            elevation: 2,
-          }}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                borderWidth: 0.5,
-                borderColor: colors.darkgray,
-                margin: 10,
-              }}
-            />
-          )}
-          data={tests}
-          renderItem={({item}) => (
-            <View style={{margin: 5}}>
+            // backgroundColor: colors.white,
+            // marginVertical: 10,
+            // elevation: 2,
+            ...GlobalStyles.infoCard,
+          }}>
+          <FlatList
+            refreshControl={
+              <RefreshControl
+                tintColor={colors.primary_color_admin}
+                refreshing={isRefresh}
+                onRefresh={() => {
+                  getData();
+                }}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => (
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  margin: 5,
-                }}>
-                <View>
-                  <Text style={fonts.h2}>{item.name}</Text>
-                  <Text style={fonts.h3}>Rs. {item.price}</Text>
-                </View>
-                {/* <View style={GlobalStyles.rowContainer}>
+                  borderWidth: 0.5,
+                  borderColor: colors.darkgray,
+                  margin: 10,
+                }}
+              />
+            )}
+            data={tests}
+            renderItem={({item}) => (
+              <View style={{margin: 5}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    margin: 5,
+                  }}>
+                  <View>
+                    <Text style={fonts.h2}>{item.name}</Text>
+                    <Text style={fonts.h3}>Rs. {item.price}</Text>
+                  </View>
+                  {/* <View style={GlobalStyles.rowContainer}>
               <Icon
               name="pencil"
               color={colors.primary_color}
@@ -116,23 +118,24 @@ const AdminTestScreen = props => {
               }}
               />
             </View> */}
+                </View>
+                <AdminButtons
+                  item={item}
+                  deletePress={() => {
+                    deleteTest(item.id);
+                  }}
+                  editPress={() => {
+                    props.navigation.navigate(ScreenNames.AdminFormScreen, {
+                      title: 'Test',
+                      price: true,
+                      ID: item.id,
+                    });
+                  }}
+                />
               </View>
-              <AdminButtons
-                item={item}
-                deletePress={() => {
-                  deleteTest(item.id);
-                }}
-                editPress={() => {
-                  props.navigation.navigate(ScreenNames.AdminFormScreen, {
-                    title: 'Test',
-                    price: true,
-                    ID: item.id,
-                  });
-                }}
-              />
-            </View>
-          )}
-        />
+            )}
+          />
+        </View>
       )}
       <FloatingButton
         icon={'plus'}

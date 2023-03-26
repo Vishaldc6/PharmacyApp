@@ -4,7 +4,6 @@ import {
   Image,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   Alert,
   RefreshControl,
@@ -14,11 +13,12 @@ import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../../styles/GlobalStyles';
 import fonts from '../../styles/fonts';
 import {Images} from '../../assets/images';
-import {size} from '../../styles/size';
 import colors from '../../styles/colors';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {AppStrings} from '../../utils/AppStrings';
-import {getToken} from '../../config/apiServices/ApiServices';
+import {getToken, getUserData} from '../../config/apiServices/ApiServices';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
+import moment from 'moment';
 
 // const PatientCard = ({name, age, gender, date, onPress}) => (
 //   <TouchableOpacity onPress={onPress}>
@@ -68,8 +68,15 @@ import {getToken} from '../../config/apiServices/ApiServices';
 
 const ConsultationCard = ({item, onPress}) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.card}>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View
+        style={{
+          ...GlobalStyles.infoCard,
+          backgroundColor: colors.primary_color_doc,
+        }}>
+        <Text style={{...fonts.h2, color: colors.white, alignSelf: 'flex-end'}}>
+          {moment(item.created_at).utc().format('hh:mm A')}
+        </Text>
         <Text style={{...fonts.h1, color: colors.white}}>
           Order ID {item.order_number}
         </Text>
@@ -90,7 +97,7 @@ const ConsultationCard = ({item, onPress}) => {
             : 'Rejected'}
         </Text>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -98,7 +105,8 @@ const DoctorHomeScreen = props => {
   const [consultationList, setConsultationList] = useState([]);
   // const [isModal, setisModal] = useState(false);
   const [isRefresh, setisRefresh] = useState(false);
-  // const [loading, setloading] = useState(true);
+  const [loading, setloading] = useState(true);
+  const [user, setuser] = useState({});
   // const [ID, setID] = useState('');
   // const [note, setnote] = useState('');
 
@@ -110,6 +118,9 @@ const DoctorHomeScreen = props => {
   }, []);
 
   const getData = async () => {
+    const usr = await getUserData();
+    setuser(usr);
+
     const token = await getToken();
 
     const res = await fetch(AppStrings.BASE_URL + '/patientConsultationList', {
@@ -139,22 +150,22 @@ const DoctorHomeScreen = props => {
       {/* Doctor Header */}
       <TouchableWithoutFeedback
         onPress={() => {
-          props.navigation.navigate(ScreenNames.ProfileScreen, {
+          props.navigation.navigate(ScreenNames.EditProfileScreen, {
             isAdmin: true,
           });
         }}>
         <View style={styles.header}>
           <Image
-            source={Images.noImage}
+            source={user.image ? {uri: user.image_url} : Images.noImage}
             style={{
-              height: size.height / 8,
-              width: size.height / 8,
+              height: widthPercentageToDP(25),
+              width: widthPercentageToDP(25),
               borderRadius: 50,
             }}
           />
           <View style={{marginHorizontal: 10}}>
             <Text style={{...fonts.h1, color: colors.white}}>
-              Hello, Doctor
+              Hello, Dr. {user.name}
             </Text>
             {/* <Text style={fonts.h3}>MBBS</Text> */}
           </View>
@@ -167,54 +178,56 @@ const DoctorHomeScreen = props => {
         </View>
       ) : (
         <View style={{...GlobalStyles.mainContainer, marginVertical: 10}}>
-          <Text style={{...fonts.h1, margin: 5}}>Consultation List</Text>
-          <FlatList
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefresh}
-                onRefresh={() => {
-                  getData();
-                }}
-              />
-            }
-            data={consultationList}
-            renderItem={({item}) => (
-              <ConsultationCard
-                item={item}
-                onPress={async () => {
-                  // console.log(item.shipping_mobile);
-                  // Linking.openURL(`tel:+91${item.shipping_mobile}`);
-                  props.navigation.navigate(ScreenNames.OrderDetailScreen, {
-                    data: item,
-                    isDoctor: true,
-                  });
-                }}
-                // accept={() => acceptRejectConsultation(item.id, '1')}
-                // reject={() => acceptRejectConsultation(item.id, '0')}
-                // addNote={
-                //   () => {
-                //     setisModal(true);
-                //     setID(item.id);
+          <View style={GlobalStyles.infoCard}>
+            <Text style={{...fonts.h1, margin: 5}}>Consultation List</Text>
+            <FlatList
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefresh}
+                  onRefresh={() => {
+                    getData();
+                  }}
+                />
+              }
+              data={consultationList}
+              renderItem={({item}) => (
+                <ConsultationCard
+                  item={item}
+                  onPress={async () => {
+                    // console.log(item.shipping_mobile);
+                    // Linking.openURL(`tel:+91${item.shipping_mobile}`);
+                    props.navigation.navigate(ScreenNames.OrderDetailScreen, {
+                      data: item,
+                      isDoctor: true,
+                    });
+                  }}
+                  // accept={() => acceptRejectConsultation(item.id, '1')}
+                  // reject={() => acceptRejectConsultation(item.id, '0')}
+                  // addNote={
+                  //   () => {
+                  //     setisModal(true);
+                  //     setID(item.id);
+                  //   }
+                  //   // addConsultationNote(
+                  //   //   item.id,
+                  //   //   'Ea non pariatur sunt quis in elit nostrud occaecat.',
+                  //   // )
+                  // }
+                />
+                // <PatientCard
+                //   name={item.name}
+                //   age={item.age}
+                //   gender={item.gender}
+                //   date={item.date}
+                //   onPress={() =>
+                //     props.navigation.navigate(ScreenNames.PatientDetailScreen, {
+                //       patient: item,
+                //     })
                 //   }
-                //   // addConsultationNote(
-                //   //   item.id,
-                //   //   'Ea non pariatur sunt quis in elit nostrud occaecat.',
-                //   // )
-                // }
-              />
-              // <PatientCard
-              //   name={item.name}
-              //   age={item.age}
-              //   gender={item.gender}
-              //   date={item.date}
-              //   onPress={() =>
-              //     props.navigation.navigate(ScreenNames.PatientDetailScreen, {
-              //       patient: item,
-              //     })
-              //   }
-              // />
-            )}
-          />
+                // />
+              )}
+            />
+          </View>
           {/* </View> */}
 
           {/* <ScrollView>
@@ -281,14 +294,15 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 2,
+    // borderWidth: 2,
     // borderTopWidth: 0,
     borderTopLeftRadius: 50,
     borderBottomLeftRadius: 50,
     marginVertical: 5,
     marginLeft: 10,
-    borderColor: colors.lightgrey,
+    // borderColor: colors.lightgrey,
     backgroundColor: colors.primary_color_doc,
+    elevation: 5,
   },
   card: {
     margin: 5,

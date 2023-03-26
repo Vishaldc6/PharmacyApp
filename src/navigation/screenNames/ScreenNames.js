@@ -34,6 +34,8 @@ export default ScreenName = {
   ScheduleScreen: 'ScheduleScreen',
   CheckoutScreen: 'CheckoutScreen',
   OrderDetailScreen: 'OrderDetailScreen',
+  EditProfileScreen: 'EditProfileScreen',
+  LabTestBookScreen: 'LabTestBookScreen',
   // doctor
   DoctorHomeScreen: 'DoctorHomeScreen',
   PatientDetailScreen: 'PatientDetailScreen',

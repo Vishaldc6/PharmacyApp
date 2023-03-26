@@ -24,6 +24,8 @@ const CartScreen = props => {
   const [cartList, setcartList] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
+  const [is_doctor_required, setis_doctor_required] = useState(false);
+  const [is_report_required, setis_report_required] = useState(false);
   const [amt, setamt] = useState(0);
 
   // let amt = 0;
@@ -52,6 +54,15 @@ const CartScreen = props => {
       // Alert.alert(AppStrings.appName, jsonRes.message);
       console.log('jsonRes.data.cart_items : ', jsonRes.data.cart_items);
       setcartList(jsonRes.data.cart_items);
+      jsonRes.data.cart_items.forEach(item => {
+        console.log(item.product_detail.is_required_doctor);
+        if (item.product_detail.is_required_doctor) {
+          setis_doctor_required(true);
+        }
+        if (item.product_detail.is_required_report) {
+          setis_report_required(true);
+        }
+      });
 
       let amount = 0;
       jsonRes.data.cart_items.map(item => {
@@ -88,54 +99,58 @@ const CartScreen = props => {
         <>
           <CustomHeading header1="Amount : " header2={amt.toFixed(2)} />
           {/* <Text style={fonts.h1}>Amount : {amt}</Text> */}
-          <FlatList
-            // style={{flex: 1, backgroundColor: 'red'}}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefresh}
-                onRefresh={() => {
-                  getCartList();
-                }}
-              />
-            }
-            data={cartList}
-            renderItem={({item}) => {
-              return (
-                <View style={styles.productCard}>
-                  <Image
-                    source={{
-                      uri:
-                        'http://192.168.29.125:8000/products/thumbnail/' +
-                        item.product_detail.thumbnail,
-                    }}
-                    style={{height: 120, width: 120}}
-                  />
-                  <View style={{width: 20}} />
-                  <View style={{flex: 1}}>
-                    <Text style={fonts.h4}>{item.product_detail.name}</Text>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <Text style={{...fonts.h3, color: colors.darkgray}}>
-                        {item.product_detail.rate} rate
+          <View style={GlobalStyles.infoCard}>
+            <FlatList
+              // style={{flex: 1, backgroundColor: 'red'}}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefresh}
+                  onRefresh={() => {
+                    getCartList();
+                  }}
+                />
+              }
+              data={cartList}
+              renderItem={({item}) => {
+                return (
+                  <View style={styles.productCard}>
+                    <Image
+                      source={{
+                        uri:
+                          // 'http://192.168.29.125:8000/products/thumbnail/' +
+                          'http://192.168.43.119:8000/products/thumbnail/' +
+                          item.product_detail.thumbnail,
+                      }}
+                      style={{height: 120, width: 120}}
+                    />
+                    <View style={{width: 20}} />
+                    <View style={{flex: 1}}>
+                      <Text style={fonts.h4}>{item.product_detail.name}</Text>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={{...fonts.h3, color: colors.darkgray}}>
+                          {item.product_detail.rate} rate
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginVertical: 5,
+                        }}>
+                        <Text style={fonts.h6}>
+                          Rs.{item.product_detail.price}{' '}
+                        </Text>
+                      </View>
+                      <Text style={{...fonts.h6, color: colors.darkgray}}>
+                        {item.qty} items
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginVertical: 5,
-                      }}>
-                      <Text style={fonts.h6}>
-                        Rs.{item.product_detail.price}{' '}
-                      </Text>
-                    </View>
-                    <Text style={{...fonts.h6, color: colors.darkgray}}>
-                      {item.qty} items
-                    </Text>
                   </View>
-                </View>
-              );
-            }}
-          />
+                );
+              }}
+            />
+          </View>
         </>
       )}
       {cartList.length == 0 ? null : (
@@ -154,6 +169,8 @@ const CartScreen = props => {
             onPress={() => {
               props.navigation.navigate(ScreenNames.CheckoutScreen, {
                 amount: amt,
+                is_doctor_required: is_doctor_required,
+                is_report_required: is_report_required,
               });
             }}
           />
@@ -167,13 +184,13 @@ const styles = StyleSheet.create({
   productCard: {
     flex: 1,
     width: size.width / 1.1,
-    // backgroundColor: colors.white,
+    // backgroundColor: colors.black,
     margin: 5,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignContent: 'center',
     alignSelf: 'center',
-    borderWidth: 1,
+    // borderWidth: 1,
     borderRadius: 10,
     padding: 10,
     borderColor: colors.darkgray,

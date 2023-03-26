@@ -10,12 +10,21 @@ import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {size} from '../../styles/size';
 import {Images} from '../../assets/images';
+import GlobalStyles from '../../styles/GlobalStyles';
 
 const WellcomeScreen = props => {
   return (
     <View style={{flex: 1}}>
       <ImageBackground source={Images.backgroundImage} style={styles.bgImage}>
-        <View style={{position: 'absolute', bottom: 50, width: size.width}}>
+        <View
+          style={{
+            // ...GlobalStyles.formContainer,
+            position: 'absolute',
+            bottom: 50,
+            width: size.width,
+            justifyContent: 'center',
+          }}>
+          {/* <View style={{height: 100}} /> */}
           <CustomButton
             title={'Sign in'}
             onPress={() => {
@@ -30,6 +39,7 @@ const WellcomeScreen = props => {
               props.navigation.navigate(ScreenNames.SignUpScreen);
             }}
           />
+          {/* <View style={{height: 100}} /> */}
         </View>
       </ImageBackground>
     </View>
@@ -44,6 +54,12 @@ const styles = StyleSheet.create({
   },
   bgImage: {
     flex: 1,
+    // position: 'absolute',
+    // top: 0,
+    // bottom: 300,
+    // left: 0,
+    // right: 0,
+    // bottom: 500,
     // opacity: 0.5,
   },
 });

@@ -160,7 +160,14 @@ const LabScreen = props => {
           {/* Simple Banner */}
           <SimpleBanner />
           {/* Book Lab with Prescription */}
-          <View style={styles.prescriptionContainer}>
+          {/* <View style={styles.prescriptionContainer}> */}
+          <View
+            style={{
+              ...GlobalStyles.infoCard,
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            }}>
             <Image
               source={Images.noImage}
               style={{
@@ -185,7 +192,7 @@ const LabScreen = props => {
                 <View style={styles.btn}>
                   <Text
                     style={{
-                      ...fonts.h6,
+                      ...fonts.h3,
                       margin: 10,
                       color: colors.primary_color,
                     }}>
@@ -207,14 +214,14 @@ const LabScreen = props => {
             </View>
           </View>
           {/* Popular Tests */}
-          <View style={{marginVertical: 10}}>
+          <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Popular Tests'} />
             <FlatList
               style={{
-                backgroundColor: colors.white,
+                // backgroundColor: colors.white,
                 padding: 10,
-                borderColor: colors.darkgray,
-                borderWidth: 0.5,
+                // borderColor: colors.darkgray,
+                // borderWidth: 0.5,
               }}
               ItemSeparatorComponent={() => (
                 <View
@@ -240,7 +247,7 @@ const LabScreen = props => {
             />
           </View>
           {/* Health Checkup Categories */}
-          <View style={{marginVertical: 10}}>
+          <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Health Checkup Categories'} />
             <FlatList
               showsHorizontalScrollIndicator={false}
@@ -250,7 +257,7 @@ const LabScreen = props => {
             />
           </View>
           {/* Horizontal Labs */}
-          <View style={{marginVertical: 10}}>
+          <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Popular Labs'} />
             <FlatList
               showsHorizontalScrollIndicator={false}
@@ -261,7 +268,8 @@ const LabScreen = props => {
           </View>
 
           {/* Information */}
-          <View style={{padding: 20, backgroundColor: colors.white}}>
+          {/* <View style={{padding: 20, backgroundColor: colors.white}}> */}
+          <View style={{...GlobalStyles.infoCard}}>
             <Text style={fonts.h1}>{AppStrings.howDoesHome}</Text>
             <InformationCard
               image={Images.noImage}

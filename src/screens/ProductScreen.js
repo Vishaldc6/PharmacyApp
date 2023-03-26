@@ -126,7 +126,8 @@ const ProductScreen = props => {
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
           {searchproducts.length !== 0 && srcTxt !== '' && (
-            <View style={{elevation: 2, backgroundColor: colors.white}}>
+            // <View style={{elevation: 2, backgroundColor: colors.white}}>
+            <View style={GlobalStyles.infoCard}>
               <CustomHeading header1={'Searched Products'} />
               <FlatList
                 style={{marginVertical: 5}}
@@ -156,7 +157,8 @@ const ProductScreen = props => {
           {/* simple banner */}
           <SimpleBanner />
           {/* horizontal products */}
-          <View style={{elevation: 2, backgroundColor: colors.white}}>
+          {/* <View style={{elevation: 2, backgroundColor: colors.white}}> */}
+          <View style={GlobalStyles.infoCard}>
             <CustomHeading header1={'Popular Products'} />
             <FlatList
               style={{marginVertical: 5}}
@@ -184,35 +186,38 @@ const ProductScreen = props => {
           </View>
 
           {/* vertical products */}
-          <FlatList
-            style={{
-              flex: 1,
-              backgroundColor: colors.white,
-              marginVertical: 10,
-              elevation: 2,
-            }}
-            ItemSeparatorComponent={() => (
-              <View
-                style={{
-                  borderWidth: 0.5,
-                  borderColor: colors.darkgray,
-                  margin: 10,
-                }}
-              />
-            )}
-            data={products}
-            renderItem={({item}) => (
-              <SecondaryProductCard
-                item={item}
-                onPress={() => {
-                  props.navigation.navigate(ScreenNames.ProductDetailScreen, {
-                    id: item.id,
-                    products: products,
-                  });
-                }}
-              />
-            )}
-          />
+          <View style={GlobalStyles.infoCard}>
+            <CustomHeading header1={'Products'} />
+            <FlatList
+              style={{
+                flex: 1,
+                // backgroundColor: colors.white,
+                // marginVertical: 10,
+                // elevation: 2,
+              }}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    borderWidth: 0.5,
+                    borderColor: colors.darkgray,
+                    margin: 10,
+                  }}
+                />
+              )}
+              data={products}
+              renderItem={({item}) => (
+                <SecondaryProductCard
+                  item={item}
+                  onPress={() => {
+                    props.navigation.navigate(ScreenNames.ProductDetailScreen, {
+                      id: item.id,
+                      products: products,
+                    });
+                  }}
+                />
+              )}
+            />
+          </View>
         </ScrollView>
       )}
     </View>

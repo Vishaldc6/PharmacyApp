@@ -38,7 +38,7 @@ const PrimaryProductCard = ({item, onPress}) => {
             marginVertical: 5,
           }}>
           {/* <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text> */}
-          <Text style={fonts.h6}>Rs.{item.price} </Text>
+          <Text style={fonts.h5}>Rs.{item.price} </Text>
           {/* <Text
           style={{
             ...fonts.h3,
@@ -62,7 +62,7 @@ const PrimaryProductCard = ({item, onPress}) => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{...fonts.h6, margin: 10, color: colors.primary_color}}>
+          <Text style={{...fonts.h5, margin: 10, color: colors.primary_color}}>
             Add to Cart
           </Text>
         </View>

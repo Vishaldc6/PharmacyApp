@@ -132,7 +132,8 @@ const HomeScreen = props => {
           />
         }>
         {searchproducts.length !== 0 && srcTxt !== '' && (
-          <View style={{elevation: 2, backgroundColor: colors.white}}>
+          // <View style={{elevation: 2, backgroundColor: colors.white}}>
+          <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Searched Products'} />
             <FlatList
               style={{marginVertical: 5}}
@@ -160,7 +161,14 @@ const HomeScreen = props => {
           </View>
         )}
         {/* Card View Container */}
-        <View style={styles.cardContainer}>
+        {/* <View style={styles.cardContainer}> */}
+        <View
+          style={{
+            ...GlobalStyles.infoCard,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'baseline',
+          }}>
           <Card
             title={'Lab Test'}
             icon={'laboratory'}
@@ -196,7 +204,14 @@ const HomeScreen = props => {
         </View>
 
         {/* Prescription Upload */}
-        <View style={styles.prescriptionContainer}>
+        {/* <View style={styles.prescriptionContainer}> */}
+        <View
+          style={{
+            ...GlobalStyles.infoCard,
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+          }}>
           <View style={{flex: 1}}>
             <Text style={fonts.h6}>Order quickly with a prescription</Text>
             <Text style={fonts.h3}>
@@ -213,7 +228,7 @@ const HomeScreen = props => {
             <View style={styles.btn}>
               <Text
                 style={{
-                  ...fonts.h5,
+                  ...fonts.h3,
                   color: colors.primary_color,
                 }}>
                 Upload
@@ -235,12 +250,16 @@ const HomeScreen = props => {
           </Swiper>
         </View>
         {/* Category */}
-        <View
+        {/* <View
           style={{
             elevation: 2,
             backgroundColor: colors.white,
             marginVertical: 5,
             // borderRadius: 10,
+          }}> */}
+        <View
+          style={{
+            ...GlobalStyles.infoCard,
           }}>
           <CustomHeading
             header1={'Popular Categories'}
@@ -270,11 +289,15 @@ const HomeScreen = props => {
         </View>
 
         {/* Horizontal Products */}
-        <View
+        {/* <View
           style={{
             elevation: 2,
             backgroundColor: colors.white,
             marginVertical: 5,
+          }}> */}
+        <View
+          style={{
+            ...GlobalStyles.infoCard,
           }}>
           <CustomHeading
             header1={'Popular Products'}

@@ -1,5 +1,12 @@
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import colors from '../styles/colors';
@@ -12,6 +19,8 @@ import RazorpayCheckout from 'react-native-razorpay';
 import {AppStrings} from '../utils/AppStrings';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getUserData} from '../config/apiServices/ApiServices';
+import DatePicker from 'react-native-date-picker';
 
 const TimeCard = ({item, onPress, index, selectedIndex}) => {
   return (
@@ -38,32 +47,54 @@ const ScheduleScreen = props => {
 
   const [time, settime] = useState(null);
   const [selectedIndex, setselectedIndex] = useState(null);
+  const [user, setuser] = useState({});
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = async () => {
+    const usr = await getUserData();
+    setuser(usr);
+    console.log(usr.mobile);
+    setloading(false);
+  };
 
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader {...props} back title={'Schedule'} />
-      <View style={styles.container}>
+      {/* <View style={styles.container}> */}
+
+      <View style={{...GlobalStyles.infoCard}}>
         {test && <Text style={fonts.h7}>Selected Test is : {test.name}</Text>}
         {lab && (
           <Text style={fonts.h7}>Selected Laboratory is : {lab.name}</Text>
         )}
       </View>
-      <View style={styles.container}>
-        {/* <CustomHeading header1={'Select your schedule'} /> */}
-        <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-          {schedule.map((item, index) => (
-            <TimeCard
-              item={item}
-              index={index}
-              selectedIndex={selectedIndex}
-              onPress={() => {
-                setselectedIndex(index);
-                settime(item);
-              }}
-            />
-          ))}
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <View style={{...GlobalStyles.infoCard}}>
+          <CustomHeading header1={'Select your schedule'} />
+          {/* <DatePicker
+
+          /> */}
+          <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+            {schedule.map((item, index) => (
+              <TimeCard
+                item={item}
+                index={index}
+                selectedIndex={selectedIndex}
+                onPress={() => {
+                  setselectedIndex(index);
+                  settime(item);
+                }}
+              />
+            ))}
+          </View>
         </View>
-      </View>
+      )}
       {time && (
         <View
           style={{
@@ -97,10 +128,10 @@ const ScheduleScreen = props => {
                 key: 'rzp_test_A2KSQPyJSFzQl6', // Your api key
                 amount: `${test.price}00`,
                 name: 'MedCare',
-                // prefill: {
-                //   contact: bill_mob,
-                //   name: bill_name,
-                // },
+                prefill: {
+                  contact: user.mobile,
+                  name: user.name,
+                },
                 theme: {color: colors.primary_color},
               };
               RazorpayCheckout.open(options).then(async data => {

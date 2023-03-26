@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
+import colors from '../styles/colors';
 
 const CustomInput = props => {
   const [isFocus, setisFocus] = useState(false);
@@ -10,13 +12,13 @@ const CustomInput = props => {
 
   return (
     <View {...props}>
-      <Text style={{...fonts.h3, marginLeft: 10}}>{props.title}</Text>
+      <Text style={{...fonts.h3}}>{props.title}</Text>
       <View style={styles.inputContainer}>
         {props.iconName && (
           <View style={styles.iconBox}>
             <Icon
               name={props.iconName}
-              size={22}
+              size={widthPercentageToDP(5)}
               color={
                 isFocus
                   ? props.isAdmin
@@ -29,6 +31,7 @@ const CustomInput = props => {
           </View>
         )}
         <TextInput
+          cursorColor={colors.primary_color}
           editable={props.editable}
           onFocus={() => {
             setisFocus(true);
@@ -50,7 +53,9 @@ const CustomInput = props => {
           value={props.value}
           onChangeText={props.onChangeText}
           keyboardType={props.keyboardType}
-          secureTextEntry={isVisible ? false : true}
+          secureTextEntry={
+            props.passwordField ? (isVisible ? false : true) : false
+          }
         />
         {props.passwordField && (
           <View style={styles.iconBox}>
@@ -59,7 +64,8 @@ const CustomInput = props => {
                 setisVisible(!isVisible);
               }}
               name={isVisible ? 'eye' : 'eye-slash'}
-              size={22}
+              // size={22}
+              size={widthPercentageToDP(5)}
               color={
                 isVisible
                   ? props.isAdmin
@@ -86,15 +92,18 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderBottomColor: Colors.primary_color,
-    borderBottomWidth: 1.5,
-    // height: 40,
-    marginHorizontal: 5,
+    borderBottomWidth: 1,
+    height: widthPercentageToDP(10),
+    marginHorizontal: widthPercentageToDP(2),
+    ...fonts.h3,
   },
   iconBox: {
     alignSelf: 'center',
-    height: 25,
-    width: 25,
+    height: widthPercentageToDP(5),
+    width: widthPercentageToDP(5),
     marginHorizontal: 10,
+    justifyContent: 'center',
+    // backgroundColor: 'red',
   },
 });
 

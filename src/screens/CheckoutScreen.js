@@ -26,6 +26,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const CheckoutScreen = props => {
   const amt = props.route.params.amount;
+  const is_doctor_required = props.route.params.is_doctor_required;
+  const is_report_required = props.route.params.is_report_required;
 
   const [ship_name, setship_name] = useState('');
   const [ship_mob, setship_mob] = useState('');
@@ -117,46 +119,50 @@ const CheckoutScreen = props => {
             keyboardType={'email-address'}
           />
           <View style={{height: 15}} />
-          <CustomInput
-            onChangeText={val => {
-              setdoctor_name(val);
-            }}
-            value={doctor_name}
-            title={'Doctor Name'}
-            placeholder={'Enter Doctor Name'}
-            keyboardType={'email-address'}
-          />
+          {is_doctor_required && (
+            <CustomInput
+              onChangeText={val => {
+                setdoctor_name(val);
+              }}
+              value={doctor_name}
+              title={'Doctor Name'}
+              placeholder={'Enter Doctor Name'}
+              keyboardType={'email-address'}
+            />
+          )}
           <View style={{height: 10}} />
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{...fonts.h3, marginLeft: 10}}>Report Pdf</Text>
-            <Text style={fonts.h3}>{pdf.name}</Text>
-            <TouchableOpacity
-              // style={{flex: 1}}
-              onPress={async () => {
-                const res = await DocumentPicker.pick({
-                  type: [DocumentPicker.types.pdf],
-                  allowMultiSelection: false,
-                });
-                console.log(res[0]);
-                setpdf(res[0]);
+          {is_report_required && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}>
-              <View style={styles.btn}>
-                <Text
-                  style={{
-                    ...fonts.h6,
-                    margin: 5,
-                    color: colors.primary_color,
-                  }}>
-                  Choose Pdf
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+              <Text style={{...fonts.h3, marginLeft: 10}}>Report Pdf</Text>
+              <Text style={fonts.h3}>{pdf.name}</Text>
+              <TouchableOpacity
+                // style={{flex: 1}}
+                onPress={async () => {
+                  const res = await DocumentPicker.pick({
+                    type: [DocumentPicker.types.pdf],
+                    allowMultiSelection: false,
+                  });
+                  console.log(res[0]);
+                  setpdf(res[0]);
+                }}>
+                <View style={styles.btn}>
+                  <Text
+                    style={{
+                      ...fonts.h6,
+                      margin: 5,
+                      color: colors.primary_color,
+                    }}>
+                    Choose Pdf
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
           <View style={{height: 150}} />
         </ScrollView>
       </KeyboardAvoidingView>

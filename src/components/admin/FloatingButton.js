@@ -2,6 +2,7 @@ import {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../styles/colors';
+import {widthPercentageToDP} from 'react-native-responsive-screen';
 
 const FloatingButton = ({icon, onPress}) => {
   return (
@@ -16,11 +17,11 @@ const FloatingButton = ({icon, onPress}) => {
 const styles = StyleSheet.create({
   btn: {
     position: 'absolute',
-    bottom: 10,
-    right: 10,
-    borderRadius: 50,
+    bottom: widthPercentageToDP(2),
+    right: widthPercentageToDP(2),
+    borderRadius: widthPercentageToDP(20),
     backgroundColor: colors.primary_color_admin,
-    padding: 25,
+    padding: widthPercentageToDP(6),
     elevation: 5,
   },
 });

@@ -94,13 +94,25 @@ const OrderDetailScreen = props => {
         back
         {...props}
         title={'Order ID ' + order.order_number}
-        call={order.order_acceptance_for_self.status == '1' && isDoctor}
+        call={
+          order.order_acceptance_for_self &&
+          order.order_acceptance_for_self.status == '1' &&
+          isDoctor
+        }
         onCall={() => {
           console.log(order.shipping_mobile);
           Linking.openURL(`tel:+91${order.shipping_mobile}`);
         }}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
+        <Text>
+          Order place at :{' '}
+          {moment(order.created_at).utc().format('hh:mm A DD/MM/yyyy')}
+        </Text>
+        {/* <Text>
+          Order updated at :{' '}
+          {moment(order.updated_at).utc().format('hh:mm A DD/MM/yyyy')}
+        </Text> */}
         <Text style={fonts.h1}>
           Status :{' '}
           {isDoctor
@@ -120,14 +132,16 @@ const OrderDetailScreen = props => {
             ? 'Accepted'
             : 'Rejected'} */}
         </Text>
-        <View style={styles.card}>
+        {/* <View style={styles.card}> */}
+        <View style={GlobalStyles.infoCard}>
           <Text style={fonts.h1}>Shipping Detail</Text>
           <View style={{height: 10}} />
           <Text style={fonts.h2}>Name : {order.shipping_name}</Text>
           <Text style={fonts.h2}>Mobile no. : {order.shipping_mobile}</Text>
           <Text style={fonts.h2}>Address : {order.shipping_address}</Text>
         </View>
-        <View style={styles.card}>
+        {/* <View style={styles.card}> */}
+        <View style={GlobalStyles.infoCard}>
           <Text style={fonts.h1}>Billing Detail</Text>
           <View style={{height: 10}} />
           <Text style={fonts.h2}>Name : {order.billing_name}</Text>
@@ -138,7 +152,8 @@ const OrderDetailScreen = props => {
         {/* {order.order_products.map(item => (
         <Text>{item.id}</Text>
       ))} */}
-        <View style={styles.card}>
+        {/* <View style={styles.card}> */}
+        <View style={GlobalStyles.infoCard}>
           <Text style={fonts.h1}>Order Products</Text>
           <View style={{height: 10}} />
           <FlatList
@@ -146,12 +161,14 @@ const OrderDetailScreen = props => {
             horizontal
             data={order.order_products}
             renderItem={({item}) => (
-              <View style={styles.card}>
+              // <View style={styles.card}>
+              <View style={GlobalStyles.infoCard}>
                 <View style={styles.productCard}>
                   <Image
                     source={{
                       uri:
                         'http://192.168.29.125:8000/products/thumbnail/' +
+                        // 'http://192.168.43.119:8000/products/thumbnail/' +
                         item.thumbnail,
                     }}
                     style={{height: 120, width: 120}}
@@ -180,9 +197,24 @@ const OrderDetailScreen = props => {
           <Text style={{...fonts.h2, alignSelf: 'flex-end'}}>
             Total Products : {order.order_products.length}
           </Text>
+          <View>
+            <CustomButton
+              secondary
+              title={'View Report'}
+              onPress={async () => {
+                Linking.canOpenURL(order.report_pdf_url).then(val => {
+                  console.log(val);
+                  if (val) {
+                    Linking.openURL(order.report_pdf_url);
+                  }
+                });
+              }}
+            />
+          </View>
         </View>
 
-        <View style={styles.card}>
+        {/* <View style={styles.card}> */}
+        <View style={GlobalStyles.infoCard}>
           {/* <View style={{flexDirection: 'row'}}>
             <Text style={fonts.h1}>Consultation Notes</Text>
           </View> */}
@@ -190,6 +222,7 @@ const OrderDetailScreen = props => {
             header1={'Consultation Notes'}
             header2={
               isDoctor &&
+              order.order_acceptance_for_self &&
               order.order_acceptance_for_self.status == '1' &&
               '+ Add Note'
             }
@@ -206,7 +239,8 @@ const OrderDetailScreen = props => {
             renderItem={({item}) => (
               <View
                 style={{
-                  ...styles.card,
+                  // ...styles.card,
+                  ...GlobalStyles.infoCard,
                   width: wp(40),
                 }}>
                 <Text numberOfLines={5} ellipsizeMode="tail" style={fonts.h2}>
@@ -216,10 +250,7 @@ const OrderDetailScreen = props => {
             )}
           />
         </View>
-        <Text>
-          Order place at :{' '}
-          {moment(order.created_at).utc().format('hh:mm A DD/MM/yyyy')}
-        </Text>
+
         <View style={{height: 100}} />
       </ScrollView>
 
@@ -264,6 +295,7 @@ const OrderDetailScreen = props => {
           <>
             <CustomButton
               title={
+                order.order_acceptance_for_self &&
                 order.order_acceptance_for_self.status == '0'
                   ? 'Rejected'
                   : 'Reject'
@@ -276,6 +308,7 @@ const OrderDetailScreen = props => {
             />
             <CustomButton
               title={
+                order.order_acceptance_for_self &&
                 order.order_acceptance_for_self.status == '1'
                   ? 'Accepted'
                   : 'Accept'
@@ -368,11 +401,11 @@ const OrderDetailScreen = props => {
 export default OrderDetailScreen;
 
 const styles = StyleSheet.create({
-  card: {
-    borderRadius: wp(3),
-    backgroundColor: colors.white,
-    padding: wp(3),
-    elevation: 5,
-    margin: wp(2),
-  },
+  // card: {
+  //   borderRadius: wp(3),
+  //   backgroundColor: colors.white,
+  //   padding: wp(3),
+  //   elevation: 5,
+  //   margin: wp(2),
+  // },
 });

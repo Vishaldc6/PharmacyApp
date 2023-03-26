@@ -101,9 +101,10 @@ const AdminLabScreen = props => {
         <View
           style={{
             flex: 1,
-            backgroundColor: colors.white,
-            marginVertical: 10,
-            elevation: 2,
+            // backgroundColor: colors.white,
+            // marginVertical: 10,
+            // elevation: 2,
+            ...GlobalStyles.infoCard,
           }}>
           <FlatList
             refreshControl={

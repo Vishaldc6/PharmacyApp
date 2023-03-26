@@ -58,7 +58,7 @@ const AdminCategoryScreen = props => {
           <Text>No labs found</Text>
         </View>
       ) : (
-        <View style={styles.cardContainer}>
+        <View style={{...GlobalStyles.infoCard, flex: 1}}>
           <FlatList
             refreshControl={
               <RefreshControl

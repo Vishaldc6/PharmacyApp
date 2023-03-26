@@ -84,6 +84,7 @@ const AdminHomeScreen = props => {
         <ActivityIndicator style={{alignSelf: 'center'}} />
       ) : (
         <ScrollView
+          showsVerticalScrollIndicator={false}
           scrollEnabled
           refreshControl={
             <RefreshControl

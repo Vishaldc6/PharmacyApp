@@ -109,8 +109,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: colors.primary_color,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: 10,
+    // flex: 1,
   },
 });
 
