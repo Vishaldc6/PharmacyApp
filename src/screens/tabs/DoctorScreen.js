@@ -26,6 +26,7 @@ import CustomHeading from '../../components/CustomHeading';
 import {getDoctors} from '../../config/apiServices/ApiServices';
 import CustomSearchBar from '../../components/CustomSearchBar';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
+import colors from '../../styles/colors';
 
 export const SymptomTab = ({item, onPress}) => {
   return (
@@ -37,8 +38,9 @@ export const SymptomTab = ({item, onPress}) => {
           borderRadius: 10,
           margin: 5,
           padding: 10,
+          borderColor: colors.black,
         }}>
-        <Text>{item.name}</Text>
+        <Text style={fonts.h2}>{item.name}</Text>
       </View>
     </TouchableOpacity>
   );

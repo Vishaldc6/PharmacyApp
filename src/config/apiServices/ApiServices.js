@@ -24,7 +24,7 @@ export const getToken = async () => {
 
 export const getUserData = async () => {
   const data = JSON.parse(await AsyncStorage.getItem('TOKEN'));
-  console.log(data);
+  // console.log(data);
 
   return data.user;
 };
