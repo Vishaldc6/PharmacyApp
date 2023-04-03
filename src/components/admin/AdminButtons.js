@@ -17,8 +17,6 @@ const AdminButtons = ({item, editPress, deletePress}) => {
 
   return (
     <View style={GlobalStyles.rowContainer}>
-      {/* <Button title="Edit" onPress={editPress} />
-    <Button title="Delete" onPress={deletePress} /> */}
       <TouchableOpacity style={{flex: 1}} onPress={editPress}>
         <View style={styles.btn}>
           <Text
@@ -31,15 +29,7 @@ const AdminButtons = ({item, editPress, deletePress}) => {
           </Text>
         </View>
       </TouchableOpacity>
-      {/* <Icon
-      name="pencil"
-      color={colors.primary_color}
-      size={25}
-      onPress={() => {
-        console.log(item.id);
-      }}
-    /> */}
-      {/* <View style={{width: 20}} /> */}
+
       <TouchableOpacity style={{flex: 1}} onPress={deletePress}>
         <View style={styles.btn}>
           <Icon

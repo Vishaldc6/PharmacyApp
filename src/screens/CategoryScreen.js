@@ -109,7 +109,7 @@ const CategoryScreen = props => {
               />
             </View>
           )}
-          {/* <View style={{elevation: 2, backgroundColor: colors.white}}> */}
+
           <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Popular Categories'} />
             <FlatList
@@ -142,12 +142,6 @@ const CategoryScreen = props => {
             </Swiper>
           </View>
           {/* horizontal product */}
-          {/* <View
-            style={{
-              elevation: 2,
-              backgroundColor: colors.white,
-              marginVertical: 10,
-            }}> */}
           <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Popular Products'} />
             <FlatList
@@ -178,14 +172,7 @@ const CategoryScreen = props => {
           </View>
           {/* simple banner */}
           <SimpleBanner />
-          {/* <View style={styles.bannerContainer}>
-            <View style={styles.slide}>
-              <Image
-                source={Images.banners3}
-                style={{flex: 1, resizeMode: 'cover', height: 200, width: 500}}
-              />
-            </View>
-          </View> */}
+
           {/* vertical products */}
           <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Products'} />
@@ -224,7 +211,6 @@ const CategoryScreen = props => {
               )}
             />
           </View>
-          {/* <Text>CategoryScreen</Text> */}
         </ScrollView>
       )}
     </View>

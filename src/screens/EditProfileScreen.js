@@ -67,199 +67,6 @@ ImageMinTop = 5;
 ImageMinLeft = 5;
 
 const EditProfileScreen = props => {
-  // const scrollY = useRef(new Animated.Value(0.01)).current;
-
-  // const heightHandller = scrollY.interpolate({
-  //   inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
-  //   outputRange: [HeaderMaxHeight, HeaderMinHeight],
-  //   extrapolate: 'clamp',
-  // });
-
-  // const imageheightHandller = scrollY.interpolate({
-  //   inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
-  //   outputRange: [ImageMaxHeight, ImageMinHeight],
-  //   extrapolate: 'clamp',
-  // });
-  // const imagetransformationTopHandller = scrollY.interpolate({
-  //   inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
-  //   outputRange: [ImageTop, ImageMinTop],
-  //   extrapolate: 'clamp',
-  // });
-  // const imagetransformationLeftHandller = scrollY.interpolate({
-  //   inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
-  //   outputRange: [ImageLeft, ImageMinLeft],
-  //   extrapolate: 'clamp',
-  // });
-  // const scaleImageHandler = scrollY.interpolate({
-  //   inputRange: [0, HeaderMaxHeight - HeaderMinHeight],
-  //   outputRange: [1, 0.5],
-  //   extrapolate: 'clamp',
-  // });
-
-  // return (
-  //   <View style={GlobalStyles.mainContainer}>
-  //     {/* <CustomHeader cart={true} /> */}
-  //     <Text
-  //       style={{...fonts.h1, alignSelf: 'center', padding: 10}}
-  //       onPress={async () => {
-  //         // const res = await ApiCall('/logout', 'POST');
-  //         // console.log('logout user ', res);
-  //         // if (res.success) {
-  //         await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
-  //         props.navigation.replace(ScreenNames.AuthStack);
-  //         // }
-  //       }}>
-  //       Log Out
-  //     </Text>
-  //     <ReactNativeParallaxHeader
-  //       // extraScrollHeight={300}
-  //       backgroundImage={Images.noImage}
-  //       navbarColor={
-  //         props.route.params.isAdmin ? colors.primary_color_admin : null
-  //       }
-  //       scrollViewProps={{
-  //         onScroll:
-  //           // e => console.log(e.nativeEvent),
-  //           () => {
-  //             console.log('first0');
-  //             Animated.event(
-  //               [
-  //                 {
-  //                   nativeEvent: {
-  //                     contentOffset: {
-  //                       y: scrollY,
-  //                     },
-  //                   },
-  //                 },
-  //               ],
-  //               {
-  //                 useNativeDriver: false,
-  //               },
-  //             );
-  //           },
-  //       }}
-  //       // scrollViewProps={{
-  //       //   onScrollBeginDrag: e => console.log('onScrollBeginDrag', e),
-  //       //   onScrollEndDrag: e => console.log('onScrollEndDrag', e),
-  //       // }}
-  //       headerMaxHeight={HeaderMaxHeight}
-  //       headerMinHeight={HeaderMinHeight}
-  //       title={
-  //         <Image
-  //           source={Images.noImage}
-  //           // style={{borderRadius: 100}}
-  //           style={{
-  //             // top: imagetransformationTopHandller,
-  //             // left: imagetransformationLeftHandller,
-  //             borderRadius: 100,
-  //             height: imageheightHandller,
-  //             width: imageheightHandller,
-  //             // margin: 10,
-  //             transform: [
-  //               {
-  //                 scale: 0.35,
-  //               },
-  //             ],
-  //           }}
-  //         />
-  //       }
-  //       renderContent={() => (
-  //         <View>
-  //           <ListTile icon={'shopping-cart'} title={'My Cart'} />
-  //           <ListTile icon={'user-md'} title={'My Doctors'} />
-  //           <ListTile icon={'flask'} title={'My Lab Tests'} />
-  //           <ListTile icon={'heart'} title={'My Care Plans'} />
-  //           {/* <ListTile icon={'shopping-cart'} title={'My Cart'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Cart'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Cart'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Cart'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-  //           <ListTile icon={'shopping-cart'} title={'My Lab Tests'} /> */}
-  //         </View>
-  //       )}
-  //     />
-
-  //     {/* <Animated.View
-  //       style={{
-  //         // backgroundColor: 'red',
-  //         height: heightHandller,
-  //         // justifyContent: 'center',
-  //       }}>
-  //       <Text style={fonts.h1}>Back</Text>
-  //       <Animated.Image
-  //         source={Images.noImage}
-  //         style={{
-  //           top: imagetransformationTopHandller,
-  //           left: imagetransformationLeftHandller,
-  //           borderRadius: 100,
-  //           height: imageheightHandller,
-  //           width: imageheightHandller,
-  //           // margin: 10,
-  //           transform: [
-  //             {
-  //               scale: scaleImageHandler,
-  //             },
-  //           ],
-  //         }}
-  //       />
-
-  //     </Animated.View> */}
-
-  //     {/* <Animated.ScrollView
-  //       style={{
-  //         // flex: 1,
-  //         width: '100%',
-  //         // position: 'absolute',
-  //         // bottom: 0,
-  //         alignSelf: 'center',
-  //         padding: 10,
-  //         borderRadius: 20,
-  //         backgroundColor: colors.white,
-  //       }}
-  //       showsVerticalScrollIndicator={false}
-  //       scrollEventThrottle={16}
-  //       onScroll={Animated.event(
-  //         [
-  //           {
-  //             nativeEvent: {
-  //               contentOffset: {
-  //                 y: scrollY,
-  //               },
-  //             },
-  //           },
-  //         ],
-  //         {
-  //           useNativeDriver: false,
-  //         },
-  //       )}>
-
-  //       <Text
-  //         style={{...fonts.h1, alignSelf: 'center', padding: 10}}
-  //         onPress={async () => {
-  //           // const res = await ApiCall('/logout', 'POST');
-  //           // console.log('logout user ', res);
-  //           // if (res.success) {
-  //           await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
-  //           props.navigation.replace(ScreenNames.AuthStack);
-  //           // }
-  //         }}>
-  //         Log Out
-  //       </Text>
-  //       <ListTile icon={'shopping-cart'} title={'My Cart'} />
-  //       <ListTile icon={'shopping-cart'} title={'My Doctors'} />
-  //       <ListTile icon={'shopping-cart'} title={'My Lab Tests'} />
-  //       <ListTile icon={'shopping-cart'} title={'My Orders'} />
-  //       <View style={{height: HeaderMaxHeight, backgroundColor: 'white'}} />
-  //     </Animated.ScrollView> */}
-  //   </View>
-  // );
-
   const GlobalStyles = useGlobaStyles();
 
   const [user, setuser] = useState({});
@@ -331,15 +138,6 @@ const EditProfileScreen = props => {
         refreshControl={
           <RefreshControl refreshing={isRefresh} onRefresh={() => getData()} />
         }>
-        {/* <View
-            style={{
-              margin: 10,
-              elevation: 3,
-              borderWidth: 0.5,
-              padding: 20,
-              backgroundColor: colors.white,
-              borderRadius: 10,
-            }}> */}
         <View
           style={{
             ...GlobalStyles.infoCard,
@@ -493,7 +291,7 @@ const EditProfileScreen = props => {
                 <Text style={GlobalStyles.errorText}>{experianceError}</Text>
               </>
             )}
-            {/* {user.role_id == 2 && ( */}
+
             {user.specialist && (
               <>
                 <>
@@ -520,16 +318,7 @@ const EditProfileScreen = props => {
                   />
                   <View style={{height: 15}} />
                 </>
-                {/* <CustomInput
-                    onChangeText={val => {
-                      setspecialist(val);
-                    }}
-                    value={specialist}
-                    title={'Specialist'}
-                    placeholder={'Enter Specialist'}
-                    keyboardType={'email-address'}
-                    iconName={'info'}
-                  /> */}
+
                 <Text style={GlobalStyles.errorText}>{specialistError}</Text>
               </>
             )}
@@ -631,32 +420,6 @@ const EditProfileScreen = props => {
             }}
           />
         </View>
-
-        {/* LAB_TESTS */}
-        {/* <View>
-            <CustomButton
-              title={'my tests'}
-              onPress={() => {
-                AsyncStorage.getItem('LAB_TESTS').then(res => {
-                  let data = JSON.parse(res);
-                  console.log(data);
-                });
-              }}
-            />
-          </View> */}
-
-        {/* <Text
-            style={{...fonts.h1, alignSelf: 'center', padding: 10}}
-            onPress={async () => {
-              // const res = await ApiCall('/logout', 'POST');
-              // console.log('logout user ', res);
-              // if (res.success) {
-              await AsyncStorage.setItem('TOKEN', JSON.stringify('logout'));
-              props.navigation.replace(ScreenNames.AuthStack);
-              // }
-            }}>
-            Log Out
-          </Text> */}
       </KeyboardAwareScrollView>
     </View>
   );

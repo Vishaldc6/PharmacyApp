@@ -52,8 +52,6 @@ const LabTestBookScreen = props => {
       ) : testList ? (
         <View style={GlobalStyles.infoCard}>
           <TestBookCard test={testList} />
-          {/* <TestBookCard />
-          <TestBookCard /> */}
         </View>
       ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

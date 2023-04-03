@@ -101,7 +101,7 @@ const CartScreen = props => {
       ) : (
         <>
           <CustomHeading header1="Amount : " header2={amt.toFixed(2)} />
-          {/* <Text style={fonts.h1}>Amount : {amt}</Text> */}
+
           <View style={GlobalStyles.infoCard}>
             <FlatList
               // style={{flex: 1, backgroundColor: 'red'}}

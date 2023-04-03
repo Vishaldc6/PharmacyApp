@@ -6,12 +6,10 @@ import {size} from '../../styles/size';
 const SimpleBanner = () => {
   return (
     <View style={styles.bannerContainer}>
-      {/* <View style={styles.slide}> */}
       <Image
         source={Images.banners1}
         style={{flex: 1, resizeMode: 'cover', height: 200, width: 500}}
       />
-      {/* </View> */}
     </View>
   );
 };

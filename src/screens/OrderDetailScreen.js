@@ -117,10 +117,7 @@ const OrderDetailScreen = props => {
           Order place at :{' '}
           {moment(order.created_at).utc().format('hh:mm A DD/MM/yyyy')}
         </Text>
-        {/* <Text>
-          Order updated at :{' '}
-          {moment(order.updated_at).utc().format('hh:mm A DD/MM/yyyy')}
-        </Text> */}
+
         <Text
           style={{
             fontSize: FONT_SIZE16,
@@ -139,13 +136,8 @@ const OrderDetailScreen = props => {
             : order.order_acceptance_list[0].status == '1'
             ? 'Accepted'
             : 'Rejected'}
-          {/* {!isDoctor && order.order_acceptance_list == []
-            ? 'Pending'
-            : order.order_acceptance_list[0].status == '1'
-            ? 'Accepted'
-            : 'Rejected'} */}
         </Text>
-        {/* <View style={styles.card}> */}
+
         <View style={GlobalStyles.infoCard}>
           <Text
             style={{
@@ -181,7 +173,7 @@ const OrderDetailScreen = props => {
             Address : {order.shipping_address}
           </Text>
         </View>
-        {/* <View style={styles.card}> */}
+
         <View style={GlobalStyles.infoCard}>
           <Text
             style={{
@@ -218,10 +210,6 @@ const OrderDetailScreen = props => {
           </Text>
         </View>
 
-        {/* {order.order_products.map(item => (
-        <Text>{item.id}</Text>
-      ))} */}
-        {/* <View style={styles.card}> */}
         <View style={GlobalStyles.infoCard}>
           <Text
             style={{
@@ -237,7 +225,6 @@ const OrderDetailScreen = props => {
             horizontal
             data={order.order_products}
             renderItem={({item}) => (
-              // <View style={styles.card}>
               <View style={GlobalStyles.infoCard}>
                 <View style={styles.productCard}>
                   <Image
@@ -266,11 +253,7 @@ const OrderDetailScreen = props => {
                     }}>
                     {item.brand}
                   </Text>
-                  {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{...fonts.h3, color: colors.darkgray}}>
-                    {item.rate}{' '}
-                  </Text>
-                </View> */}
+
                   <View
                     style={{
                       flexDirection: 'row',
@@ -315,11 +298,7 @@ const OrderDetailScreen = props => {
           </View>
         </View>
 
-        {/* <View style={styles.card}> */}
         <View style={GlobalStyles.infoCard}>
-          {/* <View style={{flexDirection: 'row'}}>
-            <Text style={fonts.h1}>Consultation Notes</Text>
-          </View> */}
           <CustomHeading
             header1={'Consultation Notes'}
             header2={
@@ -377,30 +356,6 @@ const OrderDetailScreen = props => {
           borderTopWidth: 0.5,
           borderColor: colors.black,
         }}>
-        {/* {order.order_acceptance_for_self == null ? (
-          <>
-            <CustomButton
-              title={'Reject'}
-              secondary={true}
-              isDoctor={true}
-              onPress={() => {
-                acceptRejectConsultation(order.id, '0');
-              }}
-            />
-            <CustomButton
-              title={'Accept'}
-              isDoctor={true}
-              onPress={() => {
-                acceptRejectConsultation(order.id, '1');
-              }}
-            />
-          </>
-        ) : order.order_acceptance_for_self.status == '1' ? (
-          <CustomButton title={'Accepted'} isDoctor={true} />
-        ) : (
-          <CustomButton title={'Rejected'} secondary={true} isDoctor={true} />
-        )} */}
-
         {isDoctor ? (
           // order.order_acceptance_for_self == null ?
           <>
@@ -431,11 +386,6 @@ const OrderDetailScreen = props => {
             />
           </>
         ) : (
-          // : order.order_acceptance_for_self.status == '1' ? (
-          //   <CustomButton title={'Accepted'} isDoctor={true} />
-          // ) : (
-          //   <CustomButton title={'Rejected'} secondary={true} isDoctor={true} />
-          // )
           <>
             <Text
               style={{
@@ -455,7 +405,6 @@ const OrderDetailScreen = props => {
               }}>
               Total : {order.grand_total}
             </Text>
-            {/* <Text style={{...fonts.h1,margin:5}}>sub total{order.sub_total}</Text> */}
           </>
         )}
       </View>
@@ -503,7 +452,6 @@ const OrderDetailScreen = props => {
                   setisModal(false),
                 );
               }}>
-              {/* <View style={styles.btn}> */}
               <Text
                 style={{
                   fontSize: FONT_SIZE14,
@@ -515,7 +463,6 @@ const OrderDetailScreen = props => {
                 }}>
                 Add note
               </Text>
-              {/* </View> */}
             </TouchableOpacity>
             <Text
               onPress={() => setisModal(false)}
@@ -536,13 +483,3 @@ const OrderDetailScreen = props => {
 };
 
 export default OrderDetailScreen;
-
-const styles = StyleSheet.create({
-  // card: {
-  //   borderRadius: wp(3),
-  //   backgroundColor: colors.white,
-  //   padding: wp(3),
-  //   elevation: 5,
-  //   margin: wp(2),
-  // },
-});

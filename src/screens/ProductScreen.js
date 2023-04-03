@@ -50,7 +50,7 @@ const ProductCard = ({item}) => {
           <Text style={fonts.h6}>Rs.{item.price}</Text>
           <Text style={fonts.h3}> {item.discount} % off</Text>
         </View>
-        {/* <CustomButton title={'Add to Cart'} /> */}
+
         <View
           style={{
             flex: 1,
@@ -160,7 +160,7 @@ const ProductScreen = props => {
           {/* simple banner */}
           <SimpleBanner />
           {/* horizontal products */}
-          {/* <View style={{elevation: 2, backgroundColor: colors.white}}> */}
+
           <View style={GlobalStyles.infoCard}>
             <CustomHeading header1={'Popular Products'} />
             <FlatList

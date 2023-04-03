@@ -45,7 +45,6 @@ const SelectLabCard = ({item, onPress, index, selectedIndex}) => {
             justifyContent: 'space-between',
             marginVertical: 5,
           }}>
-          {/* <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text> */}
           <Text style={{...fonts.h6, color: colors.primary_color}}>Book </Text>
         </View>
       </View>

@@ -15,14 +15,9 @@ const DoctorCard = ({item}) => {
         resizeMode={'cover'}
         style={styles.img}
       />
-      {/* <Image
-        source={{uri: 'http://192.168.29.125:8000/user/1678018624191.png'}}
-        resizeMode={'cover'}
-        style={styles.img}
-      /> */}
+
       <Text style={fonts.h6}>{item.name}</Text>
       <Text style={fonts.h5}>{item.specialist}</Text>
-      {/* <Text style={fonts.h5}>{item.experience}</Text> */}
     </View>
   );
 };

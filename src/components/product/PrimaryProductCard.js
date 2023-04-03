@@ -32,9 +32,6 @@ const PrimaryProductCard = ({item, onPress}) => {
           <Text style={{...fonts.h3, color: colors.darkgray}}>
             {item.rate}{' '}
           </Text>
-          {/* <Text style={{...fonts.h3, color: colors.darkgray}}>
-          ({item.rating} ratings)
-        </Text> */}
         </View>
         <View
           style={{
@@ -42,22 +39,9 @@ const PrimaryProductCard = ({item, onPress}) => {
             alignItems: 'center',
             marginVertical: 5,
           }}>
-          {/* <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text> */}
           <Text style={fonts.h5}>Rs.{item.price} </Text>
-          {/* <Text
-          style={{
-            ...fonts.h3,
-            color: colors.darkgray,
-            textDecorationLine: 'line-through',
-          }}>
-          Rs.{item.price}
-        </Text> */}
-          {/* <Text style={{...fonts.h3, color: colors.primary_color}}>
-          {' '}
-          {item.discount} % off
-        </Text> */}
         </View>
-        {/* <CustomButton title={'Add to Cart'} /> */}
+
         <View
           style={{
             flex: 1,

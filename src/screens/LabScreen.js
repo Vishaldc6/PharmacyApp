@@ -82,25 +82,7 @@ const LabCard = ({item}) => {
         resizeMode={'cover'}
         style={styles.img}
       />
-      {/* <Text style={{...fonts.h3, color: colors.primary_color}}>
-        {item.address}
-      </Text>
-      <Text style={{...fonts.h3, color: colors.primary_color}}>
-        {item.description}
-      </Text> */}
 
-      {/* <Text>{item.rate} rate</Text> */}
-      {/* <Text style={{...fonts.h3, color: colors.primary_color}}>
-        {item.discount} % off
-      </Text> */}
-      {/* <Text
-        style={{
-          ...fonts.h3,
-          color: colors.darkgray,
-          textDecorationLine: 'line-through',
-        }}>
-        Rs.{item.price}
-      </Text> */}
       <View
         style={{
           flexDirection: 'row',
@@ -108,7 +90,6 @@ const LabCard = ({item}) => {
           justifyContent: 'space-between',
           marginVertical: 5,
         }}>
-        {/* <Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text> */}
         <Text style={{...fonts.h6, color: colors.primary_color}}>Book </Text>
       </View>
     </View>
@@ -144,7 +125,7 @@ const LabScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'Laboratory'} back {...props} />
-      {/* <CustomSearchBar placeholder={'Search Labs or Tests (CBC, WD3, ect.)'} /> */}
+
       {loading ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <ActivityIndicator />
@@ -163,7 +144,7 @@ const LabScreen = props => {
           {/* Simple Banner */}
           <SimpleBanner />
           {/* Book Lab with Prescription */}
-          {/* <View style={styles.prescriptionContainer}> */}
+
           <View
             style={{
               ...GlobalStyles.infoCard,
@@ -203,17 +184,6 @@ const LabScreen = props => {
                   </Text>
                 </View>
               </TouchableOpacity>
-              {/* <TouchableWithoutFeedback>
-              <View style={styles.btn}>
-                <Text
-                  style={{
-                    ...fonts.h5,
-                    color: colors.white,
-                  }}>
-                  Upload
-                </Text>
-              </View>
-            </TouchableWithoutFeedback> */}
             </View>
           </View>
           {/* Popular Tests */}
@@ -282,7 +252,7 @@ const LabScreen = props => {
           </View>
 
           {/* Information */}
-          {/* <View style={{padding: 20, backgroundColor: colors.white}}> */}
+
           <View style={{...GlobalStyles.infoCard}}>
             <Text style={fonts.h1}>{AppStrings.howDoesHome}</Text>
             <InformationCard

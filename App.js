@@ -72,7 +72,6 @@ const App = () => {
   return (
     <Provider store={store}>
       <StatusBar backgroundColor={'grey'} />
-      {/* <TestPaymentScreen /> */}
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{headerShown: false}}

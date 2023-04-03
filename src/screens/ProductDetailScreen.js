@@ -113,9 +113,7 @@ const ProductDetailScreen = props => {
           <ActivityIndicator />
         </View>
       ) : (
-        // <View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {/* images */}
           <View
             style={{
               height: size.height / 3,
@@ -134,14 +132,7 @@ const ProductDetailScreen = props => {
               ))}
             </Swiper>
           </View>
-          {/* Title */}
-          {/* <View
-            style={{
-              ...styles.container,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}> */}
+
           <View
             style={{
               // ...styles.container,
@@ -198,7 +189,7 @@ const ProductDetailScreen = props => {
             </View>
           </View>
           {/* Price Add to cart */}
-          {/* <View style={styles.container}> */}
+
           <View style={{...GlobalStyles.infoCard}}>
             <PriceCard
               price={product.price}
@@ -236,7 +227,6 @@ const ProductDetailScreen = props => {
             />
           </View>
           {/* Delivery */}
-          {/* <View style={styles.container}> */}
           <View style={GlobalStyles.infoCard}>
             <Text style={fonts.h1}>
               {AppStrings.earlyDelivery}
@@ -262,7 +252,6 @@ const ProductDetailScreen = props => {
           <SimpleBanner />
 
           {/* Information */}
-          {/* <View style={styles.container}> */}
           <View style={GlobalStyles.infoCard}>
             <Text style={fonts.h1}>{AppStrings.productInfo}</Text>
             <Text>{product.information}</Text>
@@ -276,7 +265,6 @@ const ProductDetailScreen = props => {
             <Text>• {product.benefits}</Text>
           </View>
           {/* Expire */}
-          {/* <View style={styles.container}> */}
           <View style={GlobalStyles.infoCard}>
             <Text>
               {AppStrings.expire}
@@ -285,7 +273,6 @@ const ProductDetailScreen = props => {
           </View>
 
           {/* Extra Information */}
-          {/* <View style={{...styles.container, flexDirection: 'row'}}> */}
           <View style={{...GlobalStyles.infoCard, flexDirection: 'row'}}>
             <SmallInfoCard title={'100% genuine product'} />
             <SmallInfoCard title={'Safe & secure payments'} />
@@ -294,7 +281,6 @@ const ProductDetailScreen = props => {
           </View>
 
           {/* review */}
-          {/* <View style={styles.container}> */}
           <View style={GlobalStyles.infoCard}>
             <CustomHeading header1={'Product Reviews'} />
             {product.reviews.map(item => (
@@ -382,7 +368,6 @@ const ProductDetailScreen = props => {
           <SimpleBanner />
 
           {/* Horizontal products */}
-          {/* <View style={styles.container}> */}
           <View style={GlobalStyles.infoCard}>
             <CustomHeading header1={'Popular Products'} />
             <FlatList
@@ -412,7 +397,6 @@ const ProductDetailScreen = props => {
             />
           </View>
         </ScrollView>
-        // </View>
       )}
     </View>
   );
