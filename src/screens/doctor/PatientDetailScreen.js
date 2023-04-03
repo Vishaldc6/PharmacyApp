@@ -6,7 +6,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import {Images} from '../../assets/images';
 import {size} from '../../styles/size';
@@ -14,8 +13,10 @@ import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const PatientDetailScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   let patient = props.route.params.patient;
   console.log(patient);
   return (

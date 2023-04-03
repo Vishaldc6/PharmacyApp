@@ -10,13 +10,13 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
+// import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {Images} from '../../assets/images';
 import {size} from '../../styles/size';
-import fonts from '../../styles/fonts';
-import colors from '../../styles/colors';
+import fonts, {FONT_SIZE14} from '../../styles/fonts';
+
 import {getToken, getUserData} from '../../config/apiServices/ApiServices';
 import {AppStrings} from '../../utils/AppStrings';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
@@ -24,53 +24,78 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import CustomButton from '../../components/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {setTheme} from '../../redux/slice/CommonSlice';
+import {useAppDispatch, useAppSelector} from '../../redux/store/Store';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
-const ListTile = ({icon, title, onPress}) => (
-  <TouchableOpacity onPress={onPress}>
-    <View
-      style={{
-        borderWidth: 1,
-        borderRadius: 10,
-        padding: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginVertical: 10,
-      }}>
-      <View style={{flexDirection: 'row'}}>
-        {icon == 'shopping-cart' ? (
-          <Icon
-            name={icon}
-            size={size.height / 35}
-            color={colors.primary_color}
-          />
-        ) : (
-          <Fontisto
-            name={icon}
-            size={size.height / 35}
-            color={colors.primary_color}
-          />
-        )}
+const ListTile = ({icon, title, onPress}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <View
+        style={{
+          borderColor: colors.black,
+          borderWidth: 1,
+          borderRadius: 10,
+          padding: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginVertical: 10,
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          {icon == 'shopping-cart' ? (
+            <Icon
+              name={icon}
+              size={size.height / 35}
+              color={colors.primary_color}
+            />
+          ) : (
+            <Fontisto
+              name={icon}
+              size={size.height / 35}
+              color={colors.primary_color}
+            />
+          )}
 
-        <View style={{width: 20}} />
-        <Text style={fonts.h4}>{title}</Text>
+          <View style={{width: 20}} />
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '500',
+              color: colors.black,
+            }}>
+            {title}
+          </Text>
+        </View>
+        <Icon
+          name={'chevron-right'}
+          size={size.height / 35}
+          color={colors.primary_color}
+        />
       </View>
-      <Icon
-        name={'chevron-right'}
-        size={size.height / 35}
-        color={colors.primary_color}
-      />
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 const ProfileScreen = props => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  const GlobalStyles = useGlobaStyles();
+  const dispatch = useAppDispatch();
+
+  const [isDark, setisDark] = useState(false);
   const [user, setuser] = useState({});
   const [loading, setloading] = useState(true);
   const [isRefresh, setisRefresh] = useState(false);
+
+  useEffect(() => {
+    dispatch(setTheme(isDark));
+  }, [isDark]);
+
   useEffect(() => {
     getData();
   }, []);
+
   const getData = async () => {
     const data = await getUserData();
     console.log(data.id);
@@ -136,9 +161,30 @@ const ProfileScreen = props => {
                 }}
               />
               <View style={{marginHorizontal: 10}}>
-                <Text style={{...fonts.h4}}>{user.data.name}</Text>
-                <Text style={{...fonts.h4}}>{user.data.email}</Text>
-                <Text style={{...fonts.h4}}>{user.data.mobile}</Text>
+                <Text
+                  style={{
+                    fontSize: FONT_SIZE14,
+                    fontWeight: '500',
+                    color: colors.black,
+                  }}>
+                  {user.data.name}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: FONT_SIZE14,
+                    fontWeight: '500',
+                    color: colors.black,
+                  }}>
+                  {user.data.email}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: FONT_SIZE14,
+                    fontWeight: '500',
+                    color: colors.black,
+                  }}>
+                  {user.data.mobile}
+                </Text>
                 {/* <Text style={fonts.h3}>MBBS</Text> */}
               </View>
             </View>
@@ -191,6 +237,15 @@ const ProfileScreen = props => {
               }}
             />
           </View>
+          <Text
+            style={{
+              color: colors.black,
+            }}
+            onPress={() => {
+              setisDark(!isDark);
+            }}>
+            {isDark ? 'Light Mode' : 'Dark Mode'}
+          </Text>
         </ScrollView>
       )}
     </View>

@@ -17,7 +17,6 @@ import CustomInput from '../../components/CustomInput';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
 import {Images} from '../../assets/images';
 import {ApiCall, userRegister} from '../../config/apiServices/ApiServices';
@@ -25,8 +24,11 @@ import {AppStrings} from '../../utils/AppStrings';
 import {Dropdown} from 'react-native-element-dropdown';
 import {doctorTypeList} from '../../assets/data/doctorTypeList';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const SignUpScreen = props => {
+  const GlobalStyles = useGlobaStyles();
+
   const [email, setemail] = useState('');
   const [mob, setmob] = useState('');
   const [username, setusername] = useState('');

@@ -10,8 +10,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-
-import GlobalStyles from '../styles/GlobalStyles';
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
 import CustomHeading from '../components/CustomHeading';
@@ -33,6 +31,7 @@ import {openGallery} from '../utils/functions';
 import {Dropdown} from 'react-native-element-dropdown';
 import {doctorTypeList} from '../assets/data/doctorTypeList';
 import CustomHeader from '../components/CustomHeader';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const ListTile = ({icon, title, onPress}) => (
   <View
@@ -260,6 +259,8 @@ const EditProfileScreen = props => {
   //     </Animated.ScrollView> */}
   //   </View>
   // );
+
+  const GlobalStyles = useGlobaStyles();
 
   const [user, setuser] = useState({});
 

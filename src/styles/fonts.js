@@ -1,11 +1,11 @@
 import {RFValue} from 'react-native-responsive-fontsize';
 import colors from './colors';
 
-const FONT_SIZE12 = RFValue(10);
-const FONT_SIZE14 = RFValue(12);
-const FONT_SIZE16 = RFValue(14);
-const FONT_SIZE18 = RFValue(16);
-const FONT_SIZE30 = RFValue(25);
+export const FONT_SIZE12 = RFValue(10);
+export const FONT_SIZE14 = RFValue(12);
+export const FONT_SIZE16 = RFValue(14);
+export const FONT_SIZE18 = RFValue(16);
+export const FONT_SIZE30 = RFValue(25);
 
 export default Fonts = {
   h1: {

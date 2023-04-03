@@ -7,11 +7,11 @@ import {
   Image,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
-import {getToken} from '../config/apiServices/ApiServices';
+import {ApiCall, getToken} from '../config/apiServices/ApiServices';
 import {AppStrings} from '../utils/AppStrings';
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
@@ -19,8 +19,11 @@ import {size} from '../styles/size';
 import CustomButton from '../components/CustomButton';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
 import CustomHeading from '../components/CustomHeading';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const CartScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [cartList, setcartList] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
@@ -118,7 +121,8 @@ const CartScreen = props => {
                       source={{
                         uri:
                           // 'http://192.168.29.125:8000/products/thumbnail/' +
-                          'http://192.168.43.119:8000/products/thumbnail/' +
+                          'http://192.168.43.125:8000/products/thumbnail/' +
+                          // 'http://192.168.43.119:8000/products/thumbnail/' +
                           item.product_detail.thumbnail,
                       }}
                       style={{height: 120, width: 120}}
@@ -145,6 +149,29 @@ const CartScreen = props => {
                       <Text style={{...fonts.h6, color: colors.darkgray}}>
                         {item.qty} items
                       </Text>
+                      <TouchableOpacity
+                        style={{flex: 1}}
+                        onPress={async () => {
+                          console.log(item.id);
+                          const res = await ApiCall(
+                            `/removeCartItem/${item.id}`,
+                            'GET',
+                          );
+                          console.log('deleted item : ', res);
+                          if (res) {
+                            Alert.alert(AppStrings.appName, res);
+                            getCartList();
+                          }
+                        }}>
+                        <View style={styles.btn}>
+                          <Icon
+                            name="trash-o"
+                            color={colors.primary_color}
+                            size={25}
+                            style={{margin: 8}}
+                          />
+                        </View>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 );
@@ -194,6 +221,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     borderColor: colors.darkgray,
+  },
+  btn: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: colors.primary_color_admin,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 5,
   },
 });
 

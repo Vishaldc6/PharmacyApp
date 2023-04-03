@@ -10,7 +10,6 @@ import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {size} from '../../styles/size';
 import {Images} from '../../assets/images';
-import GlobalStyles from '../../styles/GlobalStyles';
 
 const WellcomeScreen = props => {
   return (
@@ -18,7 +17,6 @@ const WellcomeScreen = props => {
       <ImageBackground source={Images.backgroundImage} style={styles.bgImage}>
         <View
           style={{
-            // ...GlobalStyles.formContainer,
             position: 'absolute',
             bottom: 50,
             width: size.width,

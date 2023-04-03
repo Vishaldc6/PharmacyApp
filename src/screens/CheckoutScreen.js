@@ -10,7 +10,6 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomInput from '../components/CustomInput';
 import fonts from '../styles/fonts';
@@ -23,8 +22,10 @@ import RazorpayCheckout from 'react-native-razorpay';
 import {Images} from '../assets/images';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const CheckoutScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const amt = props.route.params.amount;
   const is_doctor_required = props.route.params.is_doctor_required;
   const is_report_required = props.route.params.is_report_required;

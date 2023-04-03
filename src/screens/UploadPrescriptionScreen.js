@@ -7,7 +7,6 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import fonts from '../styles/fonts';
 import {Images} from '../assets/images';
@@ -17,6 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {AppStrings} from '../utils/AppStrings';
 import {openCamera, openGallery} from '../utils/functions';
 import colors from '../styles/colors';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const ModelTile = ({icon, text, onPress}) => {
   return (
@@ -30,6 +30,7 @@ const ModelTile = ({icon, text, onPress}) => {
 };
 
 const UploadPrescriptionScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [isModal, setisModal] = useState(false);
   const [img, setimg] = useState('');
 

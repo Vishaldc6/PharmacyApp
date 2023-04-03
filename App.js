@@ -39,6 +39,8 @@ import CheckoutScreen from './src/screens/CheckoutScreen';
 import OrderDetailScreen from './src/screens/OrderDetailScreen';
 import EditProfileScreen from './src/screens/EditProfileScreen';
 import LabTestBookScreen from './src/screens/LabTestBookScreen';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store/Store';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,7 +70,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <Provider store={store}>
       <StatusBar backgroundColor={'grey'} />
       {/* <TestPaymentScreen /> */}
       <NavigationContainer>
@@ -186,7 +188,7 @@ const App = () => {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </Provider>
   );
 };
 

@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomSearchBar from '../components/CustomSearchBar';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
@@ -22,6 +21,8 @@ import PrimaryProductCard from '../components/product/PrimaryProductCard';
 import SecondaryProductCard from '../components/product/SecondaryProductCard';
 import CategoryCard from '../components/category/CategoryCard';
 import {getCategories, getProducts} from '../config/apiServices/ApiServices';
+import SimpleBanner from '../components/banner/SimpleBanner';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const Banner = ({image}) => (
   <View style={styles.slide}>
@@ -30,6 +31,7 @@ const Banner = ({image}) => (
 );
 
 const CategoryScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [categories, setcategories] = useState([]);
   const [products, setproducts] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
@@ -134,9 +136,9 @@ const CategoryScreen = props => {
               autoplay
               dotStyle={{bottom: -40}}
               activeDotStyle={{bottom: -40}}>
-              <Banner image={Images.banners5} />
+              <Banner image={Images.banners4} />
               <Banner image={Images.banners} />
-              <Banner image={Images.banners6} />
+              <Banner image={Images.banners5} />
             </Swiper>
           </View>
           {/* horizontal product */}
@@ -155,19 +157,35 @@ const CategoryScreen = props => {
               // scrollEnabled={false}
               data={products}
               renderItem={({item, index}) =>
-                index < 5 && <PrimaryProductCard item={item} />
+                index < 5 && (
+                  <PrimaryProductCard
+                    item={item}
+                    onPress={() => {
+                      if (item.quantity > 0) {
+                        props.navigation.navigate(
+                          ScreenNames.ProductDetailScreen,
+                          {
+                            id: item.id,
+                            products: products,
+                          },
+                        );
+                      }
+                    }}
+                  />
+                )
               }
             />
           </View>
           {/* simple banner */}
-          <View style={styles.bannerContainer}>
+          <SimpleBanner />
+          {/* <View style={styles.bannerContainer}>
             <View style={styles.slide}>
               <Image
                 source={Images.banners3}
                 style={{flex: 1, resizeMode: 'cover', height: 200, width: 500}}
               />
             </View>
-          </View>
+          </View> */}
           {/* vertical products */}
           <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Products'} />
@@ -188,7 +206,22 @@ const CategoryScreen = props => {
                 />
               )}
               data={products}
-              renderItem={({item}) => <SecondaryProductCard item={item} />}
+              renderItem={({item}) => (
+                <SecondaryProductCard
+                  item={item}
+                  onPress={() => {
+                    if (item.quantity > 0) {
+                      props.navigation.navigate(
+                        ScreenNames.ProductDetailScreen,
+                        {
+                          id: item.id,
+                          products: products,
+                        },
+                      );
+                    }
+                  }}
+                />
+              )}
             />
           </View>
           {/* <Text>CategoryScreen</Text> */}

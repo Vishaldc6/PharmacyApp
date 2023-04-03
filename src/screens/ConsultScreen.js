@@ -1,6 +1,5 @@
 import {Alert, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import {diseases} from '../assets/data/diseases';
 import {AppStrings} from '../utils/AppStrings';
@@ -13,8 +12,10 @@ import colors from '../styles/colors';
 import CustomButton from '../components/CustomButton';
 import {Images} from '../assets/images';
 import RazorpayCheckout from 'react-native-razorpay';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const ConsultScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   // let disease = props.route.params?.disease;
   const [disease, setdisease] = useState(props.route.params?.disease);
   const [user, setuser] = useState('');

@@ -1,12 +1,14 @@
 import {StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import React from 'react';
 import RazorpayCheckout from 'react-native-razorpay';
-import GlobalStyles from '../../styles/GlobalStyles';
+
 import colors from '../../styles/colors';
 import {Images} from '../../assets/images';
 import fonts from '../../styles/fonts';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const TestPaymentScreen = () => {
+  const GlobalStyles = useGlobaStyles();
   return (
     <View
       style={{

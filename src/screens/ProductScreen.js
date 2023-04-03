@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomSearchBar from '../components/CustomSearchBar';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
@@ -22,6 +21,7 @@ import PrimaryProductCard from '../components/product/PrimaryProductCard';
 import SecondaryProductCard from '../components/product/SecondaryProductCard';
 import SimpleBanner from '../components/banner/SimpleBanner';
 import {getProducts} from '../config/apiServices/ApiServices';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const ProductCard = ({item}) => {
   return (
@@ -70,6 +70,7 @@ const ProductCard = ({item}) => {
 };
 
 const ProductScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   console.log('Cat id : ', props.route.params?.cat_id);
 
   const [srcTxt, setsrcTxt] = useState('');
@@ -140,13 +141,15 @@ const ProductScreen = props => {
                     <PrimaryProductCard
                       item={item}
                       onPress={() => {
-                        props.navigation.navigate(
-                          ScreenNames.ProductDetailScreen,
-                          {
-                            id: item.id,
-                            products: products,
-                          },
-                        );
+                        if (item.quantity > 0) {
+                          props.navigation.navigate(
+                            ScreenNames.ProductDetailScreen,
+                            {
+                              id: item.id,
+                              products: products,
+                            },
+                          );
+                        }
                       }}
                     />
                   )
@@ -171,13 +174,15 @@ const ProductScreen = props => {
                   <PrimaryProductCard
                     item={item}
                     onPress={() => {
-                      props.navigation.navigate(
-                        ScreenNames.ProductDetailScreen,
-                        {
-                          id: item.id,
-                          products: products,
-                        },
-                      );
+                      if (item.quantity > 0) {
+                        props.navigation.navigate(
+                          ScreenNames.ProductDetailScreen,
+                          {
+                            id: item.id,
+                            products: products,
+                          },
+                        );
+                      }
                     }}
                   />
                 )
@@ -209,10 +214,15 @@ const ProductScreen = props => {
                 <SecondaryProductCard
                   item={item}
                   onPress={() => {
-                    props.navigation.navigate(ScreenNames.ProductDetailScreen, {
-                      id: item.id,
-                      products: products,
-                    });
+                    if (item.quantity > 0) {
+                      props.navigation.navigate(
+                        ScreenNames.ProductDetailScreen,
+                        {
+                          id: item.id,
+                          products: products,
+                        },
+                      );
+                    }
                   }}
                 />
               )}

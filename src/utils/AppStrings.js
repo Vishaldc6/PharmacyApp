@@ -42,7 +42,7 @@ export const AppStrings = {
   getPrescription: 'Get a valid prescription',
   consultNow: 'Consult now',
   consultDoctor1Click: 'Consult Doctor in 1 click',
-  selectSymptom: 'select a symptom to book in 1 step - Starting at $50',
+  selectSymptom: 'Select a symptom to book in 1 step - Starting at Rs.50',
   meetDoctor: 'Meet our Doctors',
 
   // LabScreen

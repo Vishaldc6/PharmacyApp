@@ -16,7 +16,6 @@ import CustomButton from '../../components/CustomButton';
 import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CheckBox from 'react-native-check-box';
 import {Images} from '../../assets/images';
 import {
@@ -31,11 +30,14 @@ import {
 } from '../../config/apiServices/ApiServices';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const GOOGLE_CLIENT_ID =
   '59510826670-7lilbhlo1mt18c6l2c685uae1sp3v9k6.apps.googleusercontent.com';
 
 const SignInScreen = props => {
+  const GlobalStyles = useGlobaStyles();
+
   const [email, setemail] = useState('');
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');

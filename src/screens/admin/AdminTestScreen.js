@@ -7,7 +7,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
@@ -16,8 +15,11 @@ import {ApiCall, getTests} from '../../config/apiServices/ApiServices';
 import {AppStrings} from '../../utils/AppStrings';
 import FloatingButton from '../../components/admin/FloatingButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const AdminTestScreen = props => {
+  const GlobalStyles = useGlobaStyles();
+
   const [tests, setTests] = useState([]);
   const [loading, setloading] = useState(true);
   const [isRefresh, setisRefresh] = useState(false);

@@ -1,9 +1,10 @@
 import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import React, {useState} from 'react';
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import fonts, {FONT_SIZE12, FONT_SIZE14, FONT_SIZE16} from '../styles/fonts';
+import {useAppSelector} from '../redux/store/Store';
 
 const CarePlanCard = ({item}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
   const perMonth = (parseInt(item.price) / 12).toFixed(0);
   const [selected, setselected] = useState(false);
   return (
@@ -21,9 +22,30 @@ const CarePlanCard = ({item}) => {
           flexDirection: 'row',
         }}>
         <View>
-          <Text style={fonts.h2}>{item.duration}</Text>
-          <Text style={fonts.h1}>${item.price}</Text>
-          <Text>{perMonth} / month</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+            }}>
+            {item.duration}
+          </Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE16,
+              fontWeight: '800',
+              color: colors.black,
+            }}>
+            ${item.price}
+          </Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE12,
+              fontWeight: '400',
+              color: colors.lightgrey,
+            }}>
+            {perMonth} / month
+          </Text>
         </View>
       </View>
     </TouchableWithoutFeedback>

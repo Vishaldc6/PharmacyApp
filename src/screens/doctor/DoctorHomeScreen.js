@@ -10,7 +10,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import fonts from '../../styles/fonts';
 import {Images} from '../../assets/images';
 import colors from '../../styles/colors';
@@ -19,6 +18,7 @@ import {AppStrings} from '../../utils/AppStrings';
 import {getToken, getUserData} from '../../config/apiServices/ApiServices';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import moment from 'moment';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 // const PatientCard = ({name, age, gender, date, onPress}) => (
 //   <TouchableOpacity onPress={onPress}>
@@ -67,6 +67,7 @@ import moment from 'moment';
 // );
 
 const ConsultationCard = ({item, onPress}) => {
+  const GlobalStyles = useGlobaStyles();
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View
@@ -102,6 +103,7 @@ const ConsultationCard = ({item, onPress}) => {
 };
 
 const DoctorHomeScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [consultationList, setConsultationList] = useState([]);
   // const [isModal, setisModal] = useState(false);
   const [isRefresh, setisRefresh] = useState(false);

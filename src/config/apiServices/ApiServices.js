@@ -37,12 +37,15 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     // 'Content-Type': 'multipart/form-data',
   };
 
-  const token = JSON.parse(await AsyncStorage.getItem('TOKEN'));
+  const token = await getToken();
+  console.log('token : : : ', token);
   if (token) {
     // headers.Authorization = `Bearer ${token}`;
-    headers.Authorization = `${token}`;
+    // headers.Authorization = `Bearer ${token}`;
+    headers.Authorization = `Bearer ${token}`;
   }
 
+  console.log('headers : ', headers);
   try {
     const res = await fetch(AppStrings.BASE_URL + endpoint, {
       method,

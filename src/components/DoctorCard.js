@@ -22,7 +22,7 @@ const DoctorCard = ({item}) => {
       /> */}
       <Text style={fonts.h6}>{item.name}</Text>
       <Text style={fonts.h5}>{item.specialist}</Text>
-      <Text style={fonts.h5}>{item.experience}</Text>
+      {/* <Text style={fonts.h5}>{item.experience}</Text> */}
     </View>
   );
 };

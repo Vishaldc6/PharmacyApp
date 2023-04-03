@@ -1,18 +1,22 @@
 import {View, Text, Image, StyleSheet, ScrollView, Alert} from 'react-native';
 import React from 'react';
 import CustomHeader from '../../components/CustomHeader';
-import GlobalStyles from '../../styles/GlobalStyles';
+
 import {Images} from '../../assets/images';
 import {size} from '../../styles/size';
 import {AppStrings} from '../../utils/AppStrings';
-import fonts from '../../styles/fonts';
+import fonts, {FONT_SIZE14, FONT_SIZE16} from '../../styles/fonts';
 import InformationCard from '../../components/InformationCard';
 import colors from '../../styles/colors';
 import CustomButton from '../../components/CustomButton';
 import CarePlanCard from '../../components/CarePlanCard';
 import {plans} from '../../assets/data/plans';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
+import {useAppSelector} from '../../redux/store/Store';
 
 const CarePlanScreen = () => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  const GlobalStyles = useGlobaStyles();
   return (
     <View
       style={{...GlobalStyles.mainContainer, backgroundColor: colors.white}}>
@@ -20,8 +24,22 @@ const CarePlanScreen = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* CarePlan Image */}
         <Image source={Images.noImage} style={styles.img} />
-        <Text style={fonts.h1}>{AppStrings.reduceMedial}</Text>
-        <Text style={fonts.h2}>{AppStrings.saveThings}</Text>
+        <Text
+          style={{
+            fontSize: FONT_SIZE16,
+            fontWeight: '800',
+            color: colors.black,
+          }}>
+          {AppStrings.reduceMedial}
+        </Text>
+        <Text
+          style={{
+            fontSize: FONT_SIZE14,
+            fontWeight: '400',
+            color: colors.black,
+          }}>
+          {AppStrings.saveThings}
+        </Text>
 
         {/* Benefits Information */}
         <View
@@ -36,7 +54,9 @@ const CarePlanScreen = () => {
           />
           <Text
             style={{
-              ...fonts.h2,
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
               alignContent: 'center',
               margin: 6,
               textAlign: 'center',
@@ -81,7 +101,14 @@ const CarePlanScreen = () => {
 
         {/* Choose Plan */}
         <View>
-          <Text style={fonts.h1}>{AppStrings.choosePlan}</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE16,
+              fontWeight: '800',
+              color: colors.black,
+            }}>
+            {AppStrings.choosePlan}
+          </Text>
           {plans.map(item => (
             <CarePlanCard item={item} />
           ))}

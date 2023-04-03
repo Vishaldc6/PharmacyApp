@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
@@ -33,6 +32,7 @@ const Card = ({title, number, onPress}) => {
 };
 
 const AdminHomeScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [loading, setloading] = useState(true);
 
   const [products, setproducts] = useState(0);
@@ -122,13 +122,13 @@ const AdminHomeScreen = props => {
               props.navigation.navigate(ScreenNames.AdminTestScreen);
             }}
           />
-          <Card
+          {/* <Card
             title={'Doctors'}
             number={doctors}
             onPress={() => {
               // props.navigation.navigate(ScreenNames.AdminTestScreen);
             }}
-          />
+          /> */}
         </ScrollView>
       )}
     </View>

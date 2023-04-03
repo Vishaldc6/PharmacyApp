@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import {size} from '../../styles/size';
-import GlobalStyles from '../../styles/GlobalStyles';
 import AdminButtons from '../admin/AdminButtons';
 
 const SecondaryProductCard = ({
@@ -26,7 +25,8 @@ const SecondaryProductCard = ({
 
   return (
     <TouchableWithoutFeedback onPress={onPress}>
-      <View style={styles.productCard}>
+      <View
+        style={{...styles.productCard, opacity: item.quantity > 0 ? 1 : 0.4}}>
         <Image
           source={{uri: item.thumbnail}}
           style={{height: 120, width: 120}}
@@ -34,12 +34,16 @@ const SecondaryProductCard = ({
         <View style={{width: 20}} />
         <View style={{flex: 1}}>
           <Text style={fonts.h4}>{item.name}</Text>
-          <Text style={{...fonts.h3, color: colors.darkgray}}>
-            {item.quantity} items
+          <Text
+            style={{
+              ...fonts.h3,
+              color: item.quantity > 0 ? colors.darkgray : colors.red,
+            }}>
+            {item.quantity > 0 ? `${item.quantity} items` : 'Out of Stock'}
           </Text>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text style={{...fonts.h3, color: colors.darkgray}}>
-              {item.rate}{' '}
+              {item.rate} Rating
             </Text>
             {/* <Text style={{...fonts.h3, color: colors.darkgray}}>
             ({item.rating} ratings)

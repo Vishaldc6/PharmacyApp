@@ -1,12 +1,12 @@
 import {View, Text} from 'react-native';
 import React from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomSearchBar from '../components/CustomSearchBar';
-import ScreenNames from '../navigation/screenNames/ScreenNames';
 import {useNavigation} from '@react-navigation/native';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const MedicineScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const navigation = useNavigation();
 
   return (

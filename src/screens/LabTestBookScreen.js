@@ -1,12 +1,13 @@
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import fonts from '../styles/fonts';
 import colors from '../styles/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const TestBookCard = ({test}) => {
+  const GlobalStyles = useGlobaStyles();
   console.log(test);
   return (
     <View
@@ -24,6 +25,7 @@ const TestBookCard = ({test}) => {
 };
 
 const LabTestBookScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [testList, settestList] = useState({});
   const [loading, setloading] = useState(true);
 
@@ -47,11 +49,15 @@ const LabTestBookScreen = props => {
       <CustomHeader back title={'My Tests'} {...props} />
       {loading ? (
         <ActivityIndicator />
-      ) : (
+      ) : testList ? (
         <View style={GlobalStyles.infoCard}>
           <TestBookCard test={testList} />
           {/* <TestBookCard />
           <TestBookCard /> */}
+        </View>
+      ) : (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text>You haven't book any Lab for Test yet.</Text>
         </View>
       )}
     </View>

@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomSearchBar from '../components/CustomSearchBar';
 import SimpleBanner from '../components/banner/SimpleBanner';
@@ -29,6 +28,9 @@ import ScreenNames from '../navigation/screenNames/ScreenNames';
 import InformationCard from '../components/InformationCard';
 import {getLabs, getTests} from '../config/apiServices/ApiServices';
 import CustomButton from '../components/CustomButton';
+import Swiper from 'react-native-swiper';
+import {Banner} from './tabs/HomeScreen';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const TestCard = ({item, index, onPress, selectedIndex}) => {
   const [isChecked, setisChecked] = useState(false);
@@ -114,6 +116,7 @@ const LabCard = ({item}) => {
 };
 
 const LabScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [labs, setlabs] = useState([]);
   const [tests, setTests] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
@@ -256,6 +259,17 @@ const LabScreen = props => {
               renderItem={({item}) => <DiseasesCard item={item} />}
             />
           </View>
+          {/* Scroll banner */}
+          <View style={styles.bannerContainer}>
+            <Swiper
+              autoplay
+              dotStyle={{bottom: -40}}
+              activeDotStyle={{bottom: -40}}>
+              <Banner image={Images.banners4} />
+              <Banner image={Images.banners} />
+              <Banner image={Images.banners5} />
+            </Swiper>
+          </View>
           {/* Horizontal Labs */}
           <View style={{...GlobalStyles.infoCard}}>
             <CustomHeading header1={'Popular Labs'} />
@@ -356,14 +370,26 @@ const styles = StyleSheet.create({
   labCard: {
     // justifyContent: 'center',
     // alignItems: 'center',
-    backgroundColor: colors.white,
     // height: 100,
     // width: 100,
+    backgroundColor: colors.white,
     padding: 10,
     borderRadius: 10,
     margin: 10,
   },
-  img: {margin: 10, height: 80, width: 80, alignSelf: 'center'},
+  img: {
+    margin: 10,
+    height: 80,
+    width: 80,
+    alignSelf: 'center',
+  },
+  bannerContainer: {
+    // flex: 1,
+    marginVertical: 5,
+    height: size.height / 4.5,
+    // backgroundColor: 'red',
+    padding: 10,
+  },
 });
 
 export default LabScreen;

@@ -11,19 +11,22 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import fonts, {FONT_SIZE12, FONT_SIZE14, FONT_SIZE16} from '../styles/fonts';
 import CustomButton from '../components/CustomButton';
 import {getToken} from '../config/apiServices/ApiServices';
 import {AppStrings} from '../utils/AppStrings';
 import CustomHeading from '../components/CustomHeading';
 import CustomInput from '../components/CustomInput';
 import moment from 'moment';
+import {useGlobaStyles} from '../styles/GlobalStyles';
+import {useAppSelector} from '../redux/store/Store';
 
 const OrderDetailScreen = props => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  const GlobalStyles = useGlobaStyles();
   console.log('props.route.params.data : ', props.route.params.data);
   const isDoctor = props.route.params.isDoctor;
   const order = props.route.params.data;
@@ -105,7 +108,12 @@ const OrderDetailScreen = props => {
         }}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text>
+        <Text
+          style={{
+            fontSize: FONT_SIZE12,
+            fontWeight: '400',
+            color: colors.lightgrey,
+          }}>
           Order place at :{' '}
           {moment(order.created_at).utc().format('hh:mm A DD/MM/yyyy')}
         </Text>
@@ -113,7 +121,12 @@ const OrderDetailScreen = props => {
           Order updated at :{' '}
           {moment(order.updated_at).utc().format('hh:mm A DD/MM/yyyy')}
         </Text> */}
-        <Text style={fonts.h1}>
+        <Text
+          style={{
+            fontSize: FONT_SIZE16,
+            fontWeight: '800',
+            color: colors.black,
+          }}>
           Status :{' '}
           {isDoctor
             ? order.order_acceptance_for_self == null
@@ -134,19 +147,75 @@ const OrderDetailScreen = props => {
         </Text>
         {/* <View style={styles.card}> */}
         <View style={GlobalStyles.infoCard}>
-          <Text style={fonts.h1}>Shipping Detail</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE16,
+              fontWeight: '800',
+              color: colors.black,
+            }}>
+            Shipping Detail
+          </Text>
           <View style={{height: 10}} />
-          <Text style={fonts.h2}>Name : {order.shipping_name}</Text>
-          <Text style={fonts.h2}>Mobile no. : {order.shipping_mobile}</Text>
-          <Text style={fonts.h2}>Address : {order.shipping_address}</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+            }}>
+            Name : {order.shipping_name}
+          </Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+            }}>
+            Mobile no. : {order.shipping_mobile}
+          </Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+            }}>
+            Address : {order.shipping_address}
+          </Text>
         </View>
         {/* <View style={styles.card}> */}
         <View style={GlobalStyles.infoCard}>
-          <Text style={fonts.h1}>Billing Detail</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE16,
+              fontWeight: '800',
+              color: colors.black,
+            }}>
+            Billing Detail
+          </Text>
           <View style={{height: 10}} />
-          <Text style={fonts.h2}>Name : {order.billing_name}</Text>
-          <Text style={fonts.h2}>Mobile no. : {order.billing_mobile}</Text>
-          <Text style={fonts.h2}>Address : {order.billing_address}</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+            }}>
+            Name : {order.billing_name}
+          </Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+            }}>
+            Mobile no. : {order.billing_mobile}
+          </Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+            }}>
+            Address : {order.billing_address}
+          </Text>
         </View>
 
         {/* {order.order_products.map(item => (
@@ -154,7 +223,14 @@ const OrderDetailScreen = props => {
       ))} */}
         {/* <View style={styles.card}> */}
         <View style={GlobalStyles.infoCard}>
-          <Text style={fonts.h1}>Order Products</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE16,
+              fontWeight: '800',
+              color: colors.black,
+            }}>
+            Order Products
+          </Text>
           <View style={{height: 10}} />
           <FlatList
             showsHorizontalScrollIndicator={false}
@@ -173,8 +249,21 @@ const OrderDetailScreen = props => {
                     }}
                     style={{height: 120, width: 120}}
                   />
-                  <Text style={fonts.h4}>{item.name}</Text>
-                  <Text style={{...fonts.h3, color: colors.darkgray}}>
+                  <Text
+                    style={{
+                      fontSize: FONT_SIZE14,
+                      fontWeight: '500',
+                      color: colors.black,
+                    }}>
+                    {item.name}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: FONT_SIZE12,
+                      fontWeight: '400',
+                      color: colors.black,
+                      color: colors.darkgray,
+                    }}>
                     {item.brand}
                   </Text>
                   {/* <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -188,13 +277,26 @@ const OrderDetailScreen = props => {
                       alignItems: 'center',
                       marginVertical: 5,
                     }}>
-                    <Text style={fonts.h6}>Rs.{item.price} </Text>
+                    <Text
+                      style={{
+                        fontSize: FONT_SIZE14,
+                        fontWeight: '700',
+                        color: colors.black,
+                      }}>
+                      Rs.{item.price}{' '}
+                    </Text>
                   </View>
                 </View>
               </View>
             )}
           />
-          <Text style={{...fonts.h2, alignSelf: 'flex-end'}}>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '400',
+              color: colors.black,
+              alignSelf: 'flex-end',
+            }}>
             Total Products : {order.order_products.length}
           </Text>
           <View>
@@ -243,7 +345,14 @@ const OrderDetailScreen = props => {
                   ...GlobalStyles.infoCard,
                   width: wp(40),
                 }}>
-                <Text numberOfLines={5} ellipsizeMode="tail" style={fonts.h2}>
+                <Text
+                  numberOfLines={5}
+                  ellipsizeMode="tail"
+                  style={{
+                    fontSize: FONT_SIZE14,
+                    fontWeight: '400',
+                    color: colors.black,
+                  }}>
                   {item.consultation}
                 </Text>
               </View>
@@ -265,6 +374,8 @@ const OrderDetailScreen = props => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
+          borderTopWidth: 0.5,
+          borderColor: colors.black,
         }}>
         {/* {order.order_acceptance_for_self == null ? (
           <>
@@ -326,10 +437,22 @@ const OrderDetailScreen = props => {
           //   <CustomButton title={'Rejected'} secondary={true} isDoctor={true} />
           // )
           <>
-            <Text style={{...fonts.h1, margin: 5}}>
+            <Text
+              style={{
+                fontSize: FONT_SIZE16,
+                fontWeight: '800',
+                color: colors.black,
+                margin: 5,
+              }}>
               Tax Amount : {order.tax_amount}
             </Text>
-            <Text style={{...fonts.h1, margin: 5}}>
+            <Text
+              style={{
+                fontSize: FONT_SIZE16,
+                fontWeight: '800',
+                color: colors.black,
+                margin: 5,
+              }}>
               Total : {order.grand_total}
             </Text>
             {/* <Text style={{...fonts.h1,margin:5}}>sub total{order.sub_total}</Text> */}
@@ -348,12 +471,18 @@ const OrderDetailScreen = props => {
           <View
             style={{
               width: '75%',
-              backgroundColor: 'white',
+              backgroundColor: colors.white,
               padding: 15,
               elevation: 5,
               borderRadius: 20,
             }}>
-            <Text style={{...fonts.h1, marginVertical: 10}}>
+            <Text
+              style={{
+                fontSize: FONT_SIZE16,
+                fontWeight: '800',
+                color: colors.black,
+                marginVertical: 10,
+              }}>
               Add Consultation Note
             </Text>
 
@@ -377,7 +506,9 @@ const OrderDetailScreen = props => {
               {/* <View style={styles.btn}> */}
               <Text
                 style={{
-                  ...fonts.h6,
+                  fontSize: FONT_SIZE14,
+                  fontWeight: '700',
+                  color: colors.black,
                   margin: 10,
                   alignSelf: 'center',
                   color: colors.primary_color_doc,
@@ -388,7 +519,13 @@ const OrderDetailScreen = props => {
             </TouchableOpacity>
             <Text
               onPress={() => setisModal(false)}
-              style={{...fonts.h5, alignSelf: 'center', margin: 10}}>
+              style={{
+                fontSize: FONT_SIZE12,
+                fontWeight: '500',
+                color: colors.black,
+                alignSelf: 'center',
+                margin: 10,
+              }}>
               Cancel
             </Text>
           </View>

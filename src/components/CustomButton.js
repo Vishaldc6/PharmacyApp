@@ -1,23 +1,24 @@
 import {View, Text, TouchableWithoutFeedback} from 'react-native';
 import React from 'react';
 import {size} from '../styles/size';
-import Colors from '../styles/colors';
-import fonts from '../styles/fonts';
-import colors from '../styles/colors';
+import fonts, {FONT_SIZE12} from '../styles/fonts';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {useAppSelector} from '../redux/store/Store';
 const CustomButton = props => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+
   return (
     <TouchableWithoutFeedback {...props}>
       <View
         style={{
           flex: 1,
           backgroundColor: props.secondary
-            ? Colors.white
+            ? colors.white
             : props.isAdmin
             ? colors.primary_color_admin
             : props.isDoctor
             ? colors.primary_color_doc
-            : Colors.primary_color,
+            : colors.primary_color,
           // height: size.height / 13,
           // width: size.width / 1.06,
           alignItems: 'center',
@@ -34,13 +35,14 @@ const CustomButton = props => {
         }}>
         <Text
           style={{
-            ...fonts.h5,
+            fontSize: FONT_SIZE12,
+            fontWeight: '500',
             margin: wp(5),
             color: props.secondary
               ? props.isDoctor
                 ? colors.primary_color_doc
-                : Colors.primary_color
-              : Colors.white,
+                : colors.primary_color
+              : colors.white,
           }}>
           {props.title}
         </Text>

@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import Swiper from 'react-native-swiper';
 import {Images} from '../../assets/images';
@@ -27,6 +26,7 @@ import {getDoctors} from '../../config/apiServices/ApiServices';
 import CustomSearchBar from '../../components/CustomSearchBar';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import colors from '../../styles/colors';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 export const SymptomTab = ({item, onPress}) => {
   return (
@@ -47,6 +47,8 @@ export const SymptomTab = ({item, onPress}) => {
 };
 
 const DoctorScreen = props => {
+  const GlobalStyles = useGlobaStyles();
+
   const [doctors, setdoctors] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
   const [loading, setloading] = useState(true);
@@ -123,21 +125,24 @@ const DoctorScreen = props => {
               autoplay
               dotStyle={{bottom: -40}}
               activeDotStyle={{bottom: -40}}>
-              <Banner image={Images.banners5} />
+              <Banner image={Images.banners4} />
               <Banner image={Images.banners} />
-              <Banner image={Images.banners6} />
+              <Banner image={Images.banners5} />
             </Swiper>
           </View>
           {/* Consult Doctor */}
-          <View style={GlobalStyles.infoCard}>
+          <View style={{...GlobalStyles.infoCard, flex: 1}}>
             <Text style={fonts.h1}>{AppStrings.onlineDoctor}</Text>
             <View
-              style={{
-                ...GlobalStyles.rowContainer,
-                // backgroundColor: 'black',
-                alignItems: 'baseline',
-                marginVertical: 10,
-              }}>
+              style={{flexDirection: 'row'}}
+              //  style={{
+              //   ...GlobalStyles.rowContainer,
+              //   // flex: 1,
+              //   // backgroundColor: 'red',
+              //   alignItems: 'baseline',
+              //   marginVertical: 10,
+              // }}
+            >
               <SmallInfoCard title={AppStrings.talk} />
               <SmallInfoCard title={AppStrings.freeFollowUp} />
               <SmallInfoCard title={AppStrings.getPrescription} />
@@ -209,12 +214,14 @@ const DoctorScreen = props => {
                 // backgroundColor: 'red',
                 // marginBottom: 100,
               }}>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                {doctors.map(item => {
-                  console.log(item);
-                  return <DoctorCard item={item} />;
-                })}
-              </ScrollView>
+              {doctors && (
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {doctors.map(item => {
+                    console.log(item);
+                    return <DoctorCard item={item} />;
+                  })}
+                </ScrollView>
+              )}
             </View>
           </View>
         </ScrollView>

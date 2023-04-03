@@ -13,7 +13,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
+// import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomSearchBar from '../../components/CustomSearchBar';
 import {size} from '../../styles/size';
@@ -34,6 +34,8 @@ import CustomModal from '../../components/CustomModal';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {getCategories, getProducts} from '../../config/apiServices/ApiServices';
+import SimpleBanner from '../../components/banner/SimpleBanner';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const Card = ({title, icon, onPress}) => (
   <TouchableWithoutFeedback onPress={onPress}>
@@ -65,6 +67,8 @@ export const Banner = ({image}) => (
 );
 
 const HomeScreen = props => {
+  const GlobalStyles = useGlobaStyles();
+
   const [categories, setCategories] = useState([]);
   const [products, setproducts] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
@@ -146,13 +150,15 @@ const HomeScreen = props => {
                   <PrimaryProductCard
                     item={item}
                     onPress={() => {
-                      props.navigation.navigate(
-                        ScreenNames.ProductDetailScreen,
-                        {
-                          id: item.id,
-                          products: products,
-                        },
-                      );
+                      if (item.quantity > 0) {
+                        props.navigation.navigate(
+                          ScreenNames.ProductDetailScreen,
+                          {
+                            id: item.id,
+                            products: products,
+                          },
+                        );
+                      }
                     }}
                   />
                 )
@@ -244,9 +250,9 @@ const HomeScreen = props => {
             autoplay
             dotStyle={{bottom: -40}}
             activeDotStyle={{bottom: -40}}>
-            <Banner image={Images.banners5} />
+            <Banner image={Images.banners2} />
             <Banner image={Images.banners} />
-            <Banner image={Images.banners6} />
+            <Banner image={Images.banners5} />
           </Swiper>
         </View>
         {/* Category */}
@@ -287,6 +293,9 @@ const HomeScreen = props => {
             }
           />
         </View>
+
+        {/* simple banner */}
+        <SimpleBanner />
 
         {/* Horizontal Products */}
         {/* <View

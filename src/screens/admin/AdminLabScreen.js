@@ -9,7 +9,6 @@ import {
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import colors from '../../styles/colors';
 import {size} from '../../styles/size';
@@ -19,8 +18,10 @@ import {ApiCall, getLabs} from '../../config/apiServices/ApiServices';
 import FloatingButton from '../../components/admin/FloatingButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {AppStrings} from '../../utils/AppStrings';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const LabCard = ({item, editPress, deletePress}) => {
+  const GlobalStyles = useGlobaStyles();
   // const discountedPrice =
   //   item.price - parseFloat(item.price) / parseFloat(item.discount);
 

@@ -1,6 +1,5 @@
 import {View, Text, ScrollView, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import CustomInput from '../../components/CustomInput';
 import ChooseImage from '../../components/admin/ChooseImage';
@@ -13,8 +12,10 @@ import fonts from '../../styles/fonts';
 import colors from '../../styles/colors';
 import CheckBox from 'react-native-check-box';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const AdminFormScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const title = props.route.params.title;
   const ID = props.route.params.ID;
   // console.log('ID : ', ID);
@@ -448,7 +449,7 @@ const AdminFormScreen = props => {
                     onChangeText={val => {
                       setquantity(val);
                     }}
-                    value={quantity}
+                    value={quantity > 0 ? quantity : '0'}
                     title={'Quantity'}
                     placeholder={'Enter quantity'}
                     keyboardType={'numeric'}

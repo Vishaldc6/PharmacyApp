@@ -7,20 +7,30 @@ import {
   Alert,
   TouchableOpacity,
   StyleSheet,
+  TouchableWithoutFeedback,
+  Linking,
+  Platform,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
+// import GlobalStyles from '../../styles/GlobalStyles';
 import CustomHeader from '../../components/CustomHeader';
 import {ApiCall, getToken} from '../../config/apiServices/ApiServices';
 import {AppStrings} from '../../utils/AppStrings';
-import fonts from '../../styles/fonts';
+import fonts, {FONT_SIZE12, FONT_SIZE14, FONT_SIZE16} from '../../styles/fonts';
 import colors from '../../styles/colors';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import CustomButton from '../../components/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
+import ReactNativeBlobUtil from 'react-native-blob-util';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
+import {useAppSelector} from '../../redux/store/Store';
 
 const OrderScreen = props => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  const GlobalStyles = useGlobaStyles();
+  const styles = useStyles();
+
   const [orderList, setorderList] = useState([]);
 
   const [isRefresh, setisRefresh] = useState(false);
@@ -71,6 +81,40 @@ const OrderScreen = props => {
     }
   };
 
+  const downloadFile = (link, filename) => {
+    // const source = 'https://www.africau.edu/images/default/sample.pdf';
+    let dirs = ReactNativeBlobUtil.fs.dirs;
+    ReactNativeBlobUtil.config({
+      fileCache: true,
+      appendExt: 'pdf',
+      path: `${dirs.DocumentDir}/${filename}`,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        title: filename,
+        description: 'File downloaded by download manager.',
+        mime: 'application/pdf',
+      },
+    })
+      .fetch('GET', link)
+      .then(res => {
+        // in iOS, we want to save our files by opening up the saveToFiles bottom sheet action.
+        // whereas in android, the download manager is handling the download for us.
+        if (Platform.OS === 'ios') {
+          const filePath = res.path();
+          let options = {
+            type: 'application/pdf',
+            url: filePath,
+            saveToFiles: true,
+          };
+          Share.open(options)
+            .then(resp => console.log(resp))
+            .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log('BLOB ERROR -> ', err));
+  };
+
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader title={'My Orders'} />
@@ -81,12 +125,21 @@ const OrderScreen = props => {
         </View>
       ) : orderList.length == 0 ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{...fonts.h1}}>No Order Founds</Text>
+          <Text
+            style={{
+              fontSize: FONT_SIZE16,
+              fontWeight: '800',
+              color: colors.black,
+            }}>
+            No Order Founds
+          </Text>
         </View>
       ) : (
         <>
           <View style={GlobalStyles.infoCard}>
             <FlatList
+              showsVerticalScrollIndicator={false}
+              style={{marginBottom: 50}}
               refreshControl={
                 <RefreshControl
                   refreshing={isRefresh}
@@ -132,62 +185,64 @@ const OrderScreen = props => {
                   <View style={styles.card}>
                     <Text
                       style={{
-                        ...fonts.h2,
+                        fontSize: FONT_SIZE14,
+                        fontWeight: '400',
+                        color: colors.black,
                         // color: colors.white,
                         alignSelf: 'flex-end',
                       }}>
                       {moment(item.created_at).utc().format('hh:mm A')}
                     </Text>
-                    <Text style={fonts.h1}>Order ID {item.order_number}</Text>
-                    <Text style={fonts.h2}>{item.shipping_name}</Text>
-                    <Text style={fonts.h2}>Payment ID : {item.payment_id}</Text>
+                    <Text
+                      style={{
+                        fontSize: FONT_SIZE16,
+                        fontWeight: '800',
+                        color: colors.black,
+                      }}>
+                      Order ID {item.order_number}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: FONT_SIZE14,
+                        fontWeight: '400',
+                        color: colors.black,
+                      }}>
+                      {item.shipping_name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: FONT_SIZE14,
+                        fontWeight: '400',
+                        color: colors.black,
+                      }}>
+                      Payment ID : {item.payment_id}
+                    </Text>
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        console.log(item.invoice_url);
+                        // Linking.openURL(item.invoice_url);
+                        downloadFile(
+                          item.invoice_url,
+                          `Order ID ${item.order_number}`,
+                        );
+                      }}>
+                      <View style={styles.btn}>
+                        <Text
+                          style={{
+                            fontSize: FONT_SIZE12,
+                            fontWeight: '400',
+                            color: colors.black,
+                            color: colors.primary_color,
+                          }}>
+                          Download Invoice
+                        </Text>
+                      </View>
+                    </TouchableWithoutFeedback>
                   </View>
                 </TouchableOpacity>
-
-                // <TouchableOpacity
-                //   style={{
-                //     padding: 10,
-                //     borderRadius: 10,
-                //     borderWidth: 0.5,
-                //     margin: 5,
-                //     backgroundColor: colors.white,
-                //     elevation: 5,
-                //   }}
-                //   onPress={async () => {
-                //     const token = await getToken();
-                //     const res = await fetch(
-                //       AppStrings.BASE_URL + '/orderDetail/' + item.id,
-                //       {
-                //         headers: {
-                //           Accept: 'application/json',
-                //           Authorization: 'Bearer ' + token,
-                //         },
-                //         method: 'GET',
-                //       },
-                //     );
-
-                //     const jsonRes = await res.json();
-                //     console.log('Screen res :', jsonRes);
-                //     // console.log(res);
-
-                //     if (jsonRes.flag) {
-                //       props.navigation.navigate(ScreenNames.OrderDetailScreen, {
-                //         data: jsonRes.data,
-                //       });
-                //     } else if (jsonRes.flag == false) {
-                //       if (jsonRes.data?.errors != null) {
-                //         Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
-                //       } else {
-                //         Alert.alert(AppStrings.appName, jsonRes.message);
-                //       }
-                //     }
-                //   }}>
-                //   <Text style={fonts.h1}>Billing Name : {item.billing_name}</Text>
-                //   <Text style={fonts.h2}>Order ID : {item.order_number}</Text>
-                //   <Text style={fonts.h2}>Payment ID : {item.payment_id}</Text>
-                // </TouchableOpacity>
               )}
             />
+            {/* <View style={{height: 100}} /> */}
           </View>
         </>
       )}
@@ -195,15 +250,29 @@ const OrderScreen = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  card: {
-    margin: 5,
-    padding: 15,
-    borderWidth: 1.5,
-    borderColor: colors.primary_color,
-    borderRadius: 15,
-    backgroundColor: colors.white,
-  },
-});
+const useStyles = () => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+
+  return StyleSheet.create({
+    card: {
+      margin: 5,
+      padding: 15,
+      borderWidth: 1.5,
+      borderColor: colors.primary_color,
+      borderRadius: 15,
+      backgroundColor: colors.white,
+    },
+    btn: {
+      borderColor: colors.primary_color,
+      borderWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 20,
+      margin: 10,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+    },
+  });
+};
 
 export default OrderScreen;

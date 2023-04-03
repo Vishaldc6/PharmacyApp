@@ -10,7 +10,6 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import CustomHeading from '../components/CustomHeading';
 import {LabCard} from './LabScreen';
@@ -19,6 +18,7 @@ import colors from '../styles/colors';
 import CustomButton from '../components/CustomButton';
 import fonts from '../styles/fonts';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const SelectLabCard = ({item, onPress, index, selectedIndex}) => {
   return (
@@ -54,6 +54,7 @@ const SelectLabCard = ({item, onPress, index, selectedIndex}) => {
 };
 
 const LabListScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   let test = props.route.params.test;
   const [labs, setlabs] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);

@@ -8,15 +8,17 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomHeader from '../../components/CustomHeader';
-import GlobalStyles from '../../styles/GlobalStyles';
 import SecondaryProductCard from '../../components/product/SecondaryProductCard';
 import colors from '../../styles/colors';
 import {ApiCall, getProducts} from '../../config/apiServices/ApiServices';
 import FloatingButton from '../../components/admin/FloatingButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import {AppStrings} from '../../utils/AppStrings';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const AdminProductScreen = props => {
+  const GlobalStyles = useGlobaStyles();
+
   const [products, setproducts] = useState([]);
   const [loading, setloading] = useState(true);
   const [isRefresh, setisRefresh] = useState(false);

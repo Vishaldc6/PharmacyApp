@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import GlobalStyles from '../../styles/GlobalStyles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../styles/colors';
 import fonts from '../../styles/fonts';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const AdminButtons = ({item, editPress, deletePress}) => {
+  const GlobalStyles = useGlobaStyles();
+
   return (
     <View style={GlobalStyles.rowContainer}>
       {/* <Button title="Edit" onPress={editPress} />

@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import Swiper from 'react-native-swiper';
 import {
@@ -32,6 +31,7 @@ import ScreenNames from '../navigation/screenNames/ScreenNames';
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 import {Images} from '../assets/images';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const PriceCard = ({price, addToCart}) => {
   const [selected, setselected] = useState(false);
@@ -46,10 +46,10 @@ const PriceCard = ({price, addToCart}) => {
             ...styles.pricecard,
             borderColor: selected ? colors.primary_color : colors.grey,
           }}>
-          <Text style={fonts.h2}>Rs. {price} </Text>
+          <Text style={fonts.h6}>Rs. {price} </Text>
           <Text
             style={{
-              ...fonts.h7,
+              ...fonts.h2,
               color: colors.grey,
               textDecorationLine: 'line-through',
             }}>
@@ -67,6 +67,7 @@ const PriceCard = ({price, addToCart}) => {
 };
 
 const ProductDetailScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   console.log(props.route.params.id);
   let products = props.route.params.products;
   console.log('products : ', products);
@@ -395,13 +396,15 @@ const ProductDetailScreen = props => {
                   <PrimaryProductCard
                     item={item}
                     onPress={() => {
-                      props.navigation.navigate(
-                        ScreenNames.ProductDetailScreen,
-                        {
-                          id: item.id,
-                          // product: products,
-                        },
-                      );
+                      if (item.quantity > 0) {
+                        props.navigation.navigate(
+                          ScreenNames.ProductDetailScreen,
+                          {
+                            id: item.id,
+                            // product: products,
+                          },
+                        );
+                      }
                     }}
                   />
                 )
@@ -433,7 +436,7 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
   },
 });
 

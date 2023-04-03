@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import GlobalStyles from '../styles/GlobalStyles';
 import CustomHeader from '../components/CustomHeader';
 import colors from '../styles/colors';
 import CustomHeading from '../components/CustomHeading';
@@ -24,6 +23,7 @@ import {getUserData} from '../config/apiServices/ApiServices';
 import DatePicker from 'react-native-date-picker';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import moment from 'moment';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 
 const TimeCard = ({item, onPress, index, selectedIndex}) => {
   return (
@@ -94,6 +94,7 @@ const scheduleTimeSlots = [
 ];
 
 const ScheduleScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   let test = props.route.params.test;
   let lab = props.route.params.lab;
 
@@ -132,10 +133,7 @@ const ScheduleScreen = props => {
         <View style={{...GlobalStyles.infoCard, flex: 1}}>
           {/* <ScrollView> */}
           <CustomHeading header1={'Select your schedule'} />
-          <Text style={{...fonts.h2}}>
-            Selected Date :{' '}
-            {date && moment(date.toString()).utc().format('DD-MM-yyyy')}
-          </Text>
+          <Text style={{...fonts.h2}}>Selected Date : {date}</Text>
           <View style={{flexDirection: 'row', padding: widthPercentageToDP(3)}}>
             <CustomButton
               title={'Choose Date'}
@@ -176,7 +174,7 @@ const ScheduleScreen = props => {
                   }}
                 />
               ))}
-              {selectedIndex && <View style={{height: 100}} />}
+              {selectedIndex && <View style={{height: 120}} />}
             </ScrollView>
           </View>
           {/* </ScrollView> */}
