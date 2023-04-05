@@ -6,10 +6,13 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React from 'react';
-import fonts from '../../styles/fonts';
+import {FONT_SIZE14} from '../../styles/fonts';
 import AdminButtons from '../admin/AdminButtons';
+import {useAppSelector} from '../../redux/store/Store';
 
 const CategoryCard = ({item, isAdmin, onPress, editPress, deletePress}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View
@@ -30,7 +33,14 @@ const CategoryCard = ({item, isAdmin, onPress, editPress, deletePress}) => {
             resizeMode={'stretch'}
           />
           {isAdmin && <View style={{width: 20}} />}
-          <Text style={{...fonts.h4, alignSelf: 'center'}} numberOfLines={1}>
+          <Text
+            style={{
+              fontSize: FONT_SIZE14,
+              fontWeight: '500',
+              color: colors.black,
+              alignSelf: 'center',
+            }}
+            numberOfLines={1}>
             {item.name}
           </Text>
         </View>

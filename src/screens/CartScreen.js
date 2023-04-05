@@ -13,7 +13,7 @@ import React, {useEffect, useState} from 'react';
 import CustomHeader from '../components/CustomHeader';
 import {ApiCall, getToken} from '../config/apiServices/ApiServices';
 import {AppStrings} from '../utils/AppStrings';
-import fonts from '../styles/fonts';
+import fonts, {FONT_SIZE12, FONT_SIZE14} from '../styles/fonts';
 import colors from '../styles/colors';
 import {size} from '../styles/size';
 import CustomButton from '../components/CustomButton';
@@ -21,8 +21,12 @@ import ScreenNames from '../navigation/screenNames/ScreenNames';
 import CustomHeading from '../components/CustomHeading';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useGlobaStyles} from '../styles/GlobalStyles';
+import {useAppSelector} from '../redux/store/Store';
 
 const CartScreen = props => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+
+  const styles = useStyles();
   const GlobalStyles = useGlobaStyles();
   const [cartList, setcartList] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
@@ -129,10 +133,23 @@ const CartScreen = props => {
                     />
                     <View style={{width: 20}} />
                     <View style={{flex: 1}}>
-                      <Text style={fonts.h4}>{item.product_detail.name}</Text>
+                      <Text
+                        style={{
+                          fontSize: FONT_SIZE14,
+                          fontWeight: '500',
+                          color: colors.black,
+                        }}>
+                        {item.product_detail.name}
+                      </Text>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Text style={{...fonts.h3, color: colors.darkgray}}>
+                        <Text
+                          style={{
+                            fontSize: FONT_SIZE12,
+                            fontWeight: '400',
+                            color: colors.black,
+                            color: colors.darkgray,
+                          }}>
                           {item.product_detail.rate} rate
                         </Text>
                       </View>
@@ -146,7 +163,13 @@ const CartScreen = props => {
                           Rs.{item.product_detail.price}{' '}
                         </Text>
                       </View>
-                      <Text style={{...fonts.h6, color: colors.darkgray}}>
+                      <Text
+                        style={{
+                          fontSize: FONT_SIZE14,
+                          fontWeight: '700',
+                          color: colors.black,
+                          color: colors.darkgray,
+                        }}>
                         {item.qty} items
                       </Text>
                       <TouchableOpacity
@@ -207,30 +230,33 @@ const CartScreen = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  productCard: {
-    flex: 1,
-    width: size.width / 1.1,
-    // backgroundColor: colors.black,
-    margin: 5,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignContent: 'center',
-    alignSelf: 'center',
-    // borderWidth: 1,
-    borderRadius: 10,
-    padding: 10,
-    borderColor: colors.darkgray,
-  },
-  btn: {
-    flex: 1,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: colors.primary_color_admin,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 5,
-  },
-});
+const useStyles = () => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  return StyleSheet.create({
+    productCard: {
+      flex: 1,
+      width: size.width / 1.1,
+      // backgroundColor: colors.black,
+      margin: 5,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignContent: 'center',
+      alignSelf: 'center',
+      // borderWidth: 1,
+      borderRadius: 10,
+      padding: 10,
+      borderColor: colors.darkgray,
+    },
+    btn: {
+      flex: 1,
+      borderWidth: 1,
+      borderRadius: 10,
+      borderColor: colors.primary_color_admin,
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 5,
+    },
+  });
+};
 
 export default CartScreen;

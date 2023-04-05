@@ -15,7 +15,7 @@ import {Images} from '../../assets/images';
 import {Banner} from './HomeScreen';
 import {size} from '../../styles/size';
 import {AppStrings} from '../../utils/AppStrings';
-import fonts from '../../styles/fonts';
+import fonts, {FONT_SIZE14, FONT_SIZE16} from '../../styles/fonts';
 import SmallInfoCard from '../../components/SmallInfoCard';
 import CustomButton from '../../components/CustomButton';
 import {diseases} from '../../assets/data/diseases';
@@ -27,8 +27,10 @@ import CustomSearchBar from '../../components/CustomSearchBar';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import colors from '../../styles/colors';
 import {useGlobaStyles} from '../../styles/GlobalStyles';
+import {useAppSelector} from '../../redux/store/Store';
 
 export const SymptomTab = ({item, onPress}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
   return (
     <TouchableOpacity onPress={onPress}>
       <View
@@ -40,14 +42,23 @@ export const SymptomTab = ({item, onPress}) => {
           padding: 10,
           borderColor: colors.black,
         }}>
-        <Text style={fonts.h2}>{item.name}</Text>
+        <Text
+          style={{
+            fontSize: FONT_SIZE14,
+            fontWeight: '400',
+            color: colors.black,
+          }}>
+          {item.name}
+        </Text>
       </View>
     </TouchableOpacity>
   );
 };
 
 const DoctorScreen = props => {
+  const styles = useStyles();
   const GlobalStyles = useGlobaStyles();
+  const {colors} = useAppSelector(state => state.CommonSlice);
 
   const [doctors, setdoctors] = useState([]);
   const [isRefresh, setisRefresh] = useState(false);
@@ -123,7 +134,7 @@ const DoctorScreen = props => {
           <View style={styles.bannerContainer}>
             <Swiper
               autoplay
-              dotStyle={{bottom: -40}}
+              dotStyle={{bottom: -40, backgroundColor: colors.grey}}
               activeDotStyle={{bottom: -40}}>
               <Banner image={Images.banners4} />
               <Banner image={Images.banners} />
@@ -132,7 +143,14 @@ const DoctorScreen = props => {
           </View>
           {/* Consult Doctor */}
           <View style={{...GlobalStyles.infoCard, flex: 1}}>
-            <Text style={fonts.h1}>{AppStrings.onlineDoctor}</Text>
+            <Text
+              style={{
+                fontSize: FONT_SIZE16,
+                fontWeight: '800',
+                color: colors.black,
+              }}>
+              {AppStrings.onlineDoctor}
+            </Text>
             <View
               style={{flexDirection: 'row'}}
               //  style={{
@@ -154,44 +172,38 @@ const DoctorScreen = props => {
               }}
             />
           </View>
-          <Text style={{...fonts.h1, alignSelf: 'center', marginVertical: 10}}>
+          <Text
+            style={{
+              fontSize: FONT_SIZE16,
+              fontWeight: '800',
+              color: colors.black,
+              alignSelf: 'center',
+              marginVertical: 10,
+            }}>
             OR
           </Text>
 
           {/* Symptoms cards */}
           <View style={{...GlobalStyles.infoCard}}>
-            <Text style={fonts.h1}>{AppStrings.consultDoctor1Click}</Text>
-            <Text style={fonts.h2}>{AppStrings.selectSymptom}</Text>
-            {/* <FlatList
-              style={{padding: 5}}
-              keyExtractor={(item, index) => item.name}
-              numColumns={3}
-              data={diseases}
-              renderItem={({item}) => (
-                <SymptomTab
-                  item={item}
-                  onPress={() => {
-                    props.navigation.navigate(ScreenNames.ConsultScreen, {
-                      disease: item.name,
-                    });
-                  }}
-                />
-              )}
-            /> */}
+            <Text
+              style={{
+                fontSize: FONT_SIZE16,
+                fontWeight: '800',
+                color: colors.black,
+              }}>
+              {AppStrings.consultDoctor1Click}
+            </Text>
+            <Text
+              style={{
+                fontSize: FONT_SIZE14,
+                fontWeight: '400',
+                color: colors.black,
+              }}>
+              {AppStrings.selectSymptom}
+            </Text>
+
             <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
               {diseases.map(item => (
-                // <TouchableOpacity>
-                //   <View
-                //     style={{
-                //       // flex: 1,
-                //       borderWidth: 0.5,
-                //       borderRadius: 10,
-                //       margin: 5,
-                //       padding: 10,
-                //     }}>
-                //     <Text>{item.name}</Text>
-                //   </View>
-                // </TouchableOpacity>
                 <SymptomTab
                   item={item}
                   onPress={() => {
@@ -230,13 +242,15 @@ const DoctorScreen = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  bannerContainer: {
-    marginVertical: 5,
-    height: size.height / 4.5,
-    // backgroundColor: 'red',
-    paddingVertical: 10,
-  },
-});
+const useStyles = () => {
+  return StyleSheet.create({
+    bannerContainer: {
+      marginVertical: 5,
+      height: size.height / 4.5,
+      // backgroundColor: 'red',
+      paddingVertical: 10,
+    },
+  });
+};
 
 export default DoctorScreen;

@@ -1,10 +1,11 @@
 import {View, Text, Image} from 'react-native';
 import React from 'react';
 import {Images} from '../assets/images';
-import {width} from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
-import fonts from '../styles/fonts';
+import fonts, {FONT_SIZE14} from '../styles/fonts';
+import {useAppSelector} from '../redux/store/Store';
 
 const SmallInfoCard = ({title}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
   return (
     <View
       style={{
@@ -17,7 +18,15 @@ const SmallInfoCard = ({title}) => {
         source={Images.noImage}
         style={{height: 50, width: 50, margin: 10}}
       />
-      <Text style={{...fonts.h2, textAlign: 'center'}}>{title}</Text>
+      <Text
+        style={{
+          fontSize: FONT_SIZE14,
+          fontWeight: '400',
+          color: colors.black,
+          textAlign: 'center',
+        }}>
+        {title}
+      </Text>
     </View>
   );
 };

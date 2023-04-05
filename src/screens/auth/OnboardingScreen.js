@@ -14,12 +14,13 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
-import Colors from '../../styles/colors';
-import fonts from '../../styles/fonts';
+import fonts, {FONT_SIZE14, FONT_SIZE16} from '../../styles/fonts';
 import {size} from '../../styles/size';
 import {Images} from '../../assets/images';
+import {useAppSelector} from '../../redux/store/Store';
 
 const Dots = ({selected}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
   return (
     <View
       style={{
@@ -28,7 +29,7 @@ const Dots = ({selected}) => {
         height: 6,
         borderRadius: 15,
         marginHorizontal: 3,
-        backgroundColor: selected ? Colors.primary_color : Colors.darkgray,
+        backgroundColor: selected ? colors.primary_color : colors.darkgray,
       }}
     />
   );
@@ -41,7 +42,7 @@ const Next = ({...props}) => (
         height: 60,
         width: 60,
         borderRadius: 50,
-        backgroundColor: Colors.primary_color,
+        backgroundColor: colors.primary_color,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 20,
@@ -49,7 +50,7 @@ const Next = ({...props}) => (
       }}>
       <Icon
         name="chevron-right"
-        color={Colors.white}
+        color={colors.white}
         size={25}
         style={{alignSelf: 'center'}}
       />
@@ -58,7 +59,7 @@ const Next = ({...props}) => (
 );
 
 const Skip = ({skipLabel, ...props}) => (
-  <Text style={{color: Colors.black, marginLeft: 20, bottom: 10}} {...props}>
+  <Text style={{color: colors.black, marginLeft: 20, bottom: 10}} {...props}>
     {skipLabel}
   </Text>
 );
@@ -72,7 +73,7 @@ const OnboardingScreen = props => {
   return (
     <View style={{flex: 1}}>
       <Onboarding
-        bottomBarColor={Colors.white}
+        bottomBarColor={colors.white}
         skipToPage={2}
         NextButtonComponent={Next}
         SkipButtonComponent={Skip}
@@ -85,20 +86,20 @@ const OnboardingScreen = props => {
         subTitleStyles={styles.subTxt}
         pages={[
           {
-            backgroundColor: Colors.white,
+            backgroundColor: colors.white,
             image: <Image style={styles.image} source={Images.onboarding1} />,
             title: 'Your Go-to Health Application',
             subtitle: 'Your complete healthcare companion, in your pocket.',
           },
           {
-            backgroundColor: Colors.white,
+            backgroundColor: colors.white,
             image: <Image style={styles.image} source={Images.onboarding2} />,
             title: 'Online Pharmacy',
             subtitle:
               "Order any medinice or health product and we'll deliver it for free.Enjoy discounts on everything.",
           },
           {
-            backgroundColor: Colors.white,
+            backgroundColor: colors.white,
             image: <Image style={styles.image} source={Images.onboarding3} />,
             title: 'Consult The Doctors',
             subtitle:
@@ -110,29 +111,37 @@ const OnboardingScreen = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  image: {
-    resizeMode: 'cover',
-    height: wp('90'),
-    width: wp('90'),
-    // borderRadius: 200,
-    bottom: 30,
-    // backgroundColor: 'red',
-  },
-  txt: {
-    //   fontFamily: 'Nexa-Trial-Regular',
-    ...fonts.h1,
-    bottom: 50,
-    textAlign: 'center',
-    // backgroundColor: 'red',
-  },
-  subTxt: {
-    //   fontFamily: 'Nexa-Trial-Regular',
-    ...fonts.h2,
-    bottom: 50,
-    textAlign: 'center',
-    // backgroundColor: 'blue',
-  },
-});
+const useStyles = () => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+
+  return StyleSheet.create({
+    image: {
+      resizeMode: 'cover',
+      height: wp('90'),
+      width: wp('90'),
+      // borderRadius: 200,
+      bottom: 30,
+      // backgroundColor: 'red',
+    },
+    txt: {
+      //   fontFamily: 'Nexa-Trial-Regular',
+      fontSize: FONT_SIZE16,
+      fontWeight: '800',
+      color: colors.black,
+      bottom: 50,
+      textAlign: 'center',
+      // backgroundColor: 'red',
+    },
+    subTxt: {
+      //   fontFamily: 'Nexa-Trial-Regular',
+      fontSize: FONT_SIZE14,
+      fontWeight: '400',
+      color: colors.black,
+      bottom: 50,
+      textAlign: 'center',
+      // backgroundColor: 'blue',
+    },
+  });
+};
 
 export default OnboardingScreen;

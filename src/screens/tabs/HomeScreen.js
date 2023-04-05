@@ -19,7 +19,7 @@ import CustomSearchBar from '../../components/CustomSearchBar';
 import {size} from '../../styles/size';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import colors from '../../styles/colors';
-import fonts from '../../styles/fonts';
+import fonts, {FONT_SIZE12, FONT_SIZE14} from '../../styles/fonts';
 import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
 import Swiper from 'react-native-swiper';
@@ -36,38 +36,55 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {getCategories, getProducts} from '../../config/apiServices/ApiServices';
 import SimpleBanner from '../../components/banner/SimpleBanner';
 import {useGlobaStyles} from '../../styles/GlobalStyles';
+import {useAppSelector} from '../../redux/store/Store';
 
-const Card = ({title, icon, onPress}) => (
-  <TouchableWithoutFeedback onPress={onPress}>
-    <View
-      style={{
-        justifyContent: 'center',
-        alignItems: 'center',
-        // flex: 1,
-        // backgroundColor: 'red',
-        width: size.width / 5,
-      }}>
-      {/* <View style={{height: size.height / 14}}> */}
-      <Fontisto
-        name={icon}
-        size={size.height / 23}
-        color={colors.black}
-        style={{marginVertical: 10}}
-      />
-      {/* </View> */}
-      <Text style={{...fonts.h3, textAlign: 'center'}}>{title}</Text>
+const Card = ({title, icon, onPress}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  return (
+    <TouchableWithoutFeedback onPress={onPress}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          // flex: 1,
+          // backgroundColor: 'red',
+          width: size.width / 5,
+        }}>
+        {/* <View style={{height: size.height / 14}}> */}
+        <Fontisto
+          name={icon}
+          size={size.height / 23}
+          color={colors.black}
+          style={{marginVertical: 10}}
+        />
+        {/* </View> */}
+        <Text
+          style={{
+            fontSize: FONT_SIZE12,
+            fontWeight: '400',
+            color: colors.black,
+            textAlign: 'center',
+          }}>
+          {title}
+        </Text>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
+
+export const Banner = ({image}) => {
+  const styles = useStyles();
+  return (
+    <View style={styles.slide}>
+      <Image source={image} style={{flex: 1, resizeMode: 'contain'}} />
     </View>
-  </TouchableWithoutFeedback>
-);
-
-export const Banner = ({image}) => (
-  <View style={styles.slide}>
-    <Image source={image} style={{flex: 1, resizeMode: 'contain'}} />
-  </View>
-);
+  );
+};
 
 const HomeScreen = props => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
   const GlobalStyles = useGlobaStyles();
+  const styles = useStyles();
 
   const [categories, setCategories] = useState([]);
   const [products, setproducts] = useState([]);
@@ -219,8 +236,20 @@ const HomeScreen = props => {
             alignItems: 'center',
           }}>
           <View style={{flex: 1}}>
-            <Text style={fonts.h6}>Order quickly with a prescription</Text>
-            <Text style={fonts.h3}>
+            <Text
+              style={{
+                fontSize: FONT_SIZE14,
+                fontWeight: '700',
+                color: colors.black,
+              }}>
+              Order quickly with a prescription
+            </Text>
+            <Text
+              style={{
+                fontSize: FONT_SIZE12,
+                fontWeight: '400',
+                color: colors.black,
+              }}>
               Just upload the prescription and tell us what you need. We do the
               rest !
             </Text>
@@ -234,7 +263,9 @@ const HomeScreen = props => {
             <View style={styles.btn}>
               <Text
                 style={{
-                  ...fonts.h3,
+                  fontSize: FONT_SIZE12,
+                  fontWeight: '400',
+                  color: colors.black,
                   color: colors.primary_color,
                 }}>
                 Upload
@@ -248,7 +279,7 @@ const HomeScreen = props => {
         <View style={styles.bannerContainer}>
           <Swiper
             autoplay
-            dotStyle={{bottom: -40}}
+            dotStyle={{bottom: -40, backgroundColor: colors.grey}}
             activeDotStyle={{bottom: -40}}>
             <Banner image={Images.banners2} />
             <Banner image={Images.banners} />
@@ -342,51 +373,54 @@ const HomeScreen = props => {
   );
 };
 
-const styles = StyleSheet.create({
-  cardContainer: {
-    backgroundColor: colors.white,
-    // width: size.width,
-    // height: size.height / 7,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'baseline',
-    paddingVertical: 10,
-    elevation: 2,
-    borderRadius: 10,
-    marginVertical: 5,
-  },
-  prescriptionContainer: {
-    backgroundColor: colors.white,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 10,
-    elevation: 2,
-    borderRadius: 10,
-    padding: 6,
-    marginVertical: 5,
-  },
-  btn: {
-    borderColor: colors.primary_color,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-    margin: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-  },
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bannerContainer: {
-    marginVertical: 5,
-    height: size.height / 4.5,
-    // backgroundColor: 'red',
-    paddingVertical: 10,
-  },
-});
+const useStyles = () => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  return StyleSheet.create({
+    cardContainer: {
+      backgroundColor: colors.white,
+      // width: size.width,
+      // height: size.height / 7,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'baseline',
+      paddingVertical: 10,
+      elevation: 2,
+      borderRadius: 10,
+      marginVertical: 5,
+    },
+    prescriptionContainer: {
+      backgroundColor: colors.white,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      paddingVertical: 10,
+      elevation: 2,
+      borderRadius: 10,
+      padding: 6,
+      marginVertical: 5,
+    },
+    btn: {
+      borderColor: colors.primary_color,
+      borderWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: 20,
+      margin: 10,
+      paddingHorizontal: 20,
+      paddingVertical: 10,
+    },
+    slide: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    bannerContainer: {
+      marginVertical: 5,
+      height: size.height / 4.5,
+      // backgroundColor: 'red',
+      paddingVertical: 10,
+    },
+  });
+};
 
 export default HomeScreen;

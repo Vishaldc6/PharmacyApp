@@ -6,10 +6,12 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import React from 'react';
-import fonts from '../../styles/fonts';
-import colors from '../../styles/colors';
+import fonts, {FONT_SIZE14} from '../../styles/fonts';
+import {useAppSelector} from '../../redux/store/Store';
 
 const PrimaryProductCard = ({item, onPress}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  const styles = useStyles();
   // const discountedPrice =
   //   item.price - parseFloat(item.price) / parseFloat(item.discount);
   return (
@@ -20,7 +22,14 @@ const PrimaryProductCard = ({item, onPress}) => {
           source={{uri: item.thumbnail}}
           style={{height: 120, width: 120}}
         />
-        <Text style={fonts.h4}>{item.name}</Text>
+        <Text
+          style={{
+            fontSize: FONT_SIZE14,
+            fontWeight: '500',
+            color: colors.black,
+          }}>
+          {item.name}
+        </Text>
         <Text
           style={{
             ...fonts.h3,
@@ -60,12 +69,14 @@ const PrimaryProductCard = ({item, onPress}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  productCard: {
-    flex: 1,
-    // backgroundColor: 'blue',
-    margin: 10,
-  },
-});
+const useStyles = () => {
+  return StyleSheet.create({
+    productCard: {
+      flex: 1,
+      // backgroundColor: 'blue',
+      margin: 10,
+    },
+  });
+};
 
 export default PrimaryProductCard;

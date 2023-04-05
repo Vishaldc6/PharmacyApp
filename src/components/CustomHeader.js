@@ -61,6 +61,7 @@ const CustomHeader = props => {
           <Icon
             name={'shopping-cart'}
             size={25}
+            color={colors.darkgray}
             style={styles.icon}
             onPress={() => {
               props.navigation.navigate(ScreenNames.CartScreen);

@@ -1,12 +1,14 @@
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomHeader from '../components/CustomHeader';
-import fonts from '../styles/fonts';
+import fonts, {FONT_SIZE14} from '../styles/fonts';
 import colors from '../styles/colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useGlobaStyles} from '../styles/GlobalStyles';
+import {useAppSelector} from '../redux/store/Store';
 
 const TestBookCard = ({test}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
   const GlobalStyles = useGlobaStyles();
   console.log(test);
   return (
@@ -17,9 +19,18 @@ const TestBookCard = ({test}) => {
         borderColor: colors.primary_color,
         //   backgroundColor: colors.white,
       }}>
-      <Text style={fonts.h2}>Test Name : {test.test.name}</Text>
-      <Text style={fonts.h2}>Lab Name : {test.lab.name}</Text>
-      <Text style={fonts.h2}>Time : {test.time}</Text>
+      <Text
+        style={{fontSize: FONT_SIZE14, fontWeight: '400', color: colors.black}}>
+        Test Name : {test.test.name}
+      </Text>
+      <Text
+        style={{fontSize: FONT_SIZE14, fontWeight: '400', color: colors.black}}>
+        Lab Name : {test.lab.name}
+      </Text>
+      <Text
+        style={{fontSize: FONT_SIZE14, fontWeight: '400', color: colors.black}}>
+        Time : {test.time}
+      </Text>
     </View>
   );
 };

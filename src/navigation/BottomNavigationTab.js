@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import ScreenNames from './screenNames/ScreenNames';
@@ -6,22 +6,27 @@ import HomeScreen from '../screens/tabs/HomeScreen';
 import OrderScreen from '../screens/tabs/OrderScreen';
 import DoctorScreen from '../screens/tabs/DoctorScreen';
 import ProfileScreen from '../screens/tabs/ProfileScreen';
-import colors from '../styles/colors';
+// import colors from '../styles/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {size} from '../styles/size';
 import CarePlanScreen from '../screens/tabs/CarePlanScreen';
+import {useAppSelector} from '../redux/store/Store';
+import {useGlobaStyles} from '../styles/GlobalStyles';
 // import CarePlanScreen from '../screens/tabs/CarePlanScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const BottomNavigationTab = () => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  const styles = useStyles();
+
   return (
     <Tab.Navigator
       barStyle={styles.barStyle}
       sceneAnimationType={'shifting'}
       shifting={true}
-      screenOptions={{tabBarColor: colors.white}}
+      // screenOptions={{tabBarColor: colors.white}}
       // labeled={false}
       activeColor={colors.primary_color}
       initialRouteName={ScreenNames.HomeScreen}>
@@ -84,21 +89,25 @@ const BottomNavigationTab = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  barStyle: {
-    // height: size.height / 11,
-    borderWidth: 1,
-    backgroundColor: colors.white,
-    // borderTopLeftRadius: 10,
-    // borderTopRightRadius: 10,
-    // borderRadius: 10,
-    borderColor: colors.primary_color,
-    // position: 'absolute',
-    bottom: 10,
-    // left: 10,
-    // right: 10,
-    marginHorizontal: 5,
-  },
-});
+const useStyles = () => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+
+  return StyleSheet.create({
+    barStyle: {
+      // height: size.height / 11,
+      borderWidth: 1,
+      backgroundColor: colors.white,
+      // borderTopLeftRadius: 10,
+      // borderTopRightRadius: 10,
+      // borderRadius: 10,
+      borderColor: colors.primary_color,
+      // position: 'absolute',
+      bottom: 10,
+      // left: 10,
+      // right: 10,
+      marginHorizontal: 5,
+    },
+  });
+};
 
 export default BottomNavigationTab;
