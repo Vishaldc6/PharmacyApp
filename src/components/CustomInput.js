@@ -2,7 +2,7 @@ import {View, Text, TextInput, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors from '../styles/colors';
-import fonts, {FONT_SIZE12} from '../styles/fonts';
+import fonts, {FONT_SIZE12, FONT_SIZE14, FONT_SIZE16} from '../styles/fonts';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import colors from '../styles/colors';
 import {useAppSelector} from '../redux/store/Store';
@@ -16,7 +16,7 @@ const CustomInput = props => {
   return (
     <View {...props}>
       <Text
-        style={{fontSize: FONT_SIZE12, fontWeight: '400', color: colors.black}}>
+        style={{fontSize: FONT_SIZE14, fontWeight: '400', color: colors.black}}>
         {props.title}
       </Text>
       <View style={styles.inputContainer}>
@@ -95,7 +95,7 @@ const useStyles = () => {
     inputContainer: {
       // flex: 1,
       flexDirection: 'row',
-      // marginVertical:10,
+      marginVertical: widthPercentageToDP(2),
       // backgroundColor: 'red',
     },
     input: {
@@ -104,7 +104,7 @@ const useStyles = () => {
       borderBottomWidth: 1,
       height: widthPercentageToDP(10),
       marginHorizontal: widthPercentageToDP(2),
-      fontSize: FONT_SIZE12,
+      fontSize: FONT_SIZE16,
       fontWeight: '400',
       color: colors.black,
     },

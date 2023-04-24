@@ -14,7 +14,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../components/CustomButton';
 import ScreenNames from '../../navigation/screenNames/ScreenNames';
-import fonts, {FONT_SIZE14, FONT_SIZE16} from '../../styles/fonts';
+import {FONT_SIZE14, FONT_SIZE16} from '../../styles/fonts';
 import {size} from '../../styles/size';
 import {Images} from '../../assets/images';
 import {useAppSelector} from '../../redux/store/Store';
@@ -35,34 +35,40 @@ const Dots = ({selected}) => {
   );
 };
 
-const Next = ({...props}) => (
-  <TouchableWithoutFeedback {...props}>
-    <View
-      style={{
-        height: 60,
-        width: 60,
-        borderRadius: 50,
-        backgroundColor: colors.primary_color,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginRight: 20,
-        bottom: 10,
-      }}>
-      <Icon
-        name="chevron-right"
-        color={colors.white}
-        size={25}
-        style={{alignSelf: 'center'}}
-      />
-    </View>
-  </TouchableWithoutFeedback>
-);
+const Next = ({...props}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  return (
+    <TouchableWithoutFeedback {...props}>
+      <View
+        style={{
+          height: 60,
+          width: 60,
+          borderRadius: 50,
+          backgroundColor: colors.primary_color,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: 20,
+          bottom: 10,
+        }}>
+        <Icon
+          name="chevron-right"
+          color={colors.white}
+          size={25}
+          style={{alignSelf: 'center'}}
+        />
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
 
-const Skip = ({skipLabel, ...props}) => (
-  <Text style={{color: colors.black, marginLeft: 20, bottom: 10}} {...props}>
-    {skipLabel}
-  </Text>
-);
+const Skip = ({skipLabel, ...props}) => {
+  const {colors} = useAppSelector(state => state.CommonSlice);
+  return (
+    <Text style={{color: colors.black, marginLeft: 20, bottom: 10}} {...props}>
+      {skipLabel}
+    </Text>
+  );
+};
 
 const Done = ({...props}) => (
   <View style={{bottom: 10, width: size.width, flex: 1}}>
@@ -70,6 +76,8 @@ const Done = ({...props}) => (
   </View>
 );
 const OnboardingScreen = props => {
+  const styles = useStyles();
+  const {colors} = useAppSelector(state => state.CommonSlice);
   return (
     <View style={{flex: 1}}>
       <Onboarding

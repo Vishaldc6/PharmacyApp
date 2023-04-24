@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {size} from '../../styles/size';
@@ -23,27 +24,87 @@ import {
   GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
 import {AppStrings} from '../../utils/AppStrings';
-import {
-  ApiCall,
-  saveUser,
-  userLogin,
-} from '../../config/apiServices/ApiServices';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import axios from 'axios';
+import {ApiCall, saveUser} from '../../config/apiServices/ApiServices';
 import {useGlobaStyles} from '../../styles/GlobalStyles';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
 
 const GOOGLE_CLIENT_ID =
   '59510826670-7lilbhlo1mt18c6l2c685uae1sp3v9k6.apps.googleusercontent.com';
 
 const SignInScreen = props => {
+  const signInValidation = Yup.object().shape({
+    email: Yup.string()
+      .trim()
+      .email(AppStrings.emailError)
+      .required(AppStrings.emailRequired),
+    password: Yup.string()
+      .min(8, AppStrings.passwordLengthError)
+      .required(AppStrings.passwordRequired),
+  });
+
+  const {values, errors, handleChange, handleSubmit, touched} = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: signInValidation,
+    onSubmit: async value => {
+      setloading(true);
+      console.log('Formik submit : ', value);
+      if (values.email == 'admin@admin.com' && values.password == 'admin123') {
+        setloading(false);
+        props.navigation.navigate(ScreenNames.AdminHomeScreen);
+      } else {
+        const body = new FormData();
+        body.append('email', values.email);
+        body.append('password', values.password);
+        console.log(body);
+
+        const res = await fetch(AppStrings.BASE_URL + '/login', {
+          headers: {
+            Accept: 'application/json',
+          },
+          method: 'POST',
+          body: body,
+        }).catch(e => {
+          Alert.alert(AppStrings.appName, 'Server Error !! ');
+          setloading(false);
+        });
+        let responseText = await res.text();
+        let jsonRes = JSON.parse(responseText);
+        console.log('Screen res :', jsonRes);
+        if (jsonRes.flag) {
+          Alert.alert(AppStrings.appName, jsonRes.message);
+          saveUser(jsonRes.data);
+          if (isCheck) {
+            props.navigation.replace(ScreenNames.DoctorHomeScreen);
+          } else {
+            props.navigation.replace(ScreenNames.Home);
+          }
+          setloading(false);
+        } else if (jsonRes.flag == false) {
+          if (jsonRes.data?.errors != null) {
+            Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
+          } else {
+            Alert.alert(AppStrings.appName, jsonRes.message);
+          }
+          setloading(false);
+        } else {
+          Alert.alert(AppStrings.appName, 'Something went wrong !');
+          setloading(false);
+        }
+      }
+    },
+  });
+
   const GlobalStyles = useGlobaStyles();
 
   const [email, setemail] = useState('');
-  const [username, setusername] = useState('');
+
   const [password, setpassword] = useState('');
   const [isCheck, setisCheck] = useState(false);
-  const [emailError, setemailError] = useState('');
-  const [passwordError, setpasswordError] = useState('');
+  const [loading, setloading] = useState(false);
 
   const [user, setUser] = useState(null);
   GoogleSignin.configure({
@@ -102,14 +163,7 @@ const SignInScreen = props => {
 
   // checkSignedIn();
 
-  useEffect(() => {
-    props.navigation.addListener('focus', () => {
-      setemail('');
-      setpassword('');
-      setemailError('');
-      setpasswordError('');
-    });
-  }, []);
+  useEffect(() => {}, []);
 
   // const userLogin = async () => {
   //   console.log('first');
@@ -140,29 +194,32 @@ const SignInScreen = props => {
                 <Text style={fonts.h1}>Wellcome</Text>
                 <View style={{height: 20}} />
                 <CustomInput
-                  onChangeText={val => {
-                    setemail(val);
-                  }}
-                  value={email}
+                  onChangeText={handleChange('email')}
+                  value={values.email}
                   title={'Email'}
                   placeholder={'Enter Email'}
-                  // keyboardType={'email-address'}
-                  keyboardType={'default'}
+                  keyboardType={'email-address'}
+                  // keyboardType={'default'}
                   iconName={'user-circle-o'}
-                  // passwordField={false}
                 />
-                <Text style={GlobalStyles.errorText}>{emailError}</Text>
+                {touched.email && errors.email ? (
+                  <Text style={GlobalStyles.errorText}>{errors.email}</Text>
+                ) : (
+                  ''
+                )}
                 <CustomInput
                   passwordField={true}
-                  value={password}
-                  onChangeText={val => {
-                    setpassword(val);
-                  }}
+                  value={values.password}
+                  onChangeText={handleChange('password')}
                   title={'Password'}
                   placeholder={'Enter Password'}
                   iconName={'key'}
                 />
-                <Text style={GlobalStyles.errorText}>{passwordError}</Text>
+                {touched.password && errors.password ? (
+                  <Text style={GlobalStyles.errorText}>{errors.password}</Text>
+                ) : (
+                  ''
+                )}
                 <View
                   style={{...GlobalStyles.rowContainer, marginHorizontal: 10}}>
                   <View style={GlobalStyles.rowContainer}>
@@ -177,114 +234,22 @@ const SignInScreen = props => {
                     <Text style={fonts.h3}>As Doctor</Text>
                   </View>
                   {/* <Text
-                      onPress={() => {
-                        props.navigation.navigate(
-                          ScreenNames.ForgotPasswordScreen,
-                        );
-                      }}
-                      style={styles.linkText}>
-                      Forgot Password ?
-                    </Text> */}
+                    onPress={() => {
+                      props.navigation.navigate(
+                        ScreenNames.ForgotPasswordScreen,
+                      );
+                    }}
+                    style={styles.linkText}>
+                    Forgot Password ?
+                  </Text> */}
                 </View>
                 <View style={{height: 10}} />
                 <View style={{marginHorizontal: 10}}>
-                  <CustomButton
-                    title={'Sign in'}
-                    onPress={async () => {
-                      // console.log('username', username);
-                      if (email == '' && password == '') {
-                        // Alert.alert('Sign in',"All flieds are empty")
-                        setemailError('* Please enter Email');
-                        setpasswordError('* Please enter Password');
-                      } else if (email == 'admin' && password == 'admin123') {
-                        props.navigation.navigate(ScreenNames.AdminHomeScreen);
-                      } else {
-                        const body = new FormData();
-                        body.append('email', email);
-                        body.append('password', password);
-                        console.log(body);
-
-                        // axios
-                        //   .post(AppStrings.BASE_URL + '/login', body)
-                        //   .then(res => console.log('axios : ', res.data));
-
-                        const res = await fetch(
-                          AppStrings.BASE_URL + '/login',
-                          {
-                            headers: {
-                              Accept: 'application/json',
-                            },
-                            method: 'POST',
-                            body: body,
-                          },
-                        ).catch(e =>
-                          Alert.alert(AppStrings.appName, 'Server Error !! '),
-                        );
-                        console.log(res);
-                        // const jsonRes = await res.json();
-                        let responseText = await res.text();
-                        let jsonRes = JSON.parse(responseText);
-                        console.log('Screen res :', jsonRes);
-                        // if (res.ok) {
-                        if (jsonRes.flag) {
-                          Alert.alert(AppStrings.appName, jsonRes.message);
-                          saveUser(jsonRes.data);
-                          setemailError('');
-                          setpasswordError('');
-                          if (isCheck) {
-                            props.navigation.replace(
-                              ScreenNames.DoctorHomeScreen,
-                            );
-                          } else {
-                            props.navigation.replace(ScreenNames.Home);
-                          }
-                        } else if (jsonRes.flag == false) {
-                          if (jsonRes.data?.errors != null) {
-                            Alert.alert(
-                              AppStrings.appName,
-                              jsonRes.data.errors[0],
-                            );
-                          } else {
-                            Alert.alert(AppStrings.appName, jsonRes.message);
-                          }
-                        }
-                        // }
-                        else {
-                          Alert.alert(
-                            AppStrings.appName,
-                            'Something went wrong !',
-                          );
-                        }
-
-                        // const res = await ApiCall('/login', 'POST', body);
-                        // console.log('res        :::::: ', res);
-                        // if (res) {
-                        //   saveUser(res.token);
-                        //   props.navigation.replace(ScreenNames.Home);
-                        // } else {
-                        //   Alert.alert(
-                        //     AppStrings.appName,
-                        //     'Something went wrong !',
-                        //   );
-                        // }
-
-                        // const res = await userLogin(email, password);
-                        // console.log('resss : ', res);
-                        // if (res.errors == null) {
-                        //   Alert.alert(AppStrings.appName, res.MESSAGE);
-                        //   if (res.FLAG) {
-                        //     props.navigation.navigate(ScreenNames.Home);
-                        //   }
-                        //   console.log(res);
-                        // } else {
-                        //   Alert.alert(
-                        //     AppStrings.appName,
-                        //     Object.values(res.errors)[0].toString(),
-                        //   );
-                        // }
-                      }
-                    }}
-                  />
+                  {loading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <CustomButton title={'Sign In'} onPress={handleSubmit} />
+                  )}
                 </View>
                 <View style={{height: 10}} />
                 {/* <View style={{justifyContent: 'center', alignItems: 'center'}}>

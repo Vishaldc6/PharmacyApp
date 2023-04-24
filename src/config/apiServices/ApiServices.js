@@ -24,7 +24,7 @@ export const getToken = async () => {
 
 export const getUserData = async () => {
   const data = JSON.parse(await AsyncStorage.getItem('TOKEN'));
-  // console.log(data);
+  console.log('getUserData : ', data);
 
   return data.user;
 };
@@ -52,10 +52,11 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
       headers,
       body: data ? data : null,
     });
+    // console.log('REs:', await res.json());
     // console.log('json parse : ', JSON.parse(await res.text()));
-    // let response = await res.json();
-    let responseText = await res.text();
-    let response = JSON.parse(responseText);
+    let response = await res.json();
+    // let responseText = await res.text();
+    // let response = JSON.parse(responseText);
     console.log('response:::', response);
     if (response.success) {
       // Alert.alert(AppStrings.appName, response.message);
@@ -82,7 +83,7 @@ export const ApiCall = async (endpoint, method = 'GET', data = null) => {
     return response;
   } catch (error) {
     console.log(error);
-    Alert.alert(AppStrings.appName, error.toString());
+    // Alert.alert(AppStrings.appName, error.toString());
   }
 };
 
@@ -203,4 +204,10 @@ export const userLogin = async (email, password) => {
       break;
   }
   return response;
+};
+
+//Get user from id
+export const getUserDetails = async ID => {
+  const res = await ApiCall('/users/' + ID, 'GET');
+  return res;
 };

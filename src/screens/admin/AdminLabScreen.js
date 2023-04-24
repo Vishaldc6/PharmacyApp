@@ -60,6 +60,7 @@ const LabCard = ({item, editPress, deletePress}) => {
 };
 
 const AdminLabScreen = props => {
+  const GlobalStyles = useGlobaStyles();
   const [labs, setlabs] = useState([]);
   const [loading, setloading] = useState(true);
   const [isRefresh, setisRefresh] = useState(false);

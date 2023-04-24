@@ -23,10 +23,12 @@ import CustomInput from '../components/CustomInput';
 import moment from 'moment';
 import {useGlobaStyles} from '../styles/GlobalStyles';
 import {useAppSelector} from '../redux/store/Store';
+import {size} from '../styles/size';
 
 const OrderDetailScreen = props => {
   const {colors} = useAppSelector(state => state.CommonSlice);
   const GlobalStyles = useGlobaStyles();
+  // const styles = useStyles();
   console.log('props.route.params.data : ', props.route.params.data);
   const isDoctor = props.route.params.isDoctor;
   const order = props.route.params.data;
@@ -226,18 +228,32 @@ const OrderDetailScreen = props => {
             data={order.order_products}
             renderItem={({item}) => (
               <View style={GlobalStyles.infoCard}>
-                <View style={styles.productCard}>
+                <View
+                  style={{
+                    flex: 1,
+                    width: size.width / 2,
+                    // backgroundColor: colors.white,
+                    margin: 5,
+                    // flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignContent: 'center',
+                    alignSelf: 'center',
+                    // borderWidth: 1,
+                    borderRadius: 10,
+                    padding: 5,
+                    // borderColor: colors.darkgray,
+                  }}>
                   <Image
                     source={{
                       uri:
-                        'http://192.168.29.125:8000/products/thumbnail/' +
-                        // 'http://192.168.43.119:8000/products/thumbnail/' +
+                        'http://192.168.43.125:8000/products/thumbnail/' +
                         item.thumbnail,
                     }}
                     style={{height: 120, width: 120}}
                   />
                   <Text
                     style={{
+                      flex: 1,
                       fontSize: FONT_SIZE14,
                       fontWeight: '500',
                       color: colors.black,
@@ -313,30 +329,32 @@ const OrderDetailScreen = props => {
             }}
           />
           <View style={{height: 10}} />
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={order.notes.reverse()}
-            renderItem={({item}) => (
-              <View
-                style={{
-                  // ...styles.card,
-                  ...GlobalStyles.infoCard,
-                  width: wp(40),
-                }}>
-                <Text
-                  numberOfLines={5}
-                  ellipsizeMode="tail"
+          {order.notes && (
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={order.notes.reverse()}
+              renderItem={({item}) => (
+                <View
                   style={{
-                    fontSize: FONT_SIZE14,
-                    fontWeight: '400',
-                    color: colors.black,
+                    // ...styles.card,
+                    ...GlobalStyles.infoCard,
+                    width: wp(40),
                   }}>
-                  {item.consultation}
-                </Text>
-              </View>
-            )}
-          />
+                  <Text
+                    numberOfLines={5}
+                    ellipsizeMode="tail"
+                    style={{
+                      fontSize: FONT_SIZE14,
+                      fontWeight: '400',
+                      color: colors.black,
+                    }}>
+                    {item.consultation}
+                  </Text>
+                </View>
+              )}
+            />
+          )}
         </View>
 
         <View style={{height: 100}} />

@@ -20,6 +20,8 @@ import {
   ApiCall,
   getToken,
   getUserData,
+  getUserDetails,
+  saveUser,
 } from '../config/apiServices/ApiServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ScreenNames from '../navigation/screenNames/ScreenNames';
@@ -99,7 +101,7 @@ const EditProfileScreen = props => {
   }, []);
   const getData = async () => {
     const data = await getUserData();
-    console.log(data.id);
+    console.log('getUserData : ', data.id);
     const tkn = await getToken();
     const res = await fetch(AppStrings.BASE_URL + '/users/' + data.id, {
       headers: {
@@ -394,6 +396,16 @@ const EditProfileScreen = props => {
                   seteducationError('');
                   setexperianceError('');
                   setspecialistError('');
+                  getUserDetails(ID).then(res => {
+                    console.log('getUserDetails : ', res);
+                    getToken().then(tkn => {
+                      console.log('TOKEN :: ', tkn);
+
+                      saveUser({user: res, token: tkn}).then(res =>
+                        console.log('user saved..'),
+                      );
+                    });
+                  });
                 } else if (jsonRes.flag == false) {
                   if (jsonRes.data?.errors != null) {
                     Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);

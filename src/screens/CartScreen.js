@@ -60,6 +60,7 @@ const CartScreen = props => {
     if (jsonRes.flag) {
       // Alert.alert(AppStrings.appName, jsonRes.message);
       console.log('jsonRes.data.cart_items : ', jsonRes.data.cart_items);
+
       setcartList(jsonRes.data.cart_items);
       jsonRes.data.cart_items.forEach(item => {
         console.log(item.product_detail.is_required_doctor);
@@ -124,9 +125,7 @@ const CartScreen = props => {
                     <Image
                       source={{
                         uri:
-                          // 'http://192.168.29.125:8000/products/thumbnail/' +
                           'http://192.168.43.125:8000/products/thumbnail/' +
-                          // 'http://192.168.43.119:8000/products/thumbnail/' +
                           item.product_detail.thumbnail,
                       }}
                       style={{height: 120, width: 120}}

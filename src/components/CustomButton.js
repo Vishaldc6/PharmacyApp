@@ -4,7 +4,7 @@ import {size} from '../styles/size';
 import fonts, {FONT_SIZE12} from '../styles/fonts';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {useAppSelector} from '../redux/store/Store';
-const CustomButton = props => {
+const CustomButton = (props, children) => {
   const {colors} = useAppSelector(state => state.CommonSlice);
 
   return (

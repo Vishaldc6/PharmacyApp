@@ -9,6 +9,7 @@ import {
   Keyboard,
   Alert,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import CustomButton from '../../components/CustomButton';
@@ -25,48 +26,133 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {doctorTypeList} from '../../assets/data/doctorTypeList';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useGlobaStyles} from '../../styles/GlobalStyles';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
 
 const SignUpScreen = props => {
+  const signUpValidation = Yup.object().shape({
+    username: Yup.string()
+      .trim()
+      .matches(/^[A-Za-z]*$/, AppStrings.usernameNumError)
+      .required(AppStrings.usernameRequired)
+      .min(3, AppStrings.usernameError),
+    email: Yup.string()
+      .trim()
+      .email(AppStrings.emailError)
+      .required(AppStrings.emailRequired),
+    mob: Yup.string()
+      .trim()
+      .length(10, AppStrings.mobError)
+      .required(AppStrings.mobRequired),
+    password: Yup.string()
+      .min(8, AppStrings.passwordLengthError)
+      .required(AppStrings.passwordRequired),
+    confirmPassword: Yup.string()
+      .required(AppStrings.passwordRequired)
+      .oneOf([Yup.ref('password')], AppStrings.passwordMatchError),
+    // education: Yup.string().trim().required(AppStrings.educationRequired),
+    // experiance: Yup.string().trim().required(AppStrings.experianceRequired),
+  });
+  const DoctorSignUpValidation = Yup.object().shape({
+    username: Yup.string()
+      .trim()
+      .matches(/^[A-Za-z]*$/, AppStrings.usernameNumError)
+      .required(AppStrings.usernameRequired)
+      .min(3, AppStrings.usernameError),
+    email: Yup.string()
+      .trim()
+      .email(AppStrings.emailError)
+      .required(AppStrings.emailRequired),
+    mob: Yup.string()
+      .trim()
+      .length(10, AppStrings.mobError)
+      .required(AppStrings.mobRequired),
+    password: Yup.string()
+      .min(8, AppStrings.passwordLengthError)
+      .required(AppStrings.passwordRequired),
+    confirmPassword: Yup.string()
+      .required(AppStrings.passwordRequired)
+      .oneOf([Yup.ref('password')], AppStrings.passwordMatchError),
+    education: Yup.string()
+      .trim()
+      .required(AppStrings.educationRequired)
+      .min(2, '*please enter proper education degree'),
+    experiance: Yup.string()
+      .trim()
+      .required(AppStrings.experianceRequired)
+      .min(5, '*please enter proper experiance year/month'),
+  });
+
   const GlobalStyles = useGlobaStyles();
 
-  const [email, setemail] = useState('');
-  const [mob, setmob] = useState('');
-  const [username, setusername] = useState('');
-  const [password, setpassword] = useState('');
-  const [education, seteducation] = useState('');
-  const [experiance, setexperiance] = useState('');
   const [specialist, setspecialist] = useState('');
-  const [confirmPassword, setconfirmPassword] = useState('');
   const [isCheck, setisCheck] = useState(false);
+  const [loading, setloading] = useState(false);
 
-  const [emailError, setemailError] = useState('');
-  const [usernameError, setusernameError] = useState('');
-  const [mobError, setmobError] = useState('');
-  const [educationError, seteducationError] = useState('');
-  const [specialistError, setspecialistError] = useState('');
-  const [experianceError, setexperianceError] = useState('');
-  const [passwordError, setpasswordError] = useState('');
-  const [confirmPasswordError, setconfirmPasswordError] = useState('');
+  const {values, errors, handleChange, handleSubmit, touched, setFieldError} =
+    useFormik({
+      initialValues: {
+        username: '',
+        email: '',
+        mob: '',
+        password: '',
+        confirmPassword: '',
+        specialist: '',
+        education: '',
+        experiance: '',
+      },
+      validationSchema: isCheck ? DoctorSignUpValidation : signUpValidation,
+      onSubmit: async values => {
+        if (!specialist && isCheck) {
+          setFieldError('specialist', '* please select specialist');
+        } else {
+          console.log(values);
 
-  useEffect(() => {
-    props.navigation.addListener('focus', () => {
-      setconfirmPassword('');
-      setemail('');
-      setpassword('');
-      setusername('');
-      setmob('');
-      seteducation('');
-      setexperiance('');
-      setspecialist('');
-      setemailError('');
-      setusernameError('');
-      setconfirmPasswordError('');
-      setmobError('');
-      seteducationError('');
-      setexperianceError('');
-      setspecialistError('');
+          setloading(true);
+          const body = new FormData();
+          body.append('name', values.username);
+          body.append('email', values.email);
+          body.append('mobile', values.mob);
+          body.append('password', values.password);
+          body.append('password_confirmation', values.confirmPassword);
+          if (isCheck) {
+            body.append('specialist', specialist);
+            body.append('education', values.education);
+            body.append('experience', values.experiance);
+          }
+          const res = await fetch(
+            isCheck
+              ? AppStrings.BASE_URL + '/doctorRegister'
+              : AppStrings.BASE_URL + '/patientRegister',
+            {
+              headers: {
+                Accept: 'application/json',
+              },
+              method: 'POST',
+              body: body,
+            },
+          );
+          let responseText = await res.text();
+          let jsonRes = JSON.parse(responseText);
+          if (jsonRes.flag) {
+            Alert.alert(AppStrings.appName, jsonRes.message);
+            setloading(false);
+            props.navigation.navigate(ScreenNames.SignInScreen);
+          } else if (jsonRes.flag == false) {
+            if (jsonRes.data?.errors != null) {
+              Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
+            } else {
+              Alert.alert(AppStrings.appName, jsonRes.message);
+            }
+            setloading(false);
+          } else {
+            Alert.alert(AppStrings.appName, 'Something went wrong !');
+            setloading(false);
+          }
+          setloading(false);
+        }
+      },
     });
-  }, []);
 
   return (
     <View style={{flex: 1}}>
@@ -83,98 +169,107 @@ const SignUpScreen = props => {
                 {/* <View style={{backgroundColor: 'red', height: 500}}> */}
 
                 <CustomInput
-                  onChangeText={val => {
-                    setusername(val);
-                  }}
-                  value={username}
+                  onChangeText={handleChange('username')}
+                  value={values.username}
                   title={'Username'}
                   placeholder={'Enter Username'}
                   keyboardType={'email-address'}
                   iconName={'user-circle-o'}
                 />
-                <Text style={{...GlobalStyles.errorText}}>{usernameError}</Text>
+                {touched.username && errors.username ? (
+                  <Text style={{...GlobalStyles.errorText}}>
+                    {errors.username}
+                  </Text>
+                ) : (
+                  ''
+                )}
                 <CustomInput
-                  onChangeText={val => {
-                    setemail(val);
-                  }}
-                  value={email}
+                  onChangeText={handleChange('email')}
+                  value={values.email}
                   title={'Email'}
                   placeholder={'Enter Email'}
                   keyboardType={'email-address'}
                   iconName={'envelope-o'}
                 />
-                <Text style={GlobalStyles.errorText}>{emailError}</Text>
+                {touched.email && errors.email ? (
+                  <Text style={GlobalStyles.errorText}>{errors.email}</Text>
+                ) : (
+                  ''
+                )}
                 <CustomInput
-                  onChangeText={val => {
-                    setmob(val);
-                  }}
-                  value={mob}
+                  onChangeText={handleChange('mob')}
+                  value={values.mob}
                   title={'Mobile'}
                   placeholder={'Enter Mobile'}
                   keyboardType={'phone-pad'}
                   iconName={'mobile-phone'}
                 />
-                <Text style={GlobalStyles.errorText}>{mobError}</Text>
+                {touched.mob && errors.mob ? (
+                  <Text style={GlobalStyles.errorText}>{errors.mob}</Text>
+                ) : (
+                  ''
+                )}
                 <CustomInput
                   passwordField={true}
-                  onChangeText={val => {
-                    setpassword(val);
-                  }}
-                  value={password}
+                  onChangeText={handleChange('password')}
+                  value={values.password}
                   title={'Password'}
                   placeholder={'Enter Password'}
                   iconName={'key'}
                 />
-                <Text style={GlobalStyles.errorText}>{passwordError}</Text>
+                {touched.password && errors.password ? (
+                  <Text style={GlobalStyles.errorText}>{errors.password}</Text>
+                ) : (
+                  ''
+                )}
                 <CustomInput
                   passwordField={true}
-                  onChangeText={val => {
-                    setconfirmPassword(val);
-                  }}
-                  value={confirmPassword}
+                  onChangeText={handleChange('confirmPassword')}
+                  value={values.confirmPassword}
                   title={'Confirm Password'}
                   placeholder={'Enter Confirm Password'}
                   iconName={'key'}
                 />
-                <Text style={GlobalStyles.errorText}>
-                  {confirmPasswordError}
-                </Text>
+                {touched.confirmPassword && errors.confirmPassword ? (
+                  <Text style={GlobalStyles.errorText}>
+                    {errors.confirmPassword}
+                  </Text>
+                ) : (
+                  ''
+                )}
                 {isCheck && (
                   <>
                     <CustomInput
-                      onChangeText={val => {
-                        seteducation(val);
-                      }}
-                      value={education}
+                      onChangeText={handleChange('education')}
+                      value={values.education}
                       title={'Education'}
                       placeholder={'Enter Education'}
                       keyboardType={'email-address'}
                       iconName={'info'}
                     />
-                    <Text style={GlobalStyles.errorText}>{educationError}</Text>
+                    {touched.education && errors.education ? (
+                      <Text style={GlobalStyles.errorText}>
+                        {errors.education}
+                      </Text>
+                    ) : (
+                      ''
+                    )}
                     <CustomInput
-                      onChangeText={val => {
-                        setexperiance(val);
-                      }}
-                      value={experiance}
+                      onChangeText={handleChange('experiance')}
+                      value={values.experiance}
                       title={'Experiance'}
                       placeholder={'Enter Experiance'}
                       keyboardType={'email-address'}
                       iconName={'info'}
                     />
-                    <Text style={GlobalStyles.errorText}>
-                      {experianceError}
-                    </Text>
-                    {/* <CustomInput
-                      onChangeText={val => {
-                        setspecialist(val);
-                      }}
-                      value={specialist}
-                      title={'Specialist'}
-                      placeholder={'Enter Specialist'}
-                      keyboardType={'email-address'}
-                      iconName={'info'}
-                    /> */}
+                    {touched.experiance && errors.experiance ? (
+                      <Text style={GlobalStyles.errorText}>
+                        {errors.experiance}
+                      </Text>
+                    ) : (
+                      ''
+                    )}
+
                     <Text style={{...fonts.h3, marginLeft: 10}}>
                       Doctor Type
                     </Text>
@@ -184,14 +279,6 @@ const SignUpScreen = props => {
                         borderBottomWidth: 1.5,
                         borderBottomColor: colors.darkgray,
                       }}
-                      // onFocus={() => {
-                      //   console.log('focus');
-                      //   setFocus(true);
-                      // }}
-                      // onBlur={() => {
-                      //   console.log('blur');
-                      //   setFocus(false);
-                      // }}
                       renderLeftIcon={() => (
                         <Icon
                           name={'user'}
@@ -201,7 +288,6 @@ const SignUpScreen = props => {
                         />
                       )}
                       data={doctorTypeList}
-                      // search
                       maxHeight={300}
                       labelField="label"
                       valueField="value"
@@ -215,9 +301,16 @@ const SignUpScreen = props => {
                         setspecialist(item.label);
                       }}
                     />
-                    <Text style={GlobalStyles.errorText}>
+                    {touched.specialist && errors.specialist ? (
+                      <Text style={GlobalStyles.errorText}>
+                        {errors.specialist}
+                      </Text>
+                    ) : (
+                      ''
+                    )}
+                    {/* <Text style={GlobalStyles.errorText}>
                       {specialistError}
-                    </Text>
+                    </Text> */}
                   </>
                 )}
 
@@ -237,121 +330,16 @@ const SignUpScreen = props => {
                       checkBoxColor={colors.primary_color}
                     />
                     <View style={{width: 10}} />
-                    <Text style={fonts.h3}>As Doctor</Text>
+                    <Text style={fonts.h4}>As Doctor</Text>
                   </View>
                 </View>
                 <View style={{height: 10}} />
                 <View style={{marginHorizontal: 10}}>
-                  <CustomButton
-                    title={'Sign up'}
-                    onPress={async () => {
-                      if (username == '') {
-                        setusernameError('* Please enter Username');
-                      } else if (email == '') {
-                        setemailError('* Please enter Email');
-                      } else if (password == '') {
-                        setpasswordError('* Please enter Password');
-                      } else if (confirmPassword == '') {
-                        setconfirmPasswordError(
-                          '* Please enter Confirm Password',
-                        );
-                      } else if (mob == '') {
-                        setmobError('* Please enter Mobile');
-                      }
-                      // Alert.alert('Sign in',"All flieds are empty")
-                      else {
-                        const body = new FormData();
-                        body.append('name', username);
-                        body.append('email', email);
-                        body.append('mobile', mob);
-                        body.append('password', password);
-                        body.append('password_confirmation', confirmPassword);
-                        if (isCheck) {
-                          if (education == '') {
-                            seteducationError('* Please enter Education');
-                          } else if (specialist == '') {
-                            setspecialistError('* Please enter Specialist');
-                          } else if (experiance == '') {
-                            setexperianceError('* Please enter Experiance');
-                          } else {
-                            body.append('specialist', specialist);
-                            body.append('education', education);
-                            body.append('experience', experiance);
-                          }
-                        }
-                        const res = await fetch(
-                          isCheck
-                            ? AppStrings.BASE_URL + '/doctorRegister'
-                            : AppStrings.BASE_URL + '/patientRegister',
-                          {
-                            headers: {
-                              Accept: 'application/json',
-                            },
-                            method: 'POST',
-                            body: body,
-                          },
-                        );
-                        // const jsonRes = await res.json();
-                        let responseText = await res.text();
-                        let jsonRes = JSON.parse(responseText);
-                        console.log('Screen res :', jsonRes);
-                        console.log(res);
-                        // if (res.ok) {
-                        if (jsonRes.flag) {
-                          Alert.alert(AppStrings.appName, jsonRes.message);
-                          setemailError('');
-                          setmobError('');
-                          seteducationError('');
-                          setpasswordError('');
-                          setusernameError('');
-                          setexperianceError('');
-                          setspecialistError('');
-                          setconfirmPasswordError('');
-                          props.navigation.navigate(ScreenNames.SignInScreen);
-                        } else if (jsonRes.flag == false) {
-                          if (jsonRes.data?.errors != null) {
-                            Alert.alert(
-                              AppStrings.appName,
-                              jsonRes.data.errors[0],
-                            );
-                          } else {
-                            Alert.alert(AppStrings.appName, jsonRes.message);
-                          }
-                        }
-                        // }
-                        else {
-                          Alert.alert(
-                            AppStrings.appName,
-                            'Something went wrong !',
-                          );
-                        }
-                        // if (res?.data.errors) {
-                        //   Alert.alert(AppStrings.appName, res.data.errors[0]);
-                        // } else {
-                        //   Alert.alert(AppStrings.appName, res.toString());
-                        //   props.navigation.navigate(ScreenNames.SignInScreen);
-                        // }
-                        // Alert.alert(AppStrings.appName, res);
-                        // props.navigation.navigate(ScreenNames.SignInScreen);
-                        // const res = await userRegister(
-                        //   username,
-                        //   email,
-                        //   password,
-                        //   confirmPassword,
-                        // );
-                        // console.log('ressss : ', res);
-                        // if (res.errors == null) {
-                        //   Alert.alert(AppStrings.appName, res.MESSAGE);
-                        //   props.navigation.navigate(ScreenNames.SignInScreen);
-                        // } else {
-                        //   Alert.alert(
-                        //     AppStrings.appName,
-                        //     Object.values(res.errors)[0].toString(),
-                        //   );
-                        // }
-                      }
-                    }}
-                  />
+                  {loading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <CustomButton title={'Sign up'} onPress={handleSubmit} />
+                  )}
                 </View>
                 <View style={{height: 10}} />
                 <Text style={{...fonts.h3, alignSelf: 'center'}}>

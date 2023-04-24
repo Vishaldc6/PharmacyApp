@@ -19,7 +19,7 @@ const AdminFormScreen = props => {
   const title = props.route.params.title;
   const ID = props.route.params.ID;
   // console.log('ID : ', ID);
-  // console.log('params : ', props.route.params);
+  console.log('params : ', props.route.params);
 
   useEffect(() => {
     if (ID) {

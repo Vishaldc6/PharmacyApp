@@ -19,6 +19,7 @@ import {getToken, getUserData} from '../../config/apiServices/ApiServices';
 import {widthPercentageToDP} from 'react-native-responsive-screen';
 import moment from 'moment';
 import {useGlobaStyles} from '../../styles/GlobalStyles';
+import {size} from '../../styles/size';
 
 // const PatientCard = ({name, age, gender, date, onPress}) => (
 //   <TouchableOpacity onPress={onPress}>
@@ -180,6 +181,12 @@ const DoctorHomeScreen = props => {
         </View>
       ) : (
         <View style={{...GlobalStyles.mainContainer, marginVertical: 10}}>
+          <View style={styles.bannerContainer}>
+            <Image
+              source={Images.banners3}
+              style={{flex: 1, resizeMode: 'cover', height: 200, width: 500}}
+            />
+          </View>
           <View style={GlobalStyles.infoCard}>
             <Text style={{...fonts.h1, margin: 5}}>Consultation List</Text>
             <FlatList
@@ -313,6 +320,18 @@ const styles = StyleSheet.create({
     borderColor: colors.darkgray,
     borderRadius: 15,
     backgroundColor: colors.primary_color_doc,
+  },
+  bannerContainer: {
+    margin: 5,
+    height: size.height / 4.5,
+    // backgroundColor: 'red',
+    padding: 10,
+  },
+  slide: {
+    flex: 1,
+    // height: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

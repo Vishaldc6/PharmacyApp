@@ -19,6 +19,7 @@ import {
   getTests,
 } from '../../config/apiServices/ApiServices';
 import {ActivityIndicator} from 'react-native-paper';
+import {useGlobaStyles} from '../../styles/GlobalStyles';
 
 const Card = ({title, number, onPress}) => {
   return (
@@ -67,11 +68,31 @@ const AdminHomeScreen = props => {
   }, []);
 
   const getData = () => {
-    getProducts().then(res => setproducts(res.length));
-    getCategories().then(res => setcategories(res.length));
-    getLabs().then(res => setlabs(res.length));
-    getTests().then(res => setTests(res.length));
-    getDoctors().then(res => setdoctors(res.length));
+    getProducts().then(res => {
+      if (res) {
+        setproducts(res.length);
+      }
+    });
+    getCategories().then(res => {
+      if (res) {
+        setcategories(res.length);
+      }
+    });
+    getLabs().then(res => {
+      if (res) {
+        setlabs(res.length);
+      }
+    });
+    getTests().then(res => {
+      if (res) {
+        setTests(res.length);
+      }
+    });
+    // getDoctors().then(res => {
+    //   if (res) {
+    //     setdoctors(res.length);
+    //   }
+    // });
     setisRefresh(true);
     setloading(false);
     setisRefresh(false);

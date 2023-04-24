@@ -32,6 +32,8 @@ import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 import {Images} from '../assets/images';
 import {useGlobaStyles} from '../styles/GlobalStyles';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
 
 const PriceCard = ({price, addToCart}) => {
   const [selected, setselected] = useState(false);
@@ -67,6 +69,53 @@ const PriceCard = ({price, addToCart}) => {
 };
 
 const ProductDetailScreen = props => {
+  const reviewValidation = Yup.object().shape({
+    review: Yup.string()
+      .trim()
+      .required(AppStrings.reviewRequired)
+      .min(3, '* Invalid review.(character lenght atleast 3)'),
+    rating: Yup.number().required(AppStrings.rateRequired),
+  });
+
+  const {values, errors, handleChange, handleSubmit, touched, resetForm} =
+    useFormik({
+      initialValues: {
+        review: '',
+        rating: '',
+      },
+      validationSchema: reviewValidation,
+      onSubmit: async value => {
+        console.log(value);
+
+        const body = new FormData();
+        body.append('product_id', product.id);
+        body.append('review', value.review);
+        body.append('rating', value.rating);
+        const res = await fetch(AppStrings.BASE_URL + '/productReview', {
+          headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+          },
+          method: 'POST',
+          body: body,
+        });
+        // const jsonRes = await res.json();
+        let responseText = await res.text();
+        let jsonRes = JSON.parse(responseText);
+        console.log('Screen res :', jsonRes);
+        console.log(res);
+        // if (res.ok) {
+        if (jsonRes.success) {
+          Alert.alert(AppStrings.appName, jsonRes.message);
+          // getDetail(props.route.params.id);
+        } else if (jsonRes.success == false) {
+          Alert.alert(AppStrings.appName, jsonRes.data);
+        }
+
+        resetForm();
+      },
+    });
+
   const GlobalStyles = useGlobaStyles();
   console.log(props.route.params.id);
   let products = props.route.params.products;
@@ -76,7 +125,7 @@ const ProductDetailScreen = props => {
   const [review, setreview] = useState('');
   const [qty, setqty] = useState(1);
   const [product, setproduct] = useState({});
-  const [loading, setloading] = useState(true);
+  const [loading, setloading] = useState(false);
   const [token, settoken] = useState('');
 
   var currentDate = new Date();
@@ -95,8 +144,8 @@ const ProductDetailScreen = props => {
   const getDetail = async id => {
     getProducts(id).then(res => {
       setproduct(res);
-      //   console.log('product detail :', product.images);
-      //   product.images.map(it => console.log(it.image));
+      console.log('product image detail :', product.images);
+      product.images.map(it => console.log(it.image));
       setloading(false);
     });
 
@@ -118,19 +167,22 @@ const ProductDetailScreen = props => {
             style={{
               height: size.height / 3,
             }}>
-            <Swiper autoplay>
-              {product.images.map(itm => (
-                <Image
-                  source={{uri: itm.image}}
-                  style={{
-                    flex: 1,
-                    width: '100%',
-                    resizeMode: 'contain',
-                    // backgroundColor: 'red',
-                  }}
-                />
-              ))}
-            </Swiper>
+            {product.images && (
+              <Swiper autoplay>
+                {console.log(product.images)}
+                {product.images.map(itm => (
+                  <Image
+                    source={{uri: itm.image}}
+                    style={{
+                      flex: 1,
+                      width: '100%',
+                      resizeMode: 'contain',
+                      // backgroundColor: 'red',
+                    }}
+                  />
+                ))}
+              </Swiper>
+            )}
           </View>
 
           <View
@@ -142,10 +194,11 @@ const ProductDetailScreen = props => {
               justifyContent: 'space-between',
             }}>
             <View>
-              <Text style={fonts.h1}>{product.name}</Text>
-              <Text>by {product.brand}</Text>
+              <Text style={{...fonts.h1, flex: 1}}>{product.name}</Text>
+              <Text style={{flex: 1}}>by {product.brand}</Text>
               <View
                 style={{
+                  flex: 1,
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
@@ -155,41 +208,43 @@ const ProductDetailScreen = props => {
                   style={{margin: 5}}
                   color={colors.primary_color}
                 />
-                <Text style={fonts.h5}>
-                  {product.rate} rate & {product.reviews.length} reviews
-                </Text>
+                {product.reviews && (
+                  <Text style={fonts.h5}>
+                    {product.rate} rate & {product.reviews.length} reviews
+                  </Text>
+                )}
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <TouchableOpacity
+                    onPress={() => setqty(c => c + 1)}
+                    style={{
+                      margin: 5,
+                      padding: 5,
+                      borderWidth: 1,
+                      borderRadius: 5,
+                    }}>
+                    <Icon name={'plus'} color={colors.primary_color} />
+                  </TouchableOpacity>
+                  <Text style={{padding: 5, ...fonts.h2}}>{qty}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (qty > 1) {
+                        setqty(c => c - 1);
+                      }
+                    }}
+                    style={{
+                      margin: 5,
+                      padding: 5,
+                      borderWidth: 1,
+                      borderRadius: 5,
+                    }}>
+                    <Icon name={'minus'} color={colors.primary_color} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              <TouchableOpacity
-                onPress={() => setqty(c => c + 1)}
-                style={{
-                  margin: 5,
-                  padding: 5,
-                  borderWidth: 1,
-                  borderRadius: 5,
-                }}>
-                <Icon name={'plus'} color={colors.primary_color} />
-              </TouchableOpacity>
-              <Text style={{padding: 5, ...fonts.h2}}>{qty}</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  if (qty > 1) {
-                    setqty(c => c - 1);
-                  }
-                }}
-                style={{
-                  margin: 5,
-                  padding: 5,
-                  borderWidth: 1,
-                  borderRadius: 5,
-                }}>
-                <Icon name={'minus'} color={colors.primary_color} />
-              </TouchableOpacity>
-            </View>
           </View>
-          {/* Price Add to cart */}
 
+          {/* Price Add to cart */}
           <View style={{...GlobalStyles.infoCard}}>
             <PriceCard
               price={product.price}
@@ -226,6 +281,7 @@ const ProductDetailScreen = props => {
               }}
             />
           </View>
+
           {/* Delivery */}
           <View style={GlobalStyles.infoCard}>
             <Text style={fonts.h1}>
@@ -283,82 +339,59 @@ const ProductDetailScreen = props => {
           {/* review */}
           <View style={GlobalStyles.infoCard}>
             <CustomHeading header1={'Product Reviews'} />
-            {product.reviews.map(item => (
-              <View
-                style={{
-                  borderWidth: 1,
-                  padding: 10,
-                  margin: 10,
-                  borderRadius: 10,
-                }}>
-                <Text style={fonts.h6}>{item.user_name}</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={fonts.h6}>{item.rating}</Text>
-                  <Icon
-                    name="star"
-                    size={25}
-                    style={{margin: 5}}
-                    color={colors.primary_color}
-                  />
+            {product.reviews &&
+              product.reviews.map(item => (
+                <View
+                  style={{
+                    borderWidth: 1,
+                    padding: 10,
+                    margin: 10,
+                    borderRadius: 10,
+                  }}>
+                  <Text style={fonts.h6}>{item.user_name}</Text>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text style={fonts.h6}>{item.rating}</Text>
+                    <Icon
+                      name="star"
+                      size={25}
+                      style={{margin: 5}}
+                      color={colors.primary_color}
+                    />
+                  </View>
+                  <Text style={fonts.h4}>{item.review}</Text>
                 </View>
-                <Text style={fonts.h4}>{item.review}</Text>
-              </View>
-            ))}
+              ))}
             <View style={{padding: 10}}>
               <CustomHeading header1={'Add your Reviews'} />
               <CustomInput
-                value={review}
-                onChangeText={val => setreview(val)}
+                value={values.review}
+                onChangeText={handleChange('review')}
                 title={'Review'}
                 iconName={'info-circle'}
                 placeholder={'Enter your review'}
                 keyboardType={'email-address'}
               />
+              {touched.review && errors.review ? (
+                <Text style={GlobalStyles.errorText}>{errors.review}</Text>
+              ) : (
+                ''
+              )}
               <CustomInput
-                value={rating}
-                onChangeText={val => setrating(val)}
+                value={values.rating}
+                onChangeText={handleChange('rating')}
                 title={'Rating'}
                 iconName={'star'}
                 placeholder={'Enter your rating'}
                 keyboardType={'phone-pad'}
               />
+              {touched.rating && errors.rating ? (
+                <Text style={GlobalStyles.errorText}>{errors.rating}</Text>
+              ) : (
+                ''
+              )}
               <View style={{padding: 15}}>
-                {rating && review && (
-                  <CustomButton
-                    title={'Add Review'}
-                    onPress={async () => {
-                      setrating('');
-                      setreview('');
-
-                      const body = new FormData();
-                      body.append('product_id', product.id);
-                      body.append('review', review);
-                      body.append('rating', rating);
-                      const res = await fetch(
-                        AppStrings.BASE_URL + '/productReview',
-                        {
-                          headers: {
-                            Accept: 'application/json',
-                            Authorization: 'Bearer ' + token,
-                          },
-                          method: 'POST',
-                          body: body,
-                        },
-                      );
-                      // const jsonRes = await res.json();
-                      let responseText = await res.text();
-                      let jsonRes = JSON.parse(responseText);
-                      console.log('Screen res :', jsonRes);
-                      console.log(res);
-                      // if (res.ok) {
-                      if (jsonRes.success) {
-                        Alert.alert(AppStrings.appName, jsonRes.message);
-                        getDetail(props.route.params.id);
-                      } else if (jsonRes.success == false) {
-                        Alert.alert(AppStrings.appName, jsonRes.data);
-                      }
-                    }}
-                  />
+                {values.rating && values.review && (
+                  <CustomButton title={'Add Review'} onPress={handleSubmit} />
                 )}
               </View>
             </View>

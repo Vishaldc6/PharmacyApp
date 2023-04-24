@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^1.5.0",
     "axios": "^1.3.4",
     "deprecated-react-native-prop-types": "^4.0.0",
+    "formik": "^2.2.9",
     "moment": "^2.29.4",
     "patch-package": "^6.5.1",
     "react": "18.1.0",
@@ -43,7 +44,8 @@
     "react-native-vector-icons": "^9.2.0",
     "react-navigation": "^4.4.4",
     "react-redux": "^8.0.5",
-    "redux": "^4.2.1"
+    "redux": "^4.2.1",
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -80,6 +80,7 @@ const App = () => {
             // ScreenNames.Home
             // ScreenNames.AdminHomeScreen
             // ScreenNames.DoctorHomeScreen
+            // ScreenNames.CheckoutScreen
           }>
           <Stack.Screen name={ScreenNames.AuthStack} component={AuthStack} />
 

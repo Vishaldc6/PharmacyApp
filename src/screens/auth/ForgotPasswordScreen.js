@@ -15,8 +15,32 @@ import fonts from '../../styles/fonts';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import {Images} from '../../assets/images';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
+import {AppStrings} from '../../utils/AppStrings';
 
 const ForgotPasswordScreen = props => {
+  const signInValidation = Yup.object().shape({
+    email: Yup.string()
+      .trim()
+      .email(AppStrings.emailError)
+      .required(AppStrings.emailRequired),
+    password: Yup.string()
+      .min(8, AppStrings.passwordLengthError)
+      .required(AppStrings.passwordRequired),
+  });
+
+  const {values, errors, handleChange, handleSubmit, touched} = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: signInValidation,
+    onSubmit: async value => {
+      console.log(values);
+    },
+  });
+
   const [username, setusername] = useState('');
   const [password, setpassword] = useState('');
   const [confirmPassword, setconfirmPassword] = useState('');
@@ -27,12 +51,12 @@ const ForgotPasswordScreen = props => {
 
   useEffect(() => {
     props.navigation.addListener('focus', () => {
-      setusername('');
-      setpassword('');
-      setconfirmPassword('');
-      setusernameError('');
-      setpasswordError('');
-      setconfirmPasswordError('');
+      // setusername('');
+      // setpassword('');
+      // setconfirmPassword('');
+      // setusernameError('');
+      // setpasswordError('');
+      // setconfirmPasswordError('');
     });
   }, []);
 

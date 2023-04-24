@@ -39,9 +39,9 @@ export const useGlobaStyles = () => {
       borderColor: colors.black,
     },
     errorText: {
-      ...fonts.h3,
+      ...fonts.h4,
       color: colors.red,
-      marginLeft: wp(3),
+      marginLeft: wp(10),
     },
   });
 };

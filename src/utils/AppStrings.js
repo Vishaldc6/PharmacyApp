@@ -2,9 +2,27 @@ export const AppStrings = {
   //App Name
   appName: 'Pharmacy App',
   // BASE URL
-  // BASE_URL: 'http://192.168.29.125:8000/api',
   BASE_URL: 'http://192.168.43.125:8000/api',
-  // BASE_URL: 'http://192.168.43.119:8000/api',
+  // BASE_URL: 'https://med-care-pharmacy-com.000webhostapp.com/api',
+
+  // Signin
+  emailRequired: '* please enter email',
+  emailError: '* please enter proper email',
+  passwordRequired: '* please enter password',
+  passwordLengthError: '* password length must be 8 characters',
+  passwordError: '* please enter proper password',
+
+  // signup
+  usernameRequired: '* please enter username',
+  usernameError: '* please enter proper username',
+  usernameNumError: '* username only contains characters',
+  mobRequired: '* please enter mobile number',
+  mobError: '* please enter proper mobile number',
+  confirmPasswordRequired: '* please enter confirm password',
+  passwordMatchError: '* password does not match',
+  educationRequired: '* please enter education',
+  experianceRequired: '* please enter experiance',
+  docTypeRequired: '* please enter doctor type',
 
   //CarePlanScreen
   reduceMedial: 'Reduce your medical expenses by HALF',
@@ -34,6 +52,8 @@ export const AppStrings = {
   deliverTo: 'Delivering to : Your Location',
   cod: 'Cash on delivery available',
   return: 'Easy 7 days return available',
+  reviewRequired: '* please enter review',
+  rateRequired: '* please enter rate',
 
   //DoctorlistScreen
   onlineDoctor: 'Online doctor consultation with qualified doctors',
