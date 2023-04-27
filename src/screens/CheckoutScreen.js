@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Button,
   KeyboardAvoidingView,
@@ -26,7 +27,65 @@ import {useGlobaStyles} from '../styles/GlobalStyles';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 
-const checkoutValidation = Yup.object().shape({
+const doctorRequiredCheckoutValidation = Yup.object().shape({
+  ship_name: Yup.string()
+    .required('* please enter shipping name')
+    .min(3, '* please enter proper name'),
+  ship_mob: Yup.string()
+    .required('* please enter shipping mobile number')
+    .length(10, '* please enter proper number '),
+  ship_street: Yup.string().required('* please enter shipping street'),
+  ship_city: Yup.string().required('* please enter shipping ciy'),
+  ship_state: Yup.string().required('* please enter shipping state'),
+  ship_zip: Yup.string()
+    .required('* please enter shipping zip')
+    // .matches(/^\d{5}$/, '* zip code must be 5 digits'),
+    .min(5, '* zip code must be 5 digits'),
+  bill_name: Yup.string()
+    .required('* please enter billing name')
+    .min(3, '* please enter proper name'),
+  bill_mob: Yup.string()
+    .required('* please enter billing mobile number')
+    .length(10, '* please enter proper number '),
+  bill_street: Yup.string().required('* please enter billing street'),
+  bill_city: Yup.string().required('* please enter billing city'),
+  bill_state: Yup.string().required('* please enter billing state'),
+  bill_zip: Yup.string()
+    .required('* please enter billing zip')
+    // .matches(/^\d{5}$/, '* zip code must be 5 digits'),
+    .min(5, '* zip code must be 5 digits'),
+  doctor_name: Yup.string().required('* please enter doctor name'),
+});
+const reportRequiredCheckoutValidation = Yup.object().shape({
+  ship_name: Yup.string()
+    .required('* please enter shipping name')
+    .min(3, '* please enter proper name'),
+  ship_mob: Yup.string()
+    .required('* please enter shipping mobile number')
+    .length(10, '* please enter proper number '),
+  ship_street: Yup.string().required('* please enter shipping street'),
+  ship_city: Yup.string().required('* please enter shipping ciy'),
+  ship_state: Yup.string().required('* please enter shipping state'),
+  ship_zip: Yup.string()
+    .required('* please enter shipping zip')
+    // .matches(/^\d{5}$/, '* zip code must be 5 digits'),
+    .min(5, '* zip code must be 5 digits'),
+  bill_name: Yup.string()
+    .required('* please enter billing name')
+    .min(3, '* please enter proper name'),
+  bill_mob: Yup.string()
+    .required('* please enter billing mobile number')
+    .length(10, '* please enter proper number '),
+  bill_street: Yup.string().required('* please enter billing street'),
+  bill_city: Yup.string().required('* please enter billing city'),
+  bill_state: Yup.string().required('* please enter billing state'),
+  bill_zip: Yup.string()
+    .required('* please enter billing zip')
+    // .matches(/^\d{5}$/, '* zip code must be 5 digits'),
+    .min(5, '* zip code must be 5 digits'),
+  report: Yup.object().required('* please select report pdf'),
+});
+const doctorReportRequiredCheckoutValidation = Yup.object().shape({
   ship_name: Yup.string()
     .required('* please enter shipping name')
     .min(3, '* please enter proper name'),
@@ -56,12 +115,42 @@ const checkoutValidation = Yup.object().shape({
   doctor_name: Yup.string().required('* please enter doctor name'),
   report: Yup.object().required('* please select report pdf'),
 });
+const checkoutValidation = Yup.object().shape({
+  ship_name: Yup.string()
+    .required('* please enter shipping name')
+    .min(3, '* please enter proper name'),
+  ship_mob: Yup.string()
+    .required('* please enter shipping mobile number')
+    .length(10, '* please enter proper number '),
+  ship_street: Yup.string().required('* please enter shipping street'),
+  ship_city: Yup.string().required('* please enter shipping ciy'),
+  ship_state: Yup.string().required('* please enter shipping state'),
+  ship_zip: Yup.string()
+    .required('* please enter shipping zip')
+    // .matches(/^\d{5}$/, '* zip code must be 5 digits'),
+    .min(5, '* zip code must be 5 digits'),
+  bill_name: Yup.string()
+    .required('* please enter billing name')
+    .min(3, '* please enter proper name'),
+  bill_mob: Yup.string()
+    .required('* please enter billing mobile number')
+    .length(10, '* please enter proper number '),
+  bill_street: Yup.string().required('* please enter billing street'),
+  bill_city: Yup.string().required('* please enter billing city'),
+  bill_state: Yup.string().required('* please enter billing state'),
+  bill_zip: Yup.string()
+    .required('* please enter billing zip')
+    // .matches(/^\d{5}$/, '* zip code must be 5 digits'),
+    .min(5, '* zip code must be 5 digits'),
+  // doctor_name: Yup.string().required('* please enter doctor name'),
+  // report: Yup.object().required('* please select report pdf'),
+});
 
 const CheckoutScreen = props => {
   const GlobalStyles = useGlobaStyles();
   const amt = props.route.params.amount;
-  // const is_doctor_required = props.route.params.is_doctor_required;
-  // const is_report_required = props.route.params.is_report_required;
+  const is_doctor_required = props.route.params.is_doctor_required;
+  const is_report_required = props.route.params.is_report_required;
 
   const [ship_name, setship_name] = useState('');
   const [ship_mob, setship_mob] = useState('');
@@ -73,6 +162,7 @@ const CheckoutScreen = props => {
   const [payment_id, setpayment_id] = useState('');
   const [pdf, setpdf] = useState('');
   const [isVisiable, setisVisiable] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   const {
     values,
@@ -99,7 +189,14 @@ const CheckoutScreen = props => {
       doctor_name: '',
       report: {},
     },
-    validationSchema: checkoutValidation,
+    validationSchema:
+      is_doctor_required && is_report_required
+        ? doctorReportRequiredCheckoutValidation
+        : is_doctor_required
+        ? doctorRequiredCheckoutValidation
+        : is_report_required
+        ? reportRequiredCheckoutValidation
+        : checkoutValidation,
     onSubmit: async value => {
       console.log(value);
       let ship_address =
@@ -189,243 +286,255 @@ const CheckoutScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       <CustomHeader back {...props} title={'Checkout'} />
-      <KeyboardAvoidingView>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={{...fonts.h1, margin: 8}}>Shipping Details</Text>
-          <CustomInput
-            onChangeText={handleChange('ship_name')}
-            value={values.ship_name}
-            title={'Shipping Name'}
-            placeholder={'Enter Shipping Name'}
-            keyboardType={'email-address'}
-          />
-          {touched.ship_name && errors.ship_name ? (
-            <Text style={GlobalStyles.errorText}>{errors.ship_name}</Text>
-          ) : (
-            ''
-          )}
-          <View style={{height: 15}} />
-          <CustomInput
-            onChangeText={handleChange('ship_mob')}
-            value={values.ship_mob}
-            title={'Shipping Mobile'}
-            placeholder={'Enter Shipping Mobile'}
-            keyboardType={'numeric'}
-          />
-          {touched.ship_mob && errors.ship_mob ? (
-            <Text style={GlobalStyles.errorText}>{errors.ship_mob}</Text>
-          ) : (
-            ''
-          )}
-          <View style={{height: 15}} />
-          <Text
-            style={{
-              fontSize: FONT_SIZE14,
-              fontWeight: '400',
-              color: colors.black,
-            }}>
-            {'Shipping Address'}
-          </Text>
-          <View style={{paddingHorizontal: 10}}>
+      {isLoading ? (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <KeyboardAvoidingView>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Text style={{...fonts.h1, margin: 8}}>Shipping Details</Text>
             <CustomInput
-              onChangeText={handleChange('ship_street')}
-              value={values.ship_street}
-              title={'Street'}
-              placeholder={'Enter Street'}
+              onChangeText={handleChange('ship_name')}
+              value={values.ship_name}
+              title={'Shipping Name'}
+              placeholder={'Enter Shipping Name'}
               keyboardType={'email-address'}
             />
-            {touched.ship_street && errors.ship_street ? (
-              <Text style={GlobalStyles.errorText}>{errors.ship_street}</Text>
+            {touched.ship_name && errors.ship_name ? (
+              <Text style={GlobalStyles.errorText}>{errors.ship_name}</Text>
             ) : (
               ''
             )}
             <View style={{height: 15}} />
             <CustomInput
-              onChangeText={handleChange('ship_city')}
-              value={values.ship_city}
-              title={'City'}
-              placeholder={'Enter City'}
-              keyboardType={'email-address'}
-            />
-            {touched.ship_city && errors.ship_city ? (
-              <Text style={GlobalStyles.errorText}>{errors.ship_city}</Text>
-            ) : (
-              ''
-            )}
-            <View style={{height: 15}} />
-            <CustomInput
-              onChangeText={handleChange('ship_state')}
-              value={values.ship_state}
-              title={'State'}
-              placeholder={'Enter State'}
-              keyboardType={'email-address'}
-            />
-            {touched.ship_state && errors.ship_state ? (
-              <Text style={GlobalStyles.errorText}>{errors.ship_state}</Text>
-            ) : (
-              ''
-            )}
-            <View style={{height: 15}} />
-            <CustomInput
-              onChangeText={handleChange('ship_zip')}
-              value={values.ship_zip}
-              title={'Zip code'}
-              placeholder={'Enter Zip code'}
+              onChangeText={handleChange('ship_mob')}
+              value={values.ship_mob}
+              title={'Shipping Mobile'}
+              placeholder={'Enter Shipping Mobile'}
               keyboardType={'numeric'}
             />
-            {touched.ship_zip && errors.ship_zip ? (
-              <Text style={GlobalStyles.errorText}>{errors.ship_zip}</Text>
+            {touched.ship_mob && errors.ship_mob ? (
+              <Text style={GlobalStyles.errorText}>{errors.ship_mob}</Text>
             ) : (
               ''
             )}
             <View style={{height: 15}} />
-          </View>
-          <Text style={{...fonts.h1, margin: 8}}>Billing Details</Text>
-          <CustomInput
-            onChangeText={handleChange('bill_name')}
-            value={values.bill_name}
-            title={'Billing Name'}
-            placeholder={'Enter Billing Name'}
-            keyboardType={'email-address'}
-          />
-          {touched.bill_name && errors.bill_name ? (
-            <Text style={GlobalStyles.errorText}>{errors.bill_name}</Text>
-          ) : (
-            ''
-          )}
-          <View style={{height: 15}} />
-          <CustomInput
-            onChangeText={handleChange('bill_mob')}
-            value={values.bill_mob}
-            title={'Billing Mobile'}
-            placeholder={'Enter Billing Mobile'}
-            keyboardType={'numeric'}
-          />
-          {touched.bill_mob && errors.bill_mob ? (
-            <Text style={GlobalStyles.errorText}>{errors.bill_mob}</Text>
-          ) : (
-            ''
-          )}
-          <View style={{height: 15}} />
-          <Text
-            style={{
-              fontSize: FONT_SIZE14,
-              fontWeight: '400',
-              color: colors.black,
-            }}>
-            {'Billing Address'}
-          </Text>
-          <View style={{paddingHorizontal: 10}}>
-            <CustomInput
-              onChangeText={handleChange('bill_street')}
-              value={values.bill_street}
-              title={'Street'}
-              placeholder={'Enter Street'}
-              keyboardType={'email-address'}
-            />
-            {touched.bill_street && errors.bill_street ? (
-              <Text style={GlobalStyles.errorText}>{errors.bill_street}</Text>
-            ) : (
-              ''
-            )}
-            <View style={{height: 15}} />
-            <CustomInput
-              onChangeText={handleChange('bill_city')}
-              value={values.bill_city}
-              title={'City'}
-              placeholder={'Enter City'}
-              keyboardType={'email-address'}
-            />
-            {touched.bill_city && errors.bill_city ? (
-              <Text style={GlobalStyles.errorText}>{errors.bill_city}</Text>
-            ) : (
-              ''
-            )}
-            <View style={{height: 15}} />
-            <CustomInput
-              onChangeText={handleChange('bill_state')}
-              value={values.bill_state}
-              title={'State'}
-              placeholder={'Enter State'}
-              keyboardType={'email-address'}
-            />
-            {touched.bill_state && errors.bill_state ? (
-              <Text style={GlobalStyles.errorText}>{errors.bill_state}</Text>
-            ) : (
-              ''
-            )}
-            <View style={{height: 15}} />
-            <CustomInput
-              onChangeText={handleChange('bill_zip')}
-              value={values.bill_zip}
-              title={'Zip code'}
-              placeholder={'Enter Zip code'}
-              keyboardType={'numeric'}
-            />
-            {touched.bill_zip && errors.bill_zip ? (
-              <Text style={GlobalStyles.errorText}>{errors.bill_zip}</Text>
-            ) : (
-              ''
-            )}
-            <View style={{height: 15}} />
-          </View>
-          {/* {is_doctor_required && ( */}
-          <CustomInput
-            onChangeText={handleChange('doctor_name')}
-            value={values.doctor_name}
-            title={'Doctor Name'}
-            placeholder={'Enter Doctor Name'}
-            keyboardType={'email-address'}
-          />
-          {touched.doctor_name && errors.doctor_name ? (
-            <Text style={GlobalStyles.errorText}>{errors.doctor_name}</Text>
-          ) : (
-            ''
-          )}
-          {/* )} */}
-          <View style={{height: 10}} />
-          {/* {is_report_required && ( */}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{...fonts.h3, marginLeft: 10}}>Report Pdf</Text>
-            {/* <Text style={fonts.h3}>{pdf.name}</Text> */}
-            <Text style={fonts.h3}>{values.report.name}</Text>
-            <TouchableOpacity
-              // style={{flex: 1}}
-              onPress={async () => {
-                const res = await DocumentPicker.pick({
-                  type: [DocumentPicker.types.pdf],
-                  allowMultiSelection: false,
-                });
-                console.log(res[0]);
-                setpdf(res[0]);
-                setFieldValue('report', res[0]);
+            <Text
+              style={{
+                fontSize: FONT_SIZE14,
+                fontWeight: '400',
+                color: colors.black,
               }}>
-              <View style={styles.btn}>
-                <Text
+              {'Shipping Address'}
+            </Text>
+            <View style={{paddingHorizontal: 10}}>
+              <CustomInput
+                onChangeText={handleChange('ship_street')}
+                value={values.ship_street}
+                title={'Street'}
+                placeholder={'Enter Street'}
+                keyboardType={'email-address'}
+              />
+              {touched.ship_street && errors.ship_street ? (
+                <Text style={GlobalStyles.errorText}>{errors.ship_street}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+              <CustomInput
+                onChangeText={handleChange('ship_city')}
+                value={values.ship_city}
+                title={'City'}
+                placeholder={'Enter City'}
+                keyboardType={'email-address'}
+              />
+              {touched.ship_city && errors.ship_city ? (
+                <Text style={GlobalStyles.errorText}>{errors.ship_city}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+              <CustomInput
+                onChangeText={handleChange('ship_state')}
+                value={values.ship_state}
+                title={'State'}
+                placeholder={'Enter State'}
+                keyboardType={'email-address'}
+              />
+              {touched.ship_state && errors.ship_state ? (
+                <Text style={GlobalStyles.errorText}>{errors.ship_state}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+              <CustomInput
+                onChangeText={handleChange('ship_zip')}
+                value={values.ship_zip}
+                title={'Zip code'}
+                placeholder={'Enter Zip code'}
+                keyboardType={'numeric'}
+              />
+              {touched.ship_zip && errors.ship_zip ? (
+                <Text style={GlobalStyles.errorText}>{errors.ship_zip}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+            </View>
+            <Text style={{...fonts.h1, margin: 8}}>Billing Details</Text>
+            <CustomInput
+              onChangeText={handleChange('bill_name')}
+              value={values.bill_name}
+              title={'Billing Name'}
+              placeholder={'Enter Billing Name'}
+              keyboardType={'email-address'}
+            />
+            {touched.bill_name && errors.bill_name ? (
+              <Text style={GlobalStyles.errorText}>{errors.bill_name}</Text>
+            ) : (
+              ''
+            )}
+            <View style={{height: 15}} />
+            <CustomInput
+              onChangeText={handleChange('bill_mob')}
+              value={values.bill_mob}
+              title={'Billing Mobile'}
+              placeholder={'Enter Billing Mobile'}
+              keyboardType={'numeric'}
+            />
+            {touched.bill_mob && errors.bill_mob ? (
+              <Text style={GlobalStyles.errorText}>{errors.bill_mob}</Text>
+            ) : (
+              ''
+            )}
+            <View style={{height: 15}} />
+            <Text
+              style={{
+                fontSize: FONT_SIZE14,
+                fontWeight: '400',
+                color: colors.black,
+              }}>
+              {'Billing Address'}
+            </Text>
+            <View style={{paddingHorizontal: 10}}>
+              <CustomInput
+                onChangeText={handleChange('bill_street')}
+                value={values.bill_street}
+                title={'Street'}
+                placeholder={'Enter Street'}
+                keyboardType={'email-address'}
+              />
+              {touched.bill_street && errors.bill_street ? (
+                <Text style={GlobalStyles.errorText}>{errors.bill_street}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+              <CustomInput
+                onChangeText={handleChange('bill_city')}
+                value={values.bill_city}
+                title={'City'}
+                placeholder={'Enter City'}
+                keyboardType={'email-address'}
+              />
+              {touched.bill_city && errors.bill_city ? (
+                <Text style={GlobalStyles.errorText}>{errors.bill_city}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+              <CustomInput
+                onChangeText={handleChange('bill_state')}
+                value={values.bill_state}
+                title={'State'}
+                placeholder={'Enter State'}
+                keyboardType={'email-address'}
+              />
+              {touched.bill_state && errors.bill_state ? (
+                <Text style={GlobalStyles.errorText}>{errors.bill_state}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+              <CustomInput
+                onChangeText={handleChange('bill_zip')}
+                value={values.bill_zip}
+                title={'Zip code'}
+                placeholder={'Enter Zip code'}
+                keyboardType={'numeric'}
+              />
+              {touched.bill_zip && errors.bill_zip ? (
+                <Text style={GlobalStyles.errorText}>{errors.bill_zip}</Text>
+              ) : (
+                ''
+              )}
+              <View style={{height: 15}} />
+            </View>
+            {is_doctor_required && (
+              <>
+                <CustomInput
+                  onChangeText={handleChange('doctor_name')}
+                  value={values.doctor_name}
+                  title={'Doctor Name'}
+                  placeholder={'Enter Doctor Name'}
+                  keyboardType={'email-address'}
+                />
+                {touched.doctor_name && errors.doctor_name ? (
+                  <Text style={GlobalStyles.errorText}>
+                    {errors.doctor_name}
+                  </Text>
+                ) : (
+                  ''
+                )}
+              </>
+            )}
+            <View style={{height: 10}} />
+            {is_report_required && (
+              <>
+                <View
                   style={{
-                    ...fonts.h6,
-                    margin: 5,
-                    color: colors.primary_color,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
                   }}>
-                  Choose Pdf
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          {touched.report && errors.report ? (
-            <Text style={GlobalStyles.errorText}>{errors.report}</Text>
-          ) : (
-            ''
-          )}
-          {/* )} */}
-          <View style={{height: 150}} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+                  <Text style={{...fonts.h3, marginLeft: 10}}>Report Pdf</Text>
+
+                  <Text style={fonts.h3}>{values.report.name}</Text>
+                  <TouchableOpacity
+                    // style={{flex: 1}}
+                    onPress={async () => {
+                      const res = await DocumentPicker.pick({
+                        type: [DocumentPicker.types.pdf],
+                        allowMultiSelection: false,
+                      });
+                      console.log(res[0]);
+                      setpdf(res[0]);
+                      setFieldValue('report', res[0]);
+                    }}>
+                    <View style={styles.btn}>
+                      <Text
+                        style={{
+                          ...fonts.h6,
+                          margin: 5,
+                          color: colors.primary_color,
+                        }}>
+                        Choose Pdf
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                {touched.report && errors.report ? (
+                  <Text style={GlobalStyles.errorText}>{errors.report}</Text>
+                ) : (
+                  ''
+                )}
+              </>
+            )}
+            <View style={{height: 150}} />
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
       <View
         style={{
           padding: 10,
@@ -436,53 +545,7 @@ const CheckoutScreen = props => {
           // backgroundColor: 'blue',
           position: 'absolute',
         }}>
-        <CustomButton
-          title={'Place Order'}
-          onPress={
-            handleSubmit
-            // async () => {
-            // setisVisiable(true);
-            // const body = new FormData();
-            // body.append('shipping_name', ship_name);
-            // body.append('shipping_mobile', ship_mob);
-            // body.append('shipping_address', ship_add);
-            // body.append('billing_name', bill_name);
-            // body.append('billing_mobile', bill_mob);
-            // body.append('billing_address', bill_add);
-            // body.append('doctor_name', doctor_name);
-            // body.append('payment_id', payment_id);
-            // if (pdf.uri) {
-            //   body.append('report_pdf', {
-            //     uri: pdf.uri,
-            //     name: pdf.name,
-            //     type: pdf.type,
-            //   });
-            // }
-            // const token = await getToken();
-            // const res = await fetch(AppStrings.BASE_URL + '/placeOrder', {
-            //   headers: {
-            //     Accept: 'application/json',
-            //     Authorization: 'Bearer ' + token,
-            //   },
-            //   method: 'POST',
-            //   body: body,
-            // });
-            // const jsonRes = await res.json();
-            // console.log('Screen res :', jsonRes);
-            // console.log(res);
-            // // if (res.ok) {
-            // if (jsonRes.flag) {
-            //   Alert.alert(AppStrings.appName, jsonRes.message);
-            // } else if (jsonRes.flag == false) {
-            //   if (jsonRes.data?.errors != null) {
-            //     Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
-            //   } else {
-            //     Alert.alert(AppStrings.appName, jsonRes.message);
-            //   }
-            // }
-            // }
-          }
-        />
+        <CustomButton title={'Place Order'} onPress={handleSubmit} />
       </View>
       <Modal visible={isVisiable} animationType={'slide'} transparent={true}>
         <View
@@ -507,6 +570,7 @@ const CheckoutScreen = props => {
             <TouchableOpacity
               // style={{flex: 1}}
               onPress={async () => {
+                setisVisiable(false);
                 var options = {
                   description: 'Credits towards consultation',
                   image: Images.appLogo,
@@ -525,16 +589,35 @@ const CheckoutScreen = props => {
                   .then(async data => {
                     // handle success
                     console.log(data);
+                    let ship_address =
+                      values.ship_street +
+                      ',' +
+                      values.ship_city +
+                      ',' +
+                      values.ship_state +
+                      ',' +
+                      values.ship_zip;
+                    console.log('ship_address : : ', ship_address);
+                    let bill_address =
+                      values.bill_street +
+                      ',' +
+                      values.bill_city +
+                      ',' +
+                      values.bill_state +
+                      ',' +
+                      values.bill_zip;
+                    console.log('bill_address : : ', bill_address);
                     alert(`Success: ${data.razorpay_payment_id}`);
                     setpayment_id(data.razorpay_payment_id);
+                    setisLoading(true);
 
                     const body = new FormData();
                     body.append('shipping_name', values.ship_name);
                     body.append('shipping_mobile', values.ship_mob);
-                    body.append('shipping_address', values.ship_add);
+                    body.append('shipping_address', ship_address);
                     body.append('billing_name', values.bill_name);
                     body.append('billing_mobile', values.bill_mob);
-                    body.append('billing_address', values.bill_add);
+                    body.append('billing_address', bill_address);
                     body.append('doctor_name', values.doctor_name);
                     body.append('payment_id', data.razorpay_payment_id);
                     if (values.report.uri) {
@@ -563,6 +646,7 @@ const CheckoutScreen = props => {
                     console.log(res);
                     // if (res.ok) {
                     if (jsonRes.flag) {
+                      setisLoading(false);
                       Alert.alert(AppStrings.appName, jsonRes.message);
                       props.navigation.replace(ScreenNames.Home);
                     } else if (jsonRes.flag == false) {

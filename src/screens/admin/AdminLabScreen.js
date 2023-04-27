@@ -31,7 +31,7 @@ const LabCard = ({item, editPress, deletePress}) => {
       <View style={{width: 20}} />
       <View style={{flex: 1}}>
         <Text style={fonts.h4}>{item.name}</Text>
-        <Text>Includes {item.included_test} Tests</Text>
+        <Text numberOfLines={2}>Includes {item.included_test} Tests</Text>
         <Text>{item.address}</Text>
         <Text numberOfLines={1}>{item.description}</Text>
         {/*<Text style={fonts.h6}>Rs.{discountedPrice.toFixed(0)} </Text>

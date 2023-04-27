@@ -33,10 +33,16 @@ import {openCamera, openGallery} from '../../utils/functions';
 import CustomModal from '../../components/CustomModal';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {getCategories, getProducts} from '../../config/apiServices/ApiServices';
+import {
+  getCategories,
+  getProducts,
+  getToken,
+} from '../../config/apiServices/ApiServices';
 import SimpleBanner from '../../components/banner/SimpleBanner';
 import {useGlobaStyles} from '../../styles/GlobalStyles';
 import {useAppSelector} from '../../redux/store/Store';
+import {AppStrings} from '../../utils/AppStrings';
+import {useIsFocused} from '@react-navigation/native';
 
 const Card = ({title, icon, onPress}) => {
   const {colors} = useAppSelector(state => state.CommonSlice);
@@ -82,6 +88,7 @@ export const Banner = ({image}) => {
 };
 
 const HomeScreen = props => {
+  const focus = useIsFocused();
   const {colors} = useAppSelector(state => state.CommonSlice);
   const GlobalStyles = useGlobaStyles();
   const styles = useStyles();
@@ -91,10 +98,49 @@ const HomeScreen = props => {
   const [isRefresh, setisRefresh] = useState(false);
   const [searchproducts, setsearchproducts] = useState([]);
   const [srcTxt, setsrcTxt] = useState('');
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (focus) {
+      getData();
+      getCartList();
+    }
+  }, [focus]);
+
+  const getCartList = async () => {
+    const token = await getToken();
+
+    const res = await fetch(AppStrings.BASE_URL + '/cartList', {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + token,
+      },
+      method: 'GET',
+    });
+    // const jsonRes = await res.json();
+    let responseText = await res.text();
+    let jsonRes = JSON.parse(responseText);
+    console.log('Screen res :', jsonRes);
+    console.log(res);
+    // if (res.ok) {
+    if (jsonRes.flag) {
+      // Alert.alert(AppStrings.appName, jsonRes.message);
+      console.log('jsonRes.data.cart_items : ', jsonRes.data.cart_items);
+
+      setCartItemCount(jsonRes.data.cart_items.length);
+
+      setloading(false);
+      setisRefresh(false);
+    } else if (jsonRes.flag == false) {
+      if (jsonRes.data?.errors != null) {
+        Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
+      } else {
+        Alert.alert(AppStrings.appName, jsonRes.message);
+      }
+    } else {
+      Alert.alert(AppStrings.appName, jsonRes.message);
+    }
+  };
 
   const getData = () => {
     getCategories().then(res => {
@@ -111,7 +157,7 @@ const HomeScreen = props => {
   return (
     <View style={GlobalStyles.mainContainer}>
       {/* Header */}
-      <CustomHeader title={'Home'} cart {...props} />
+      <CustomHeader title={'Home'} cart {...props} count={cartItemCount} />
 
       {/* SearchBar */}
       <TouchableWithoutFeedback
@@ -148,6 +194,7 @@ const HomeScreen = props => {
           <RefreshControl
             onRefresh={() => {
               getData();
+              getCartList();
             }}
             refreshing={isRefresh}
           />

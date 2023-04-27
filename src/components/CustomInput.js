@@ -37,6 +37,7 @@ const CustomInput = props => {
           </View>
         )}
         <TextInput
+          onPressIn={props.onPress}
           cursorColor={colors.primary_color}
           editable={props.editable}
           onFocus={() => {

@@ -298,20 +298,28 @@ const OrderDetailScreen = props => {
             }}>
             Total Products : {order.order_products.length}
           </Text>
-          <View>
-            <CustomButton
-              secondary
-              title={'View Report'}
-              onPress={async () => {
-                Linking.canOpenURL(order.report_pdf_url).then(val => {
-                  console.log(val);
-                  if (val) {
-                    Linking.openURL(order.report_pdf_url);
-                  }
-                });
-              }}
-            />
-          </View>
+          {order.order_products.forEach(product => {
+            console.log(
+              'product.is_required_report=== 1 : ',
+              product.is_required_report === '1',
+            );
+            if (product.is_required_report === '1') {
+              <View>
+                <CustomButton
+                  secondary
+                  title={'View Report'}
+                  onPress={async () => {
+                    Linking.canOpenURL(order.report_pdf_url).then(val => {
+                      console.log(val);
+                      if (val) {
+                        Linking.openURL(order.report_pdf_url);
+                      }
+                    });
+                  }}
+                />
+              </View>;
+            }
+          })}
         </View>
 
         <View style={GlobalStyles.infoCard}>

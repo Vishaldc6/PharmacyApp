@@ -168,8 +168,8 @@ const ProductDetailScreen = props => {
               height: size.height / 3,
             }}>
             {product.images && (
-              <Swiper autoplay>
-                {console.log(product.images)}
+              <Swiper autoplay horizontal={true}>
+                {/* {console.log(product.images)} */}
                 {product.images.map(itm => (
                   <Image
                     source={{uri: itm.image}}

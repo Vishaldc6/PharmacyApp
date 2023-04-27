@@ -58,15 +58,31 @@ const CustomHeader = props => {
           />
         )}
         {props.cart && (
-          <Icon
-            name={'shopping-cart'}
-            size={25}
-            color={colors.darkgray}
-            style={styles.icon}
-            onPress={() => {
-              props.navigation.navigate(ScreenNames.CartScreen);
-            }}
-          />
+          <View>
+            <Icon
+              name={'shopping-cart'}
+              size={25}
+              color={colors.darkgray}
+              style={styles.icon}
+              onPress={() => {
+                props.navigation.navigate(ScreenNames.CartScreen);
+              }}
+            />
+            <Text
+              style={{
+                backgroundColor: colors.primary_color,
+                borderRadius: 10,
+                position: 'absolute',
+                height: widthPercentageToDP(5),
+                width: widthPercentageToDP(5),
+                textAlign: 'center',
+                padding: widthPercentageToDP(0.5),
+                right: -widthPercentageToDP(2),
+                top: -widthPercentageToDP(2),
+              }}>
+              {props.count}
+            </Text>
+          </View>
         )}
       </View>
     </View>

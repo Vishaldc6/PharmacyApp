@@ -3,6 +3,7 @@ export const AppStrings = {
   appName: 'Pharmacy App',
   // BASE URL
   BASE_URL: 'http://192.168.43.125:8000/api',
+  // BASE_URL: 'http://172.20.10.2:8000/api',
   // BASE_URL: 'https://med-care-pharmacy-com.000webhostapp.com/api',
 
   // Signin

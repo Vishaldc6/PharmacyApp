@@ -63,11 +63,18 @@ const CartScreen = props => {
 
       setcartList(jsonRes.data.cart_items);
       jsonRes.data.cart_items.forEach(item => {
-        console.log(item.product_detail.is_required_doctor);
-        if (item.product_detail.is_required_doctor) {
+        console.log(
+          'item.product_detail.is_required_doctor : ',
+          item.product_detail.is_required_doctor,
+        );
+        console.log(
+          'item.product_detail.is_required_report : ',
+          item.product_detail.is_required_report,
+        );
+        if (item.product_detail.is_required_doctor === '1') {
           setis_doctor_required(true);
         }
-        if (item.product_detail.is_required_report) {
+        if (item.product_detail.is_required_report === '1') {
           setis_report_required(true);
         }
       });
@@ -216,6 +223,7 @@ const CartScreen = props => {
           <CustomButton
             title={'Checkout'}
             onPress={() => {
+              console.log({is_doctor_required, is_report_required});
               props.navigation.navigate(ScreenNames.CheckoutScreen, {
                 amount: amt,
                 is_doctor_required: is_doctor_required,

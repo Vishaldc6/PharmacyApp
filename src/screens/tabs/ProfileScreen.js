@@ -93,6 +93,7 @@ const ProfileScreen = props => {
   }, [isDark]);
 
   useEffect(() => {
+    console.log('getdata');
     getData();
   }, []);
 
