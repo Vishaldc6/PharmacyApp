@@ -71,6 +71,12 @@ const CategoryScreen = props => {
         onChangeText={val => {
           if (val == '') {
             setsearchproducts([]);
+          } else {
+            let list = categories.filter(item =>
+              // item.name == srcTxt
+              item.name.includes(val),
+            );
+            setsearchproducts(list);
           }
           setsrcTxt(val);
         }}

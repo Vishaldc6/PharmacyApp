@@ -72,6 +72,7 @@ ImageMinTop = 5;
 ImageMinLeft = 5;
 
 const userprofileValidation = Yup.object().shape({
+  image: Yup.string().required('* please choose image'),
   username: Yup.string()
     .trim()
     .matches(/^[A-Za-z]*$/, AppStrings.usernameNumError)
@@ -85,14 +86,15 @@ const userprofileValidation = Yup.object().shape({
     .trim()
     .length(10, AppStrings.mobError)
     .required(AppStrings.mobRequired),
-  street: Yup.string().required('* please enter shipping street'),
-  city: Yup.string().required('* please enter shipping ciy'),
-  state: Yup.string().required('* please enter shipping state'),
+  street: Yup.string().required('* please enter street'),
+  city: Yup.string().required('* please enter ciy'),
+  state: Yup.string().required('* please enter state'),
   zip: Yup.string()
-    .required('* please enter shipping zip')
+    .required('* please enter zip')
     .min(5, '* zip code must be 5 digits'),
 });
 const doctorprofileValidation = Yup.object().shape({
+  image: Yup.string().required('* please choose image'),
   username: Yup.string()
     .trim()
     .matches(/^[A-Za-z]*$/, AppStrings.usernameNumError)
@@ -106,11 +108,11 @@ const doctorprofileValidation = Yup.object().shape({
     .trim()
     .length(10, AppStrings.mobError)
     .required(AppStrings.mobRequired),
-  street: Yup.string().required('* please enter shipping street'),
-  city: Yup.string().required('* please enter shipping ciy'),
-  state: Yup.string().required('* please enter shipping state'),
+  street: Yup.string().required('* please enter street'),
+  city: Yup.string().required('* please enter ciy'),
+  state: Yup.string().required('* please enter state'),
   zip: Yup.string()
-    .required('* please enter shipping zip')
+    .required('* please enter zip')
     .min(5, '* zip code must be 5 digits'),
   education: Yup.string()
     .trim()
@@ -162,6 +164,7 @@ const EditProfileScreen = props => {
     setFieldValue,
   } = useFormik({
     initialValues: {
+      image: '',
       username: '',
       email: '',
       mob: '',
@@ -181,10 +184,69 @@ const EditProfileScreen = props => {
     onSubmit: async value => {
       if (!value.dob) {
         setFieldError('dob', '* please choose date of birth');
-      } else if (!value.specialist) {
+      } else if (user.specialist && !value.specialist) {
         setFieldError('specialist', '* please select specialist');
       } else {
         console.log(values);
+
+        let address =
+          value.street + ',' + value.city + ',' + value.state + ',' + value.zip;
+        console.log('address : : ', address);
+        const body = new FormData();
+        body.append('name', value.username);
+        body.append('mobile', value.mob);
+        body.append('date_of_birth', value.dob);
+        body.append('address', address);
+        if (user.role_id == 2) {
+          body.append('specialist', value.specialist);
+          body.append('education', value.education);
+          body.append('experience', value.experiance);
+        }
+        if (img) {
+          if (img.uri) {
+            body.append('image', {
+              uri: img.uri,
+              name: img.fileName,
+              type: img.type,
+            });
+          }
+        }
+        const res = await fetch(AppStrings.BASE_URL + '/userUpdate/' + ID, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: 'Bearer ' + token,
+          },
+          method: 'POST',
+          body: body,
+        });
+        // const jsonRes = await res.json();
+        let responseText = await res.text();
+        let jsonRes = JSON.parse(responseText);
+        console.log('Screen res :', jsonRes);
+        console.log(res);
+        // if (res.ok) {
+        if (jsonRes.flag) {
+          Alert.alert(AppStrings.appName, jsonRes.message);
+
+          getUserDetails(ID).then(res => {
+            console.log('getUserDetails : ', res);
+            getToken().then(tkn => {
+              console.log('TOKEN :: ', tkn);
+
+              saveUser({user: res, token: tkn}).then(res =>
+                console.log('user saved..'),
+              );
+            });
+          });
+        } else if (jsonRes.flag == false) {
+          if (jsonRes.data?.errors != null) {
+            Alert.alert(AppStrings.appName, jsonRes.data.errors[0]);
+          } else {
+            Alert.alert(AppStrings.appName, jsonRes.message);
+          }
+        } else {
+          Alert.alert(AppStrings.appName, jsonRes.message);
+        }
       }
     },
   });
@@ -223,6 +285,23 @@ const EditProfileScreen = props => {
     setspecialist(USER.data.specialist);
     setexperiance(USER.data.experience);
     setimg(USER.data.image);
+
+    setFieldValue('image', USER.data.image);
+    setFieldValue('username', USER.data.name);
+    setFieldValue('email', USER.data.email);
+    setFieldValue('mob', USER.data.mobile);
+    setFieldValue('dob', USER.data.date_of_birth);
+    setFieldValue('education', USER.data.education);
+    setFieldValue('experience', USER.data.experience);
+    setFieldValue('specialist', USER.data.specialist);
+
+    let address = USER.data.address.split(',');
+    console.log('Adress [] : ', address);
+    setFieldValue('street', address[0]);
+    setFieldValue('city', address[1]);
+    setFieldValue('state', address[2]);
+    setFieldValue('zip', address[3]);
+
     setisRefresh(false);
   };
 
@@ -284,6 +363,7 @@ const EditProfileScreen = props => {
                   //   setimgName(res.fileName);
                   //   setimgPath(res.uri);
                   setimg(res);
+                  // setFieldValue('image', res);
                 }}
               />
               <Text
@@ -299,6 +379,11 @@ const EditProfileScreen = props => {
                 Update Profile Picture
               </Text>
             </View>
+            {touched.image && errors.image ? (
+              <Text style={{...GlobalStyles.errorText}}>{errors.image}</Text>
+            ) : (
+              ''
+            )}
           </View>
           <View>
             <CustomInput
@@ -497,6 +582,7 @@ const EditProfileScreen = props => {
                     // console.log('doctor_type : ', doctor_type);
                     console.log(item.label);
                     setspecialist(item.label);
+                    setFieldValue('specialist', item.label);
                   }}
                 />
                 {touched.specialist && errors.specialist ? (

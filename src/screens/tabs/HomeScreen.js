@@ -173,13 +173,22 @@ const HomeScreen = props => {
           onChangeText={val => {
             if (val == '') {
               setsearchproducts([]);
+            } else {
+              let list = products.filter(item =>
+                // item.name == srcTxt
+                item.name.includes(val),
+              );
+              setsearchproducts(list);
             }
             setsrcTxt(val);
           }}
-          onSearch={() => {
-            let list = products.filter(item => item.name == srcTxt);
-            setsearchproducts(list);
-          }}
+          // onSearch={() => {
+          //   let list = products.filter(item =>
+          //     // item.name == srcTxt
+          //     item.name.includes(srcTxt),
+          //   );
+          //   setsearchproducts(list);
+          // }}
         />
       </TouchableWithoutFeedback>
       {/* <Text

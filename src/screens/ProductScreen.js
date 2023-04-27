@@ -106,10 +106,22 @@ const ProductScreen = props => {
         //   //   props.navigation.navigate(ScreenNames.SearchScreen);
         // }}
         value={srcTxt}
+        // onChangeText={val => {
+        //   console.log('value : ', val);
+        //   if (val == '') {
+        //     setsearchproducts([]);
+        //   }
+        //   setsrcTxt(val);
+        // }}
         onChangeText={val => {
-          console.log('value : ', val);
           if (val == '') {
             setsearchproducts([]);
+          } else {
+            let list = products.filter(item =>
+              // item.name == srcTxt
+              item.name.includes(val),
+            );
+            setsearchproducts(list);
           }
           setsrcTxt(val);
         }}
